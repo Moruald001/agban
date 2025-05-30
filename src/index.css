@@ -1,1 +1,8 @@
+@import "@fontsource/exo/400.css"; /* Exo normal */
+@import "@fontsource/exo/700.css"; /* Exo bold */
+@import "@fontsource/raleway/400.css"; /* Raleway normal */
+@import "@fontsource/raleway/700.css";
+@import "@fontsource/roboto/400.css"; /* Poids normal (400) */
+@import "@fontsource/roboto/700.css"; /* Poids bold (700) */
+
 @import "tailwindcss";
