@@ -33,7 +33,9 @@ export function AddClient() {
       setPreview(null);
     }
   }, [images]);
-  console.log(preview);
+  //creation d un tableau pour limiter les previews
+
+  const previewLimited = preview?.filter((_, index) => index < 5);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -136,19 +138,14 @@ export function AddClient() {
           {errors.images.message}
         </p>
       )}
-      {preview && preview.length > 0 && (
+
+      {/* apercu */}
+      {previewLimited && previewLimited.length > 0 && (
         <div className="flex items-center gap-5">
-          <h1>Apercu : </h1>
-          {preview.map((preview, index) => (
+          <h1>Preview : </h1>
+          {previewLimited.map((previewLimitedItem, index) => (
             <div key={index} className="h-10 w-10 my-10">
-              <img src={preview} alt={`Preview ${index}`} />
-              {/* <button
-                type="button"
-                onClick={() => removeImage(index)}
-                className="remove-btn"
-              >
-                ×
-              </button> */}
+              <img src={previewLimitedItem} alt={`Preview ${index}`} />
             </div>
           ))}
         </div>
