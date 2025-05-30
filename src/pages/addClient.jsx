@@ -13,19 +13,27 @@ export function AddClient() {
 
   const images = watch("images");
   // console.log(images);
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState([]);
 
   useEffect(() => {
-    if (images && images[0]) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(images[0]);
+    const imagesUrlArray = [];
+
+    if (images && images.length > 0) {
+      Array.from(images).forEach((image) => {
+        const imageUrl = URL.createObjectURL(image);
+        imagesUrlArray.push(imageUrl);
+        setPreview(imagesUrlArray);
+
+        return () => {
+          //nettoyage
+          imagesUrlArray.forEach((url) => URL.revokeObjectURL(url));
+        };
+      });
     } else {
       setPreview(null);
     }
   }, [images]);
+  console.log(preview);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -128,21 +136,24 @@ export function AddClient() {
           {errors.images.message}
         </p>
       )}
-      {preview && (
-        <div style={{ marginTop: "1rem" }}>
-          <h3>Aperçu :</h3>
-          <img
-            src={preview}
-            alt="Preview"
-            style={{
-              maxWidth: "30px",
-              maxHeight: "30px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-            }}
-          />
+      {preview && preview.length > 0 && (
+        <div className="flex items-center gap-5">
+          <h1>Apercu : </h1>
+          {preview.map((preview, index) => (
+            <div key={index} className="h-10 w-10 my-10">
+              <img src={preview} alt={`Preview ${index}`} />
+              {/* <button
+                type="button"
+                onClick={() => removeImage(index)}
+                className="remove-btn"
+              >
+                ×
+              </button> */}
+            </div>
+          ))}
         </div>
       )}
+
       {/* select */}
 
       <label className="text-xl font-bold font-exo mb-2" htmlFor="status">
