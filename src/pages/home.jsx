@@ -1,4 +1,4 @@
-import { Btn } from "../components/button";
+import { Link } from "react-router-dom";
 import { TypeAnimation } from "react-type-animation";
 
 export function Home() {
@@ -13,7 +13,14 @@ export function Home() {
         repeat={Infinity}
         cursor={false}
       />
-      <Btn title="Ajouter un client" animation="animate-bounce" />
+      <Link
+        className={
+          "bg-gray-600 p-3 rounded-3xl text-white font-center font-exo  duration-300 ease-in-out hover:scale-75 transition-transform animate-bounce "
+        }
+        to={"/add-client"}
+      >
+        Ajouter un client
+      </Link>
     </div>
   );
 }

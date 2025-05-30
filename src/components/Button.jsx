@@ -1,5 +1,4 @@
 // import { useState } from "react";
-import { Link } from "react-router-dom";
 
 export const Btn = ({
   title,
@@ -7,21 +6,22 @@ export const Btn = ({
   position = "",
   weight = "",
   fontStyle = "",
+  attributes,
 }) => {
   return (
     <>
-      <Link
+      <button
+        type={attributes}
         className={
-          "bg-gray-600 p-3 rounded-3xl text-white font-center font-exo  duration-300 ease-in-out hover:scale-75 transition-transform " +
+          "bg-gray-600 p-3 rounded-3xl text-white font-center font-exo  duration-300 ease-in-out hover:scale-75 transition-transform cursor-pointer" +
           animation +
           position +
           weight +
           fontStyle
         }
-        to={"/add-client"}
       >
         {title}
-      </Link>
+      </button>
     </>
   );
 };
