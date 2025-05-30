@@ -47,7 +47,10 @@ export function AddClient() {
       className="flex flex-col gap-3 items-center relative bottom-10 -right-2 justify-center min-h-screen mx-4  "
     >
       {/* client name */}
-      <label className="text-xl  font-bold font-roboto" htmlFor="name">
+      <label
+        className="text-xl  text-gray-700 text-gray-700 font-bold font-roboto"
+        htmlFor="name"
+      >
         Nom du client
       </label>
 
@@ -69,7 +72,10 @@ export function AddClient() {
       )}
       {/* contact */}
 
-      <label className="text-xl font-bold font-exo" htmlFor="contact">
+      <label
+        className="text-xl  text-gray-700 font-bold font-exo"
+        htmlFor="contact"
+      >
         Contact du client
       </label>
       <input
@@ -91,7 +97,10 @@ export function AddClient() {
       )}
 
       {/* textarea */}
-      <label className="text-xl font-bold font-exo " htmlFor="description">
+      <label
+        className="text-xl  text-gray-700 font-bold font-exo "
+        htmlFor="description"
+      >
         Description des colis{" "}
       </label>
       <textarea
@@ -112,7 +121,10 @@ export function AddClient() {
 
       {/* image colis */}
 
-      <label className="text-xl font-bold font-exo " htmlFor="image">
+      <label
+        className="text-xl  text-gray-700 font-bold font-exo "
+        htmlFor="image"
+      >
         Photos des colis
       </label>
       <input
@@ -153,7 +165,10 @@ export function AddClient() {
 
       {/* select */}
 
-      <label className="text-xl font-bold font-exo mb-2" htmlFor="status">
+      <label
+        className="text-xl  text-gray-700 font-bold font-exo mb-2"
+        htmlFor="status"
+      >
         Status du colis
       </label>
       <select
@@ -168,7 +183,7 @@ export function AddClient() {
         title="Creer"
         position=" self-center mt-10 "
         weight=" px-14"
-        fontStyle=" font-bold text-xl"
+        fontStyle=" font-bold text-xl  text-gray-700"
         attributes="submit"
       />
     </form>
