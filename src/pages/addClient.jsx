@@ -12,20 +12,20 @@ export function AddClient() {
   } = useForm();
 
   const images = watch("images");
-  console.log(images);
-  // const [preview, setPreview] = useState(null);
+  // console.log(images);
+  const [preview, setPreview] = useState(null);
 
-  // useEffect(() => {
-  //   if (images) {
-  //     images.map((image) => {
-  //       const reader = new FileReader();
-  //       reader.onloadend = () => setPreview(reader.result);
-  //       reader.readAsDataURL(image);
-  //     });
-  //   } else {
-  //     setPreview(null);
-  //   }
-  // }, [images]);
+  useEffect(() => {
+    if (images && images[0]) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(images[0]);
+    } else {
+      setPreview(null);
+    }
+  }, [images]);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -128,21 +128,21 @@ export function AddClient() {
           {errors.images.message}
         </p>
       )}
-      {/* {preview && (
+      {preview && (
         <div style={{ marginTop: "1rem" }}>
           <h3>Aperçu :</h3>
           <img
             src={preview}
             alt="Preview"
             style={{
-              maxWidth: "100%",
-              maxHeight: "300px",
+              maxWidth: "30px",
+              maxHeight: "30px",
               border: "1px solid #ddd",
               borderRadius: "4px",
             }}
           />
         </div>
-      )} */}
+      )}
       {/* select */}
 
       <label className="text-xl font-bold font-exo mb-2" htmlFor="status">
