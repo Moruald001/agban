@@ -2,8 +2,11 @@
 import { useForm } from "react-hook-form";
 import { Btn } from "../components/button";
 import { useEffect, useState } from "react";
+import { ThreeDot } from "react-loading-indicators";
 
 export function AddClient() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -33,6 +36,21 @@ export function AddClient() {
       setPreview(null);
     }
   }, [images]);
+
+  const statusLoading = async (value) => {
+    await setIsLoading(value);
+  };
+  useEffect(() => {
+    statusLoading(true);
+
+    const timeOut = setTimeout(() => {
+      statusLoading(false);
+    }, [1000]);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, []);
   //creation d un tableau pour limiter les previews
 
   const previewLimited = preview?.filter((_, index) => index < 5);
@@ -41,14 +59,25 @@ export function AddClient() {
     console.log(data);
   };
 
-  return (
+  return isLoading ? (
+    <div className="relative top-110">
+      <ThreeDot
+        variant="bounce"
+        color="#a9a9a9"
+        size="medium"
+        text=""
+        textColor=""
+        className="mt-10"
+      />
+    </div>
+  ) : (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-3 items-center relative bottom-10 -right-2 justify-center min-h-screen mx-4  "
     >
       {/* client name */}
       <label
-        className="text-xl  text-gray-700 text-gray-700 font-bold font-roboto"
+        className="text-xl  text-gray-700  font-bold font-roboto"
         htmlFor="name"
       >
         Nom du client
