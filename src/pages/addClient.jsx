@@ -95,9 +95,7 @@ export function AddClient() {
         })}
       />
       {errors.name && (
-        <p className="text-white bg-red-400 px-4 py-2 ml-1 rounded-md border-1 border-white after:content-['⚠️']">
-          Nom invalide
-        </p>
+        <p className="text-red-400  after:content-['⚠️']">Nom invalide</p>
       )}
       {/* contact */}
 
@@ -120,9 +118,7 @@ export function AddClient() {
         })}
       />
       {errors.contact && (
-        <p className="text-white bg-red-400 px-4 py-2 ml-1 rounded-md border-1 border-white after:content-['⚠️']">
-          Contact invalide
-        </p>
+        <p className="text-red-400  after:content-['⚠️']">Contact invalide</p>
       )}
 
       {/* textarea */}
@@ -142,7 +138,7 @@ export function AddClient() {
         })}
       ></textarea>
       {errors.description && (
-        <p className="text-white bg-red-400 px-4 py-2 ml-1 rounded-md border-1 border-white after:content-['⚠️']">
+        <p className="text-red-400  after:content-['⚠️']">
           {" "}
           description est importante
         </p>
@@ -175,20 +171,26 @@ export function AddClient() {
         })}
       />
       {errors.images && (
-        <p className="text-white bg-red-400 px-4 py-2 ml-1 rounded-md border-1 border-white after:content-['⚠️']">
+        <p className="text-red-400  after:content-['⚠️']">
           {errors.images.message}
         </p>
       )}
 
       {/* apercu */}
       {previewLimited && previewLimited.length > 0 && (
-        <div className="flex items-center gap-5">
-          <h1>Preview : </h1>
-          {previewLimited.map((previewLimitedItem, index) => (
-            <div key={index} className="h-10 w-10 my-10">
-              <img src={previewLimitedItem} alt={`Preview ${index}`} />
-            </div>
-          ))}
+        <div className="flex flex-col  items-center">
+          {/* <h1 className="">Images selectionnées</h1> */}
+          <div className="flex items-center gap-5 border-1 rounded-xl px-4 border-green-100">
+            {previewLimited.map((previewLimitedItem, index) => (
+              <div key={index} className="h-10 w-10 my-2">
+                <img
+                  className="h-10 w-10 "
+                  src={previewLimitedItem}
+                  alt={`Preview ${index}`}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
