@@ -20,8 +20,8 @@ export function Register() {
     <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-3 items-center justify-center min-h-64 relative bottom-10 -
-         mx-4 mt-5 md:max-lg:scale-130  lg:max-2xl:scale-180  p-3 backdrop-blur-3xl border-1 border-transparent shadow-gray-600/50 -right-2 ring-2 ring-yellow-100/40 shadow-2xl rounded-2xl"
+        className="flex flex-col gap-3 items-center justify-center min-h-70 max-w-3xl relative bottom-10 -
+         mx-4 mt-5 md:max-lg:scale-140  lg:max-3xl:scale-180  p-3 backdrop-blur-3xl border-1 border-transparent shadow-gray-600/50 -right-2 ring-2 ring-yellow-100/40 shadow-2xl rounded-2xl"
       >
         <label
           className="text-xl  text-gray-700 font-bold font-exo"
@@ -73,7 +73,7 @@ export function Register() {
           className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
           type="password"
           // name="contact"
-          id="password"
+          id="confirmPassword"
           placeholder="mot de passe"
           {...register("confirmePassword")}
         />
