@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const schema = yup.object().shape({
+export const schemaRegister = yup.object().shape({
   pseudo: yup.string().required("le pseudo est requis"),
   password: yup
     .string()
@@ -16,4 +16,9 @@ export const schema = yup.object().shape({
       [yup.ref("password")],
       "Le mot de passe entré ne correspond pas au mot de passe"
     ),
+});
+
+export const schemaLogin = yup.object().shape({
+  pseudo: yup.string().required("Ce champs ne peut etre vide"),
+  password: yup.string().required("Veuillez entrer votre mot de passe svp"),
 });

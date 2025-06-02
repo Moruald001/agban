@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Btn } from "../../components/button";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../../lib/Schema";
+import { schemaRegister } from "../../lib/Schema";
 
 export function Register() {
   const {
@@ -9,7 +9,7 @@ export function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schemaRegister),
   });
 
   const onSubmit = (data) => {
@@ -51,7 +51,7 @@ export function Register() {
         </label>
         <input
           className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
-          type="text"
+          type="password"
           // name="contact"
           id="password"
           placeholder="mot de passe"
@@ -71,7 +71,7 @@ export function Register() {
         </label>
         <input
           className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
-          type="text"
+          type="password"
           // name="contact"
           id="password"
           placeholder="mot de passe"
