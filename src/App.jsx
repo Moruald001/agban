@@ -1,7 +1,9 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { Home } from "./pages/home";
-import { AddClient } from "./pages/addClient";
+import { Home } from "./pages/Home";
+import { AddClient } from "./pages/AddClient";
+import { Register } from "./pages/auth/Register";
+
 // import { List } from "./pages/list";
 
 function App() {
@@ -9,6 +11,8 @@ function App() {
     <Routes>
       <Route path={"/"} element={<Home />} />
       <Route path={"/add-client"} element={<AddClient />} />
+      <Route path={"/register"} element={<Register />} />
+      {/* <Route path={"/login"} element={<Login />} /> */}
       {/* <Route path={"/list"} element={<List />} /> */}
     </Routes>
   );
