@@ -20,7 +20,7 @@ export function Login() {
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-3 items-center justify-center min-h-64 relative bottom-10 -
-         mx-4 mt-5 md:max-lg:scale-150  xl:max-2xl:scale-200  p-3 backdrop-blur-3xl border-1 border-transparent shadow-gray-600/50 -right-2 ring-2 ring-yellow-100/40 shadow-2xl rounded-2xl"
+         mx-4 mt-5   md:max-xl:scale-170  xl:max-3xl:scale-200  p-3 backdrop-blur-3xl border-1 border-transparent shadow-gray-600/50 -right-2 ring-2 ring-yellow-100/40 shadow-2xl rounded-2xl"
     >
       <label
         className="text-xl  text-gray-700 font-bold font-exo"
