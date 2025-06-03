@@ -4,6 +4,7 @@ import { Home } from "./pages/Home";
 import { AddClient } from "./pages/AddClient";
 import { Register } from "./pages/auth/Register";
 import { Login } from "./pages/auth/login";
+import { NotFound } from "./pages/notFound";
 
 // import { List } from "./pages/list";
 
@@ -14,6 +15,8 @@ function App() {
       <Route path={"/add-client"} element={<AddClient />} />
       <Route path={"/register"} element={<Register />} />
       <Route path={"/login"} element={<Login />} />
+      <Route path={"*"} element={<NotFound />} />
+
       {/* <Route path={"/list"} element={<List />} /> */}
     </Routes>
   );
