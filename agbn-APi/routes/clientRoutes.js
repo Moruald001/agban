@@ -4,10 +4,12 @@ const validate = require("../utils/validate");
 const {
   createClient,
   createList,
-} = require("../controllers/createClient.controller");
+  getClients,
+} = require("../controllers/Client.controller");
 const { createClientSchema, createListSchema } = require("../utils/schema");
 
 router.post("/add-client", validate(createClientSchema), createClient);
 router.post("/create-list", validate(createListSchema), createList);
+router.get("/clients", getClients);
 
 module.exports = router;

@@ -83,4 +83,17 @@ const createClient = async (req, res) => {
   }
 };
 
-module.exports = { createClient, createList };
+//Recuperation des clients
+
+const getClients = async (req, res) => {
+  try {
+    const clientsList = await Client.findAll({
+      attributes: ["name", "contact", "description", "keep"],
+    });
+    res.status(200).json({ "liste des clients": clientsList });
+  } catch (error) {
+    res.status(500).json({ error: "erreur serveur" }, error);
+  }
+};
+
+module.exports = { createClient, createList, getClients };
