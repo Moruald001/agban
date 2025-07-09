@@ -1,5 +1,5 @@
 const express = require("express");
-const { Client, List } = require("../models");
+const { Client, List, Img } = require("../models");
 
 // Creation d'une liste
 const createList = async (req, res) => {
@@ -89,6 +89,7 @@ const getClients = async (req, res) => {
   try {
     const clientsList = await Client.findAll({
       attributes: ["name", "contact", "description", "keep"],
+      include: [Img],
     });
     res.status(200).json({ "liste des clients": clientsList });
   } catch (error) {
@@ -96,4 +97,22 @@ const getClients = async (req, res) => {
   }
 };
 
-module.exports = { createClient, createList, getClients };
+//Reuperation des listes
+const getLists = async (req, res) => {
+  try {
+    const lists = await List.findAll({
+      include: [
+        {
+          model: Client,
+          include: [Img],
+        },
+      ],
+    });
+
+    res.status(200).json({ "liste ": lists });
+  } catch (error) {
+    res.status(500).json({ error: "erreur serveur" }, error);
+  }
+};
+
+module.exports = { createClient, createList, getClients, getLists };
