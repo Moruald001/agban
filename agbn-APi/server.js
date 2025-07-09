@@ -1,18 +1,10 @@
 // const routes = require("./routes");
-const fs = require("fs");
-const path = require("path");
+
 const { sequelize } = require("./models/index");
 const express = require("express");
 const app = express();
 const port = 5000;
 app.use(express.json());
-
-// const dbDir = path.resolve(__dirname, "data");
-// if (!fs.existsSync(dbDir)) {
-//   fs.mkdirSync(dbDir);
-// }
-
-// app.use("/", routes);
 
 async function main() {
   try {
