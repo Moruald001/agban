@@ -88,7 +88,7 @@ const createClient = async (req, res) => {
 const getClients = async (req, res) => {
   try {
     const clientsList = await Client.findAll({
-      attributes: ["name", "contact", "description", "keep"],
+      attributes: ["id", "name", "contact", "description", "keep"],
       include: [Img],
     });
     res.status(200).json({ "liste des clients": clientsList });
@@ -115,4 +115,40 @@ const getLists = async (req, res) => {
   }
 };
 
-module.exports = { createClient, createList, getClients, getLists };
+// modifier un client(contact et keep)
+const updateClient = async (req, res) => {
+  const id = req.params.id;
+  const { keep, contact } = req.body;
+
+  const client = await Client.findByPk(id);
+  if (client === null) {
+    res.status(400).json({
+      message: "impossible de mettre à jour ce client car il est introuvable",
+    });
+    throw new Error(
+      "impossible de mettre à jour ce client car il est introuvable"
+    );
+  }
+  try {
+    await Client.update(
+      { contact, keep },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info client mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update client:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+module.exports = {
+  createClient,
+  createList,
+  getClients,
+  getLists,
+  updateClient,
+};
