@@ -161,10 +161,11 @@ export function AddClient() {
           {...register("images", {
             required: "Au moins une image est requis",
             validate: {
-              maxFiles: (images) => images.length <= 5 || "Maximum 5 fichiers",
-              lessThan10MBPerFile: (images) =>
-                Array.from(images).every((image) => image.size < 10000000) ||
-                "Chaque fichier doit faire moins de 10MB",
+              maxFiles: (images) =>
+                images.length <= 10 || "Maximum 10 fichiers",
+              lessThan5MBPerFile: (images) =>
+                Array.from(images).every((image) => image.size < 6000000) ||
+                "Chaque fichier doit faire moins de 5MB",
               acceptedFormats: (images) =>
                 Array.from(images).every((image) =>
                   ["image/jpeg", "image/png"].includes(image.type)

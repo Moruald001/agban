@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const validate = require("../utils/validate");
+const validate = require("../middlewares/validate");
+const upload = require("../middlewares/imagesUpload");
 const {
   createClient,
   createList,
@@ -14,9 +15,14 @@ const {
   updateClientSchema,
 } = require("../utils/schema");
 
-router.post("/add-client", validate(createClientSchema), createClient);
+router.post(
+  "/add-client",
+  validate(createClientSchema),
+  upload.array("images"),
+  createClient
+);
 router.post("/create-list", validate(createListSchema), createList);
-router.post("/update-client/:id", validate(updateClientSchema), updateClient);
+router.put("/update-client/:id", validate(updateClientSchema), updateClient);
 router.get("/clients", getClients);
 router.get("/lists", getLists);
 

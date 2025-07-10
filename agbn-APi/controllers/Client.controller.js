@@ -71,8 +71,19 @@ const createClient = async (req, res) => {
       res.status(400).json({ message: "erreur lors de l'ajout du client" });
       throw new Error("erreur lors de l'ajout du client");
     }
-    console.log("client ajouté avec succès");
+
     const client = response.toJSON();
+
+    if (req.files && req.files.length > 0) {
+      const images = req.files.map((file) => ({
+        name: `/images/${file.filename}`,
+        clientId: client.id,
+      }));
+
+      await Img.bulkCreate(images);
+    }
+    console.log("client ajouté avec succès");
+
     console.log(client);
     res.status(201).json({
       message: `le client a été ajouté avec succès`,

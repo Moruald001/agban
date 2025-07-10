@@ -37,6 +37,8 @@ List.hasMany(Client);
 Client.belongsTo(List);
 
 Client.hasMany(Img);
-Img.belongsTo(Client);
+Img.belongsTo(Client, {
+  onDelete: "CASCADE",
+});
 
 module.exports = { sequelize, List, Client, Img };

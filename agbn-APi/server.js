@@ -3,9 +3,29 @@ const express = require("express");
 const app = express();
 const port = 5000;
 const clientRoutes = require("./routes/clientRoutes");
+const multer = require("multer");
+
 app.use(express.json());
 
 app.use("/client", clientRoutes);
+
+app.use((err, req, res, next) => {
+  // 🛑 Erreurs Multer (ex: limite de taille, format invalide)
+  if (err instanceof multer.MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE") {
+      return res
+        .status(400)
+        .json({ message: "📦 Fichier trop volumineux (max 5 Mo)" });
+    }
+    return res.status(400).json({ message: `Erreur Multer : ${err.message}` });
+  }
+
+  // ❌ Erreur rejetée depuis fileFilter (ex: mauvais format MIME)
+  if (err.message && err.message.includes("Seules les images")) {
+    return res.status(400).json({ message: err.message });
+  }
+});
+
 app.get("/", (req, res) => {
   res.json({ message: "serveur demarré" });
 });

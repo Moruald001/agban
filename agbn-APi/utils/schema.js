@@ -21,7 +21,7 @@ const updateClientSchema = yup.object({
     .required("Le contact est requis")
     .min(8, "le contact doit etre de 8 caractère minimum")
     .matches(/^\+[0-9]+$/, "le numero n'est pas valide "),
-  keep: yup.boolean().required("Le mot de passe est requis"),
+  keep: yup.boolean().required("keep est soit true ou false"),
 });
 
 module.exports = { createClientSchema, createListSchema, updateClientSchema };
