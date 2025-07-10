@@ -1,7 +1,8 @@
 // middlewares/validate.js
-const validate = (createClientSchema) => async (req, res, next) => {
+const validate = (schema) => async (req, res, next) => {
+  console.log(req.body);
   try {
-    req.body = await createClientSchema.validate(req.body, {
+    req.body = await schema.validate(req.body, {
       abortEarly: false,
       stripUnknown: true,
     });

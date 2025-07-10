@@ -76,7 +76,7 @@ const createClient = async (req, res) => {
 
     if (req.files && req.files.length > 0) {
       const images = req.files.map((file) => ({
-        name: `/images/${file.filename}`,
+        img: `/images/${file.filename}`,
         clientId: client.id,
       }));
 

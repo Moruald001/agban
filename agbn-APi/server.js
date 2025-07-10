@@ -1,13 +1,14 @@
 const { sequelize } = require("./models/index");
 const express = require("express");
-const app = express();
 const port = 5000;
 const clientRoutes = require("./routes/clientRoutes");
 const multer = require("multer");
-
-app.use(express.json());
+const app = express();
 
 app.use("/client", clientRoutes);
+app.use("/images", express.static("images"));
+
+app.use(express.json());
 
 app.use((err, req, res, next) => {
   // 🛑 Erreurs Multer (ex: limite de taille, format invalide)
@@ -35,7 +36,7 @@ async function main() {
     await sequelize.authenticate();
     console.log("✅ Connexion à la base réussie.");
 
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
     console.log("📦 Synchronisation des modèles terminée.");
     app.listen(port, () => {
       console.log(`Serveur demarré sur http://localhost:${port}`);

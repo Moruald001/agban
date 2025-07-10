@@ -8,7 +8,7 @@ const createClientSchema = yup.object({
     .min(8, "le contact doit etre de 8 caractère minimum")
     .matches(/^\+[0-9]+$/, "le numero n'est pas valide "),
   description: yup.string().required("La description est requise").min(6),
-  keep: yup.boolean().required("Le mot de passe est requis"),
+  keep: yup.boolean().required("keep est soit true ou false"),
 });
 
 const createListSchema = yup.object({

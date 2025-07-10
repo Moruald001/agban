@@ -18,8 +18,8 @@ const {
 
 router.post(
   "/add-client",
-  validate(createClientSchema),
   upload.array("images"),
+  validate(createClientSchema),
   createClient
 );
 router.post("/create-list", validate(createListSchema), createList);

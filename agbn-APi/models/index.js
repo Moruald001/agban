@@ -27,7 +27,7 @@ const List = sequelize.define(
 const Img = sequelize.define(
   "img",
   {
-    img: { type: DataTypes.STRING, allowNull: true },
+    img: { type: DataTypes.STRING, allowNull: false },
   },
   {
     timestamps: false,
