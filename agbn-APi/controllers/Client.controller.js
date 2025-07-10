@@ -156,10 +156,46 @@ const updateClient = async (req, res) => {
   }
 };
 
+// Suppression d'un client
+const deleteClient = async (req, res) => {
+  const id = req.params.id;
+
+  const client = await Client.findByPk(id);
+  if (client === null) {
+    res.status(400).json({
+      message: "impossible de mettre à jour ce client car il est introuvable",
+    });
+    throw new Error(
+      "impossible de mettre à jour ce client car il est introuvable"
+    );
+  }
+
+  try {
+    const response = await Client.destroy({
+      where: {
+        id,
+      },
+      force: true,
+    });
+
+    if (!response) {
+      res.status(500).json({ erreur: "la suppression à echoué" });
+      throw new Error("la suppression à echoué");
+    }
+    res
+      .status(200)
+      .json({ message: "la suppression à été effectué avec succès", client });
+  } catch (error) {
+    console.log("erreur serveur ", error);
+    res.status(500).json({ erreur: "la suppression à echoué" });
+  }
+};
+
 module.exports = {
   createClient,
   createList,
   getClients,
   getLists,
   updateClient,
+  deleteClient,
 };

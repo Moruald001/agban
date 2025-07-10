@@ -8,6 +8,7 @@ const {
   getClients,
   getLists,
   updateClient,
+  deleteClient,
 } = require("../controllers/Client.controller");
 const {
   createClientSchema,
@@ -23,6 +24,7 @@ router.post(
 );
 router.post("/create-list", validate(createListSchema), createList);
 router.put("/update-client/:id", validate(updateClientSchema), updateClient);
+router.delete("/delete-client/:id", deleteClient);
 router.get("/clients", getClients);
 router.get("/lists", getLists);
 
