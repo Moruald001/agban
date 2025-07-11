@@ -13,8 +13,10 @@
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "dotenv": "^17.1.0",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.1",
     "sequelize": "^6.37.7",
     "sqlite3": "^5.1.7",
