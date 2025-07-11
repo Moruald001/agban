@@ -66,4 +66,4 @@ Img.belongsTo(Client, {
 User.hasMany(List);
 List.belongsTo(User);
 
-module.exports = { sequelize, List, Client, Img };
+module.exports = { sequelize, List, Client, Img, AccountCount, User };

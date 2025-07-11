@@ -1,5 +1,12 @@
 const express = require("express");
-const { Client, List, Img } = require("../models");
+const { Client, List, Img, User, AccountCount } = require("../models");
+
+//Creation d'un utilisateur
+const register = async (req, res) => {
+  const { name, email, password } = req.body;
+};
+
+//connection
 
 // Creation d'une liste
 const createList = async (req, res) => {
@@ -24,6 +31,7 @@ const createList = async (req, res) => {
         .json({ message: "erreur lors de la creation de la liste" });
       throw new Error("erreur lors de la creation de la liste");
     }
+
     console.log("Liste crée avec succès");
     const list = response.toJSON();
     console.log(list);
