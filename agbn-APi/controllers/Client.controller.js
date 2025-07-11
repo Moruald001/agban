@@ -126,15 +126,15 @@ const getLists = async (req, res) => {
   }
 };
 
-// modifier un client(contact et keep)
+// modifier un client(tout sauf les images)
 const updateClient = async (req, res) => {
   const id = req.params.id;
-  const { keep, contact } = req.body;
+  const { name, description, contact, keep } = req.body;
 
   const client = await Client.findByPk(id);
   if (client === null) {
     res.status(400).json({
-      message: "impossible de mettre à jour ce client car il est introuvable",
+      message: "impossible de mettre à jour ce client, il est introuvable",
     });
     throw new Error(
       "impossible de mettre à jour ce client car il est introuvable"
@@ -142,7 +142,7 @@ const updateClient = async (req, res) => {
   }
   try {
     await Client.update(
-      { contact, keep },
+      { name, description, contact, keep },
       {
         where: {
           id,
