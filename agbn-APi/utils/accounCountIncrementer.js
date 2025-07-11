@@ -1,7 +1,7 @@
 const sequelize = require("sequelize");
 const { AccountCount } = require("../models");
 
-const accounCountIncrementer = async (id) => {
+const accounCountIncrementer = async () => {
   let m = "";
   try {
     const response = await AccountCount.findByPk(1);
@@ -12,7 +12,7 @@ const accounCountIncrementer = async (id) => {
       await AccountCount.update(
         { count },
         {
-          where: { id },
+          where: { id: 1 },
         }
       );
       return (m = "incremented");

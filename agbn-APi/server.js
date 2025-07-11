@@ -2,13 +2,16 @@ const { sequelize } = require("./models/index");
 const express = require("express");
 const port = 5000;
 const clientRoutes = require("./routes/clientRoutes");
+const userRoutes = require("./routes/userRoutes");
 const multer = require("multer");
+
 const app = express();
 
+app.use(express.json());
+
+app.use("/auth", userRoutes);
 app.use("/client", clientRoutes);
 app.use("/images", express.static("images"));
-
-app.use(express.json());
 
 app.use((err, req, res, next) => {
   // 🛑 Erreurs Multer (ex: limite de taille, format invalide)

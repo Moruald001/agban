@@ -2,6 +2,7 @@ import * as yup from "yup";
 
 export const schemaRegister = yup.object().shape({
   pseudo: yup.string().required("le pseudo est requis"),
+  email: yup.string().required("L'email  est requis").email("email invalide"),
   password: yup
     .string()
     .required("Le mot de passe est requis")

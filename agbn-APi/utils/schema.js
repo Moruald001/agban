@@ -15,13 +15,17 @@ const createListSchema = yup.object({
   name: yup.string().required("Veuillez entrer un nom ").min(4),
 });
 
-const updateClientSchema = yup.object({
-  contact: yup
+const registerUserSchema = yup.object({
+  name: yup.string().required("Le nom est requis").min(4),
+  email: yup.string().required("L'email  est requis").email("email invalide"),
+  password: yup
     .string()
-    .required("Le contact est requis")
-    .min(8, "le contact doit etre de 8 caractère minimum")
-    .matches(/^\+[0-9]+$/, "le numero n'est pas valide "),
-  keep: yup.boolean().required("keep est soit true ou false"),
+    .required("Le mot de passe est requis est requis")
+    .min(6)
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])/,
+      "Le mot de passe doit contenir au moins une lettre, un chiffre et un caractère spécial"
+    ),
 });
 
-module.exports = { createClientSchema, createListSchema, updateClientSchema };
+module.exports = { createClientSchema, createListSchema, registerUserSchema };
