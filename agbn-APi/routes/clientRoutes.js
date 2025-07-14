@@ -11,29 +11,24 @@ const {
   deleteClient,
 } = require("../controllers/Client.controller");
 const { createClientSchema, createListSchema } = require("../utils/schema");
-const authMiddleware = require("../middlewares/auth");
+const auth = require("../middlewares/authMiddleware");
 
 router.post(
   "/add-client",
-  authMiddleware,
+  auth,
   upload.array("images"),
   validate(createClientSchema),
   createClient
 );
-router.post(
-  "/create-list",
-  authMiddleware,
-  validate(createListSchema),
-  createList
-);
+router.post("/create-list", auth, validate(createListSchema), createList);
 router.put(
   "/update-client/:id",
-  authMiddleware,
+  auth,
   validate(createClientSchema),
   updateClient
 );
-router.delete("/delete-client/:id", authMiddleware, deleteClient);
-router.get("/clients", authMiddleware, getClients);
-router.get("/lists", authMiddleware, getLists);
+router.delete("/delete-client/:id", auth, deleteClient);
+router.get("/clients", auth, getClients);
+router.get("/lists", auth, getLists);
 
 module.exports = router;

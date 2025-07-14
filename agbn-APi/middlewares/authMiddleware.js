@@ -4,17 +4,20 @@ const { User } = require("../models/index");
 
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
+  console.log(authHeader);
 
-  if (!authHeader || !authHeader.startWith("Bearer ")) {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: "Token manquant ou invalide" });
   }
 
-  const token = authHeader.split(" ")[1];
+  const authHeaderTable = authHeader.split(' ');
+  const token = authHeaderTable[1]
+  console.log(token);
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await User.findByPk(decoded.id);
+    const user = await User.findByPk(decoded.userId);
 
     if (!user) {
       return res.status(401).json({ message: "Utilisateur non trouvé." });
