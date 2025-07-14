@@ -1,41 +1,63 @@
-# Documentation de l’API  du mini gestionnaire chargement
+# Documentation de l’API – Mini Gestionnaire de Chargement
 
-Toutes les routes sont préfixées par `/client` et nécessitent une authentification (`Authorization: Bearer <token>`).
+## Introduction
+
+Cette API permet la gestion d’utilisateurs, de clients avec l'upload d'images, de listes.  
+Toutes les routes (sauf authentification) nécessitent un token JWT (`Authorization: Bearer <token>`).
 
 ---
 
-## 1. Ajouter un client
+## Authentification
+
+### 1. Inscription
+
+- **URL** : `/auth/register`
+- **Méthode** : `POST`
+- **Body** : `application/json`
+  - `name` (string, requis)
+  - `email` (string, requis, unique)
+  - `password` (string, requis)
+- **Réponse** :
+  - `201` : Utilisateur créé
+  - `400` : Email déjà utilisé ou limite de comptes atteinte
+
+### 2. Connexion
+
+- **URL** : `/auth/login`
+- **Méthode** : `POST`
+- **Body** : `application/json`
+  - `email` (string, requis)
+  - `password` (string, requis)
+- **Réponse** :
+  - `200` : Connexion réussie, retourne un token JWT
+  - `400` : Identifiants incorrects
+- **Sécurité** :
+  - Limitation à 5 tentatives de connexion toutes les 15 minutes par IP
+
+---
+
+## Gestion des clients
+
+### 1. Ajouter un client
 
 - **URL** : `/client/add-client`
 - **Méthode** : `POST`
+- **Headers** : `Authorization: Bearer <token>`
 - **Body** : `multipart/form-data`
   - `name` (string, requis)
   - `contact` (string, requis)
   - `description` (string, requis)
   - `keep` (boolean, requis)
-  - `images` (array de fichiers, optionnel)
+  - `images` (array de fichiers, optionnel, jpeg/png/webp, max 10 fichiers, 5Mo max/fichier)
 - **Réponse** :
-  - `201` : Client créé avec succès
-  - `400/404` : Erreur de validation ou client déjà existant
+  - `201` : Client créé
+  - `400/404` : Erreur de validation ou client existant
 
----
-
-## 2. Créer une liste
-
-- **URL** : `/client/create-list`
-- **Méthode** : `POST`
-- **Body** : `application/json`
-  - `name` (string, requis)
-- **Réponse** :
-  - `201` : Liste créée
-  - `400/404` : Erreur de validation ou liste déjà existante
-
----
-
-## 3. Mettre à jour un client
+### 2. Mettre à jour un client
 
 - **URL** : `/client/update-client/:id`
 - **Méthode** : `PUT`
+- **Headers** : `Authorization: Bearer <token>`
 - **Body** : `application/json`
   - `name` (string, requis)
   - `contact` (string, requis)
@@ -45,38 +67,66 @@ Toutes les routes sont préfixées par `/client` et nécessitent une authentific
   - `200` : Client mis à jour
   - `400/404` : Erreur de validation ou client introuvable
 
----
-
-## 4. Supprimer un client
+### 3. Supprimer un client
 
 - **URL** : `/client/delete-client/:id`
 - **Méthode** : `DELETE`
+- **Headers** : `Authorization: Bearer <token>`
 - **Réponse** :
   - `200` : Suppression réussie
   - `400/500` : Client introuvable ou erreur serveur
 
----
-
-## 5. Récupérer tous les clients
+### 4. Récupérer tous les clients
 
 - **URL** : `/client/clients`
 - **Méthode** : `GET`
+- **Headers** : `Authorization: Bearer <token>`
 - **Réponse** :
-  - `200` : Liste des clients
+  - `200` : Liste des clients (avec images associées)
 
 ---
 
-## 6. Récupérer toutes les listes
+## Gestion des listes
+
+### 1. Créer une liste
+
+- **URL** : `/client/create-list`
+- **Méthode** : `POST`
+- **Headers** : `Authorization: Bearer <token>`
+- **Body** : `application/json`
+  - `name` (string, requis)
+- **Réponse** :
+  - `201` : Liste créée
+  - `400/404` : Erreur de validation ou liste existante
+
+### 2. Récupérer toutes les listes
 
 - **URL** : `/client/lists`
 - **Méthode** : `GET`
+- **Headers** : `Authorization: Bearer <token>`
 - **Réponse** :
-  - `200` : Liste des listes
+  - `200` : Liste des listes (avec clients et images associés)
 
 ---
 
-**Remarques :**
-- Toutes les routes sont protégées par authentification.
-- Les images sont uploadées via le champ `images` (multipart/form-data).
-- La validation des données est faite via le middleware `validate`.
-- Voir le contrôleur `Client.controller` pour la logique
+## Gestion des images
+
+- **Upload** : via `/client/add-client` (champ `images`)
+- **Accès** : `/images/<nom_du_fichier>`
+- **Formats acceptés** : jpeg, png, webp (vérification du type MIME et du contenu réel)
+- **Taille max** : 5 Mo par fichier, 10 fichiers max
+
+---
+
+## Sécurité et bonnes pratiques
+
+- **Validation** : Toutes les entrées sont validées côté serveur (middleware `validate.js` et schémas Yup)
+- **Authentification** : JWT obligatoire pour toutes les routes sauf `/auth/register` et `/auth/login`
+- **Rate limiting** : Limitation des tentatives de connexion (voir `middlewares/loginRateLimiter.js`)
+- **Headers de sécurité** : Ajoutés avec Helmet
+- **Logs** : Toutes les requêtes sont loggées avec Morgan
+- **CORS** : Configuré dans `config/corsOption.js` (adapter l’origine en production)
+- **Gestion des erreurs** : Centralisée dans le middleware d’erreurs de `server.js`
+- **HTTPS** : À activer en production pour sécuriser les échanges
+
+---

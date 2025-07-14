@@ -4,9 +4,15 @@ const port = 5000;
 const clientRoutes = require("./routes/clientRoutes");
 const userRoutes = require("./routes/userRoutes");
 const multer = require("multer");
-
 const app = express();
+const cors = require("cors");
+const corsOptions = require("./config/corsOption");
+const helmet = require("helmet");
+const morgan = require("morgan");
 
+app.use(helmet());
+app.use(morgan("combined"));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
