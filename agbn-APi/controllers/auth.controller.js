@@ -5,7 +5,8 @@ const jwtokenGenerator = require("../utils/jwtokenGenerator");
 
 //Creation d'un utilisateur
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, role, password } = req.body;
+  console.log(role);
 
   try {
     const emailExist = await User.findOne({ where: { email } });
@@ -23,12 +24,14 @@ const register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      role: role,
     });
     if (user) {
       await accountCountIncrementer();
     }
     res.status(201).json({ message: `Utilisateur créé, ${user.name}` });
   } catch (error) {
+    console.log(error);
     res
       .status(500)
       .json({ errors: "Erreur lors de la création de l'utilisateur" });
@@ -60,7 +63,12 @@ const login = async (req, res) => {
     return res.status(200).json({
       message: "Connexion réussie",
       token,
-      user: { id: user.id, name: user.name, email: user.email },
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
     console.error("Erreur dans /login :", error.message);

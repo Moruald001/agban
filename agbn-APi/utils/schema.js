@@ -1,5 +1,7 @@
 const yup = require("yup");
 
+const roles = ["ceo", "colaborateur"];
+
 const createClientSchema = yup.object({
   name: yup.string().required("Le nom est requis").min(4),
   contact: yup
@@ -18,6 +20,7 @@ const createListSchema = yup.object({
 const registerUserSchema = yup.object({
   name: yup.string().required("Le nom est requis").min(4),
   email: yup.string().required("L'email  est requis").email("email invalide"),
+  role: yup.string().oneOf(roles, "Role invalide").required("Role invalide"),
   password: yup
     .string()
     .required("Le mot de passe est requis est requis")

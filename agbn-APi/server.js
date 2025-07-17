@@ -11,7 +11,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 
 app.use(helmet());
-app.use(morgan("combined"));
+app.use(morgan("dev"));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
