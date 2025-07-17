@@ -31,6 +31,7 @@ const Client = sequelize.define(
     contact: DataTypes.STRING,
     description: { type: DataTypes.TEXT, allowNull: false },
     keep: { type: DataTypes.BOOLEAN, allowNull: false },
+    listId: { type: DataTypes.INTEGER, allowNull: false },
   },
   {
     timestamps: true,
@@ -41,6 +42,10 @@ const List = sequelize.define(
   "list",
   {
     name: { type: DataTypes.STRING, allowNull: false },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   {
     timestamps: true,
@@ -56,8 +61,14 @@ const Img = sequelize.define(
     timestamps: false,
   }
 );
+
 List.hasMany(Client);
-Client.belongsTo(List);
+Client.belongsTo(List, {
+  foreignKey: {
+    name: "listId",
+    allowNull: false,
+  },
+});
 
 Client.hasMany(Img);
 Img.belongsTo(Client, {
@@ -65,6 +76,11 @@ Img.belongsTo(Client, {
 });
 
 User.hasMany(List);
-List.belongsTo(User);
+List.belongsTo(User, {
+  foreignKey: {
+    name: "userId",
+    allowNull: false,
+  },
+});
 
 module.exports = { sequelize, List, Client, Img, AccountCount, User };

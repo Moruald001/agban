@@ -11,6 +11,7 @@ const createClientSchema = yup.object({
     .matches(/^\+[0-9]+$/, "le numero n'est pas valide "),
   description: yup.string().required("La description est requise").min(6),
   keep: yup.boolean().required("keep est soit true ou false"),
+  listId: yup.number().required("list id invalide"),
 });
 
 const createListSchema = yup.object({

@@ -2,47 +2,56 @@ const { Client, List, Img } = require("../models");
 // Creation d'une liste
 const createList = async (req, res) => {
   const { name } = req.body;
+  const user = req.user;
   const ListExist = await List.findOne({ where: { name } });
 
   if (ListExist !== null) {
-    res.status(404).json({
+    return res.status(404).json({
       message: "Cette liste existe déjà",
     });
-    throw new Error("Cette liste existe déjà");
   }
 
   try {
     const response = await List.create({
       name,
+      userId: user.id,
     });
 
     if (response === undefined) {
-      res
+      return res
         .status(400)
         .json({ message: "erreur lors de la creation de la liste" });
-      throw new Error("erreur lors de la creation de la liste");
     }
 
     console.log("Liste crée avec succès");
     const list = response.toJSON();
-    console.log(list);
     res.status(201).json({
       message: `Liste crée avec succès`,
       list,
     });
   } catch (error) {
-    res.status(500).json({ message: `erreur serveur ${error} ` });
+    console.log(error);
+    res.status(500).json({ message: `erreur serveur  ` });
   }
 };
 
 //Ajout d'un client
 
 const createClient = async (req, res) => {
-  const { name, contact, description, keep } = req.body;
+  const { name, contact, description, keep, listId } = req.body;
+  console.log(listId);
 
-  // on verifie si le numero ou le nom  existe exist déjà ?
+  // on verifie si la liste ,le numero ou le nom  existe exist déjà ?
+  const list = await List.findByPk(listId);
+
   const clientExist = await Client.findOne({ where: { name } });
   const clientNumberExist = await Client.findOne({ where: { contact } });
+
+  if (!list) {
+    return res.status(404).json({
+      message: "list id invalide",
+    });
+  }
 
   if (clientExist !== null) {
     res.status(404).json({
@@ -64,6 +73,7 @@ const createClient = async (req, res) => {
       contact,
       description,
       keep,
+      listId,
     });
 
     if (response === undefined) {

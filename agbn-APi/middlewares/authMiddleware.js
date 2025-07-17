@@ -4,15 +4,13 @@ const { User } = require("../models/index");
 
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  console.log(authHeader);
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Token manquant ou invalide" });
   }
 
-  const authHeaderTable = authHeader.split(' ');
-  const token = authHeaderTable[1]
-  console.log(token);
+  const authHeaderTable = authHeader.split(" ");
+  const token = authHeaderTable[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
