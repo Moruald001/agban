@@ -29,7 +29,8 @@ Toutes les routes (sauf authentification) nécessitent un token JWT (`Authorizat
   - `email` (string, requis)
   - `password` (string, requis)
 - **Réponse** :
-  - `200` : Connexion réussie, retourne un token JWT et les infos utilisateur
+  - `200` : Connexion réussie et les infos utilisateur
+  - le token est stocké dans un cookie envoyé en httpOnly qui dure 24h
   - `400` : Identifiants incorrects
 - **Sécurité** :
   - Limitation à 5 tentatives de connexion toutes les 15 minutes par IP (rate limiting)
@@ -42,7 +43,6 @@ Toutes les routes (sauf authentification) nécessitent un token JWT (`Authorizat
 
 - **URL** : `/client/add-client`
 - **Méthode** : `POST`
-- **Headers** : `Authorization: Bearer <token>`
 - **Body** : `multipart/form-data`
   - `name` (string, requis)
   - `contact` (string, requis)
@@ -58,7 +58,6 @@ Toutes les routes (sauf authentification) nécessitent un token JWT (`Authorizat
 
 - **URL** : `/client/update-client/:id`
 - **Méthode** : `PUT`
-- **Headers** : `Authorization: Bearer <token>`
 - **Body** : `application/json`
   - `name` (string, requis)
   - `contact` (string, requis)
@@ -72,7 +71,6 @@ Toutes les routes (sauf authentification) nécessitent un token JWT (`Authorizat
 
 - **URL** : `/client/delete-client/:id`
 - **Méthode** : `DELETE`
-- **Headers** : `Authorization: Bearer <token>`
 - **Réponse** :
   - `200` : Suppression réussie
   - `400/500` : Client introuvable ou erreur serveur
@@ -81,7 +79,6 @@ Toutes les routes (sauf authentification) nécessitent un token JWT (`Authorizat
 
 - **URL** : `/client/clients`
 - **Méthode** : `GET`
-- **Headers** : `Authorization: Bearer <token>`
 - **Réponse** :
   - `200` : Liste des clients (avec images associées)
 
@@ -93,7 +90,6 @@ Toutes les routes (sauf authentification) nécessitent un token JWT (`Authorizat
 
 - **URL** : `/client/create-list`
 - **Méthode** : `POST`
-- **Headers** : `Authorization: Bearer <token>`
 - **Body** : `application/json`
   - `name` (string, requis)
 - **Réponse** :
@@ -104,7 +100,6 @@ Toutes les routes (sauf authentification) nécessitent un token JWT (`Authorizat
 
 - **URL** : `/client/lists`
 - **Méthode** : `GET`
-- **Headers** : `Authorization: Bearer <token>`
 - **Réponse** :
   - `200` : Liste des listes (avec clients et images associés)
 

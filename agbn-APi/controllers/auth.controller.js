@@ -59,10 +59,14 @@ const login = async (req, res) => {
     }
     // Générer un token JWT (fonction personnalisée)
     const token = jwtokenGenerator(user.id);
-
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Lax",
+      maxAge: 24 * 60 * 60 * 1000, //24h
+    });
     return res.status(200).json({
       message: "Connexion réussie",
-      token,
       user: {
         id: user.id,
         name: user.name,

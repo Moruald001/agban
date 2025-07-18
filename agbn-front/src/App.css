@@ -6,3 +6,6 @@
 @import "@fontsource/roboto/700.css"; /* Poids bold (700) */
 
 @import "tailwindcss";
+@plugin "daisyui" {
+  themes: winter --default, dark --prefersdark;
+}
