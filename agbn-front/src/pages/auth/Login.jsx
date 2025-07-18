@@ -2,6 +2,11 @@ import { useForm } from "react-hook-form";
 import { Btn } from "../../components/button";
 import { schemaLogin } from "../../lib/Schema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Link } from "react-router-dom";
+import { doLogin } from "../../../lib/authFetcher";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { Navigate } from "react-router-dom";
 
 export function Login() {
   const {
@@ -11,37 +16,49 @@ export function Login() {
   } = useForm({
     resolver: yupResolver(schemaLogin),
   });
+  const { mutate, isPending, isError, isSuccess, error } = useMutation({
+    mutationFn: doLogin,
+  });
 
   const onSubmit = (data) => {
-    console.log(data);
+    mutate(data);
+
+    if (isSuccess) {
+      toast.success("Connexion reussî");
+      setTimeout(() => {
+        Navigate("/");
+      }, 1000);
+    }
+    if (isError) {
+      console.log(error);
+      toast.error(`${error}`);
+    }
   };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-3 items-center justify-center min-h-64 relative bottom-10 -
-         mx-4 mt-5   md:max-xl:scale-170  xl:max-3xl:scale-200  p-3 backdrop-blur-3xl border-1 border-transparent shadow-gray-600/50 -right-2 ring-2 ring-yellow-100/40 shadow-2xl rounded-2xl"
+      className="w-screen h-screen flex flex-col gap-3 items-center justify-center min-h-64 m-auto "
     >
-      <label
-        className="text-xl  text-gray-700 font-bold font-exo"
-        htmlFor="pseudo"
-      >
-        Pseudo
+      <label className="text-xl   text-gray-700 font-bold " htmlFor="email">
+        Email
       </label>
       <input
-        className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
+        className={`border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden   ${
+          errors.email && "border-pink-800"
+        } 
+        }`}
         type="text"
         // name="contact"
-        id="pseudo"
-        placeholder="Pseudo"
-        {...register("pseudo")}
+        id="email"
+        placeholder="example@email.com"
+        {...register("email")}
       />
-      {errors.pseudo && (
-        <p className="text-red-400 text-center w-50 after:content-['⚠️']">
-          {errors.pseudo.message}
+      {errors.email && (
+        <p className="text-red-400 text-center  after:content-['⚠️']">
+          {errors.email.message}
         </p>
       )}
-
       <label
         className="text-xl  text-gray-700 font-bold font-exo"
         htmlFor="password"
@@ -49,7 +66,9 @@ export function Login() {
         Mot de passe
       </label>
       <input
-        className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
+        className={`border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden ${
+          errors.password && "border-pink-800"
+        }`}
         type="password"
         // name="contact"
         id="password"
@@ -57,18 +76,24 @@ export function Login() {
         {...register("password")}
       />
       {errors.password && (
-        <p className="text-red-400 text-center w-50 after:content-['⚠️']">
+        <p className="text-red-400 text-center  after:content-['⚠️']">
           {errors.password.message}
         </p>
       )}
-
       <Btn
-        title="S'incrire"
+        title="Se connecter"
         position=" self-center mt-10 "
-        weight=" px-14"
+        weight=" px-5"
         fontStyle=" font-bold text-xl  text-gray-700"
         attributes="submit"
-      />
+        disable={isPending && "disable"}
+      />{" "}
+      <p className=" text-sm">
+        Vous n'avez pas de compte?{" "}
+        <Link className="text-blue-600 underline" to={"/register"}>
+          Créer un compte
+        </Link>
+      </p>
     </form>
   );
 }

@@ -7,17 +7,19 @@ export const Btn = ({
   weight = "",
   fontStyle = "",
   attributes,
+  disable,
 }) => {
   return (
     <>
       <button
         type={attributes}
         className={
-          "bg-gray-600 p-3 rounded-3xl text-white font-center font-exo  duration-300 ease-in-out hover:scale-75 transition-transform cursor-pointer" +
+          "bg-gray-600 p-3 rounded-md text-white font-center font-exo  duration-300 ease-in-out hover:scale-75 transition-transform cursor-pointer" +
           animation +
           position +
           weight +
-          fontStyle
+          fontStyle +
+          disable
         }
       >
         {title}

@@ -25,7 +25,7 @@ export function Home() {
   }, []);
 
   return isLoading ? (
-    <div className="flex justify-center items-center mt-100">
+    <div className="flex justify-center items-center w-screen h-screen">
       <ThreeDot
         variant="bounce"
         color="#a9a9a9"
@@ -37,7 +37,7 @@ export function Home() {
   ) : (
     <>
       <NavBar />
-      <div className="    p-5 flex flex-col justify-start items-center md:max-2xl:text-3x mt-40">
+      <div className=" mt-50  p-5 flex flex-col justify-start items-center ">
         <TypeAnimation
           sequence={["Bienvenue sur \n\n AGBAN", 2000]}
           className={

@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const schemaRegister = yup.object().shape({
-  pseudo: yup.string().required("le pseudo est requis"),
+  name: yup.string().required("le pseudo est requis"),
   email: yup.string().required("L'email  est requis").email("email invalide"),
   password: yup
     .string()
@@ -20,6 +20,9 @@ export const schemaRegister = yup.object().shape({
 });
 
 export const schemaLogin = yup.object().shape({
-  pseudo: yup.string().required("Ce champs ne peut etre vide"),
+  email: yup
+    .string()
+    .email("Email invalide")
+    .required("Ce champs ne peut etre vide"),
   password: yup.string().required("Veuillez entrer votre mot de passe svp"),
 });

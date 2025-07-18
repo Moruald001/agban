@@ -5,7 +5,7 @@ import { AddClient } from "./pages/AddClient";
 import { Register } from "./pages/auth/Register";
 import { Login } from "./pages/auth/login";
 import { NotFound } from "./pages/notFound";
-
+import { Toaster } from "solid-toast";
 // import { List } from "./pages/list";
 
 function App() {

@@ -14,7 +14,7 @@ export default function NavBar() {
         </div>
         {isAuthenticated ? (
           <div className="flex gap-4 items-center">
-            <p className="capitalize">{user.name}</p>
+            <p className="capitalize">{user?.name}</p>
             <button
               onClick={handleLogout}
               className="capitalize btn btn-neutral opacity-60"
