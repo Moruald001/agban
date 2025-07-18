@@ -79,5 +79,15 @@ const login = async (req, res) => {
     return res.status(500).json({ error: "Erreur interne du serveur." });
   }
 };
+//deconnexion
+const logout = async (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "Lax",
+  });
 
-module.exports = { register, login };
+  res.status(200).json({ message: "Déconnecté avec succès." });
+};
+
+module.exports = { register, login, logout };

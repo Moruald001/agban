@@ -6,11 +6,11 @@ export function Home() {
   return (
     <>
       <NavBar />
-      <div className=" flex flex-col justify-center items-center md:max-2xl:text-3xl">
+      <div className="    p-5 flex flex-col justify-start items-center md:max-2xl:text-3x mt-40">
         <TypeAnimation
-          sequence={["Bienvenue sur le Gestionnaire de Chargement ", 2000]}
+          sequence={["Bienvenue sur \n\n AGBAN", 2000]}
           className={
-            "text-lg text-center mb-20 font-roboto font-bold text-gray-600 after:content-['🚚']  md:max-2xl:text-4xl"
+            "  text-2xl text-center mb-20 font-roboto font-bold text-gray-600  md:max-2xl:text-4xl"
           }
           speed={50}
           repeat={Infinity}
@@ -18,7 +18,7 @@ export function Home() {
         />
         <Link
           className={
-            "bg-gray-600 p-3 rounded-3xl text-white font-center font-exo  duration-300 ease-in-out hover:scale-110 transition-transform animate-bounce "
+            "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110  "
           }
           to={"/add-client"}
         >

@@ -29,11 +29,17 @@ Toutes les routes (sauf authentification) nécessitent un token JWT (`Authorizat
   - `email` (string, requis)
   - `password` (string, requis)
 - **Réponse** :
-  - `200` : Connexion réussie et les infos utilisateur
+  - `200` : Connexion réussie et les infos utilisateur{id name email role}
   - le token est stocké dans un cookie envoyé en httpOnly qui dure 24h
   - `400` : Identifiants incorrects
 - **Sécurité** :
   - Limitation à 5 tentatives de connexion toutes les 15 minutes par IP (rate limiting)
+
+### 3 . Deconneion
+
+- **URL** : `/auth/logout`
+- **Méthode** : `POST`
+- **Réponse** : `200` : Deconnexion réussie
 
 ---
 
