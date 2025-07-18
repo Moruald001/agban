@@ -1,9 +1,40 @@
 import { Link } from "react-router-dom";
 import { TypeAnimation } from "react-type-animation";
 import NavBar from "../components/NavBar";
+import useAuthStore from "../../store/useAuth";
+import { ThreeDot } from "react-loading-indicators";
+import { useState, useEffect } from "react";
 
 export function Home() {
-  return (
+  const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated } = useAuthStore();
+
+  const statusLoading = async (value) => {
+    await setIsLoading(value);
+  };
+  useEffect(() => {
+    statusLoading(true);
+
+    const timeOut = setTimeout(() => {
+      statusLoading(false);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, []);
+
+  return isLoading ? (
+    <div className="flex justify-center items-center mt-100">
+      <ThreeDot
+        variant="bounce"
+        color="#a9a9a9"
+        size="medium"
+        text=""
+        textColor=""
+      />
+    </div>
+  ) : (
     <>
       <NavBar />
       <div className="    p-5 flex flex-col justify-start items-center md:max-2xl:text-3x mt-40">
@@ -16,14 +47,25 @@ export function Home() {
           repeat={Infinity}
           cursor={false}
         />
-        <Link
-          className={
-            "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110  "
-          }
-          to={"/add-client"}
-        >
-          Ajouter un client
-        </Link>
+        {isAuthenticated ? (
+          <Link
+            className={
+              "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110  "
+            }
+            to={"/add-client"}
+          >
+            Ajouter un client
+          </Link>
+        ) : (
+          <Link
+            className={
+              "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110 capitalize "
+            }
+            to={"/login"}
+          >
+            se connecter
+          </Link>
+        )}
       </div>
     </>
   );

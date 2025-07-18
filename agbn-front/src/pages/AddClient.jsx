@@ -36,7 +36,7 @@ export function AddClient() {
       setPreview(null);
     }
   }, [images]);
-
+  // handle loading
   const statusLoading = async (value) => {
     await setIsLoading(value);
   };
@@ -45,7 +45,7 @@ export function AddClient() {
 
     const timeOut = setTimeout(() => {
       statusLoading(false);
-    }, [1000]);
+    }, 1000);
 
     return () => {
       clearTimeout(timeOut);
@@ -60,14 +60,13 @@ export function AddClient() {
   };
 
   return isLoading ? (
-    <div>
+    <div className="flex justify-center items-center mt-100">
       <ThreeDot
         variant="bounce"
         color="#a9a9a9"
         size="medium"
         text=""
         textColor=""
-        className="mt-10"
       />
     </div>
   ) : (
