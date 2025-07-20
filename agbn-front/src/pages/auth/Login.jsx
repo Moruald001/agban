@@ -7,6 +7,7 @@ import { doLogin } from "../../../utils/authFetcher";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../../store/useAuth";
 
 export function Login() {
   const {
@@ -17,21 +18,24 @@ export function Login() {
     resolver: yupResolver(schemaLogin),
   });
   const navigate = useNavigate();
-  const { mutate, isPending, isError, isSuccess, error } = useMutation({
+  const { login } = useAuthStore();
+
+  const { mutateAsync, isPending, isError, isSuccess, error } = useMutation({
     mutationFn: doLogin,
   });
 
-  const onSubmit = (data) => {
-    mutate(data);
-
+  const onSubmit = async (data) => {
+    const user = await mutateAsync(data);
+    login(user.user);
     if (isSuccess) {
-      toast.success("Connexion reussî");
+      toast.success("Connexion réussi");
       setTimeout(() => {
         navigate("/");
       }, 1000);
     }
 
     if (isError) {
+      console.log(error.toString().split(": ")[1]);
       toast.error(`${error.toString().split(":")[1]}`);
     }
   };

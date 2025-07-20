@@ -43,4 +43,5 @@ export const doLogout = async () => {
     const errData = await res.json();
     throw new Error(errData.error || "Erreur de connexion");
   }
+  return await res.json();
 };

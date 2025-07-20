@@ -5,7 +5,8 @@ import { schemaRegister } from "../../lib/Schema";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { doRegistration } from "../../../utils/authFetcher";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import useAuthStore from "../../../store/useAuth";
 
 export function Register() {
   const {
@@ -16,8 +17,9 @@ export function Register() {
     resolver: yupResolver(schemaRegister),
   });
   const navigate = useNavigate();
+  const { login } = useAuthStore();
 
-  const { mutate, isPending, isError, isSuccess, error } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: doRegistration,
   });
 
@@ -28,15 +30,15 @@ export function Register() {
       password: data.password,
       role: data.role,
     };
-    mutate(shrinkData);
 
-    if (isSuccess) {
-      toast.success("Inscription reussî");
+    try {
+      const user = mutateAsync(shrinkData);
+      login(user);
+      toast.success("Inscription réussi");
       setTimeout(() => {
         navigate("/login");
       }, 2000);
-    }
-    if (isError) {
+    } catch (error) {
       console.log(error);
       toast.error(`${error}`);
     }
@@ -169,6 +171,12 @@ export function Register() {
             attributes="submit"
             disable={isPending ? "disabled:bg-gray-400" : ""}
           />
+          <p className=" text-sm mt-2 text-center">
+            Vous avez déjà un compte?{" "}
+            <Link className="text-blue-600 underline" to={"/login"}>
+              Se connecter
+            </Link>
+          </p>
         </div>
       </form>
     </div>

@@ -1,10 +1,12 @@
+import toast from "react-hot-toast";
 import useAuthStore from "../../store/useAuth";
 
 export default function NavBar() {
   const { user, isAuthenticated, logout } = useAuthStore();
+  console.log(user);
 
   const handleLogout = async () => {
-    await logout();
+    const res = await logout();
   };
   return (
     <div>
@@ -19,7 +21,7 @@ export default function NavBar() {
               onClick={handleLogout}
               className="capitalize btn btn-neutral opacity-60"
             >
-              deconnexion
+              déconnexion
             </button>{" "}
           </div>
         ) : (
