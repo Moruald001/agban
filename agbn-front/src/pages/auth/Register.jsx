@@ -2,6 +2,10 @@ import { useForm } from "react-hook-form";
 import { Btn } from "../../components/button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaRegister } from "../../lib/Schema";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { doRegistration } from "../../../utils/authFetcher";
+import { useNavigate } from "react-router-dom";
 
 export function Register() {
   const {
@@ -11,43 +15,83 @@ export function Register() {
   } = useForm({
     resolver: yupResolver(schemaRegister),
   });
+  const navigate = useNavigate();
+
+  const { mutate, isPending, isError, isSuccess, error } = useMutation({
+    mutationFn: doRegistration,
+  });
 
   const onSubmit = (data) => {
-    console.log(data);
-  };
+    const shrinkData = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: data.role,
+    };
+    mutate(shrinkData);
 
+    if (isSuccess) {
+      toast.success("Inscription reussî");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    }
+    if (isError) {
+      console.log(error);
+      toast.error(`${error}`);
+    }
+  };
   return (
     <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className=" w-screen h-screen flex flex-col gap-3 items-center justify-center min-h-70  relative bottom-10 -
-         mx-4 mt-5   p-3 border-1 border-transparent shadow-gray-600/50 -right-2 ring-2 ring-yellow-100/40 shadow-2xl rounded-2xl"
+        className=" w-screen h-screen flex flex-col  items-center justify-center 
+          "
       >
-        <div className="card  p-10 shadow-[10px_10px_40px_black]/30 flex flex-col  gap-3 ">
+        <div className=" card  p-20 shadow-[10px_10px_40px_black]/30 flex flex-col  gap-3  ">
           <label
             className="text-xl  text-gray-700 font-bold font-exo"
-            htmlFor="pseudo"
+            htmlFor="nom"
           >
-            Pseudo
+            Nom
           </label>
           <input
             className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
             type="text"
             // name="contact"
-            id="pseudo"
-            placeholder="Pseudo"
-            {...register("pseudo")}
+            id="nom"
+            placeholder="nom"
+            {...register("name")}
           />
-          {errors.pseudo && (
-            <p className="text-red-400 text-center w-50 after:content-['⚠️']">
-              {errors.pseudo.message}
+          {errors.name && (
+            <p className="text-red-400 text-center after:content-['⚠️']">
+              {errors.name.message}
             </p>
           )}
           <label
             className="text-xl  text-gray-700 font-bold font-exo"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
+            type="text"
+            // name="contact"
+            id="email"
+            placeholder="email"
+            {...register("email")}
+          />
+          {errors.email && (
+            <p className="text-red-400 text-center after:content-['⚠️']">
+              {errors.email.message}
+            </p>
+          )}
+          <label
+            className="text-xl  text-gray-700 font-bold font-exo "
             htmlFor="password"
           >
-            mot de passe
+            Mot de passe
           </label>
           <input
             className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
@@ -58,13 +102,13 @@ export function Register() {
             {...register("password")}
           />
           {errors.password && (
-            <p className="text-red-400 text-center w-50 after:content-['⚠️']">
+            <p className="text-red-400 text-center  after:content-['⚠️']">
               {errors.password.message}
             </p>
           )}
           <label
             className="text-xl  text-gray-700 font-bold font-exo"
-            htmlFor="confirmePassword"
+            htmlFor="confirmPassword"
           >
             Confirmer le mot de passe
           </label>
@@ -74,11 +118,47 @@ export function Register() {
             // name="contact"
             id="confirmPassword"
             placeholder="mot de passe"
-            {...register("confirmePassword")}
+            {...register("confirmPassword")}
           />
-          {errors.confirmePassword && (
-            <p className="text-red-400 text-center w-50 after:content-['⚠️']">
-              {errors.confirmePassword.message}
+          {errors.confirmPassword && (
+            <p className="text-red-400 text-center  after:content-['⚠️']">
+              {errors.confirmPassword.message}
+            </p>
+          )}
+
+          <p className="text-left text-xl font-bold ml-1 my-2">
+            Choisir un rôle
+          </p>
+          <div className="flex justify-evenly gap-12  ">
+            <div className="flex flex-col-reverse capitalize">
+              <label className="mt-2" htmlFor="role">
+                ceo
+              </label>
+              <input
+                className="  border-gray-400/20 bg-gray-400 p-2  text-center scale-130 "
+                type="radio"
+                value="ceo"
+                id="role"
+                {...register("role")}
+              />
+            </div>
+            <div className="flex flex-col-reverse capitalize">
+              <label className="mt-2" htmlFor="role">
+                collaborateur
+              </label>
+
+              <input
+                className=" border-gray-400  text-center scale-130 "
+                type="radio"
+                id="role"
+                value="collaborateur"
+                {...register("role")}
+              />
+            </div>
+          </div>
+          {errors.role && (
+            <p className="text-red-400 text-center  after:content-['⚠️']">
+              {errors.role.message}
             </p>
           )}
           <Btn
@@ -87,6 +167,7 @@ export function Register() {
             weight=" px-14"
             fontStyle=" font-bold text-xl  text-gray-700"
             attributes="submit"
+            disable={isPending ? "disabled:bg-gray-400" : ""}
           />
         </div>
       </form>

@@ -1,6 +1,6 @@
 const yup = require("yup");
 
-const roles = ["ceo", "colaborateur"];
+const roles = ["ceo", "collaborateur"];
 
 const createClientSchema = yup.object({
   name: yup.string().required("Le nom est requis").min(4),

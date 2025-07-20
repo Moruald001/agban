@@ -3,10 +3,10 @@ import { Btn } from "../../components/button";
 import { schemaLogin } from "../../lib/Schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link } from "react-router-dom";
-import { doLogin } from "../../../lib/authFetcher";
+import { doLogin } from "../../../utils/authFetcher";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
   const {
@@ -16,6 +16,7 @@ export function Login() {
   } = useForm({
     resolver: yupResolver(schemaLogin),
   });
+  const navigate = useNavigate();
   const { mutate, isPending, isError, isSuccess, error } = useMutation({
     mutationFn: doLogin,
   });
@@ -26,12 +27,12 @@ export function Login() {
     if (isSuccess) {
       toast.success("Connexion reussî");
       setTimeout(() => {
-        Navigate("/");
+        navigate("/");
       }, 1000);
     }
+
     if (isError) {
-      console.log(error);
-      toast.error(`${error}`);
+      toast.error(`${error.toString().split(":")[1]}`);
     }
   };
 

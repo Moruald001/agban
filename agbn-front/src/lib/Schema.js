@@ -1,22 +1,23 @@
 import * as yup from "yup";
 
 export const schemaRegister = yup.object().shape({
-  name: yup.string().required("le pseudo est requis"),
+  name: yup.string().required("le pseudo est requis").min(3),
   email: yup.string().required("L'email  est requis").email("email invalide"),
   password: yup
     .string()
     .required("Le mot de passe est requis")
-    .min(8, "Le mot de passe doit contenir au moins 8 caractères")
+    .min(6, "Le mot de passe doit contenir au moins 6 caractères")
     .matches(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])/,
       "Le mot de passe doit contenir au moins une lettre, un chiffre et un caractère spécial"
     ),
-  confirmePassword: yup
+  confirmPassword: yup
     .string()
     .oneOf(
       [yup.ref("password")],
       "Le mot de passe entré ne correspond pas au mot de passe"
     ),
+  role: yup.string().required("Veuillez selectionnner votre rôle svp"),
 });
 
 export const schemaLogin = yup.object().shape({

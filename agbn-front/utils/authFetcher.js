@@ -10,8 +10,24 @@ export const doLogin = async (data) => {
   });
   if (!res.ok) {
     const errData = await res.json();
-    throw new Error(errData.error || "Erreur de connexion");
+    throw new Error(errData.error || "Erreur lors de l'inscription");
   }
+  return await res.json();
+};
+
+export const doRegistration = async (data) => {
+  const res = await fetch(`${apiUrl}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(errData.error || "Erreur lors de l'inscription");
+  }
+  return await res.json();
 };
 
 export const doLogout = async () => {
