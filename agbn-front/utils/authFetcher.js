@@ -10,7 +10,7 @@ export const doLogin = async (data) => {
   });
   if (!res.ok) {
     const errData = await res.json();
-    throw new Error(errData.error || "Erreur lors de l'inscription");
+    throw new Error(errData.error || "Erreur lors de la connexion");
   }
   return await res.json();
 };
@@ -40,8 +40,8 @@ export const doLogout = async () => {
   });
 
   if (!res.ok) {
-    const errData = await res.json();
-    throw new Error(errData.error || "Erreur de connexion");
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || "Erreur lors de la déconnexion");
   }
   return await res.json();
 };

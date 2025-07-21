@@ -1,12 +1,25 @@
 import toast from "react-hot-toast";
 import useAuthStore from "../../store/useAuth";
+import { useMutation } from "@tanstack/react-query";
+import { doLogout } from "../../utils/authFetcher";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
   const { user, isAuthenticated, logout } = useAuthStore();
-  console.log(user);
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: doLogout,
+  });
 
   const handleLogout = async () => {
-    const res = await logout();
+    try {
+      const res = await mutateAsync();
+      res ? toast.success(res.message) : toast.error("échec de la déconnexion");
+
+      await logout();
+    } catch (error) {
+      console.log(error);
+      toast.error(`${error}`);
+    }
   };
   return (
     <div>

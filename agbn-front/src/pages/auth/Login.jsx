@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../../store/useAuth";
+import { useState } from "react";
 
 export function Login() {
   const {
@@ -19,7 +20,13 @@ export function Login() {
   });
   const navigate = useNavigate();
   const { login } = useAuthStore();
+  const [togglePassword, setTogglePassword] = useState("password");
 
+  const toggleInput = () => {
+    togglePassword === "password"
+      ? setTogglePassword("text")
+      : setTogglePassword("password");
+  };
   const { mutateAsync, isPending, isError, isSuccess, error } = useMutation({
     mutationFn: doLogin,
   });
@@ -36,7 +43,7 @@ export function Login() {
 
     if (isError) {
       console.log(error.toString().split(": ")[1]);
-      toast.error(`${error.toString().split(":")[1]}`);
+      await toast.error(`${error}`);
     }
   };
 
@@ -71,16 +78,31 @@ export function Login() {
         >
           Mot de passe
         </label>
-        <input
-          className={`border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden ${
-            errors.password && "border-pink-800"
-          }`}
-          type="password"
-          // name="contact"
-          id="password"
-          placeholder="mot de passe"
-          {...register("password")}
-        />
+        <div className="flex flex-row gap-3">
+          <input
+            className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
+            type={togglePassword}
+            // name="contact"
+            id="password"
+            placeholder="mot de passe"
+            {...register("password")}
+          />
+          <button
+            type="button"
+            onClick={toggleInput}
+            className="cursor-pointer"
+          >
+            <img
+              className="w-7 h-7 "
+              src={
+                togglePassword === "password"
+                  ? "../assets/oeil-fermé.png"
+                  : "../assets/oeil-ouvert.png"
+              }
+              alt=""
+            />
+          </button>
+        </div>
         {errors.password && (
           <p className="text-red-400 text-center  after:content-['⚠️']">
             {errors.password.message}

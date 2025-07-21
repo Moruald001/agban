@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(false);
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
 
   const statusLoading = async (value) => {
     await setIsLoading(value);
@@ -39,9 +39,14 @@ export function Home() {
       <NavBar />
       <div className=" mt-50  p-5 flex flex-col justify-start items-center ">
         <TypeAnimation
-          sequence={["Bienvenue sur \n\n AGBAN", 2000]}
+          sequence={[
+            `Bienvenue,  ${
+              user && user?.name !== undefined ? user?.name : "sur AGBAN"
+            }`,
+            2000,
+          ]}
           className={
-            "  text-2xl text-center mb-20 font-roboto font-bold text-gray-600  md:max-2xl:text-4xl"
+            "  text-2xl text-center mb-20 font-roboto font-bold text-gray-600  md:max-2xl:text-4xl capitalize"
           }
           speed={50}
           repeat={Infinity}

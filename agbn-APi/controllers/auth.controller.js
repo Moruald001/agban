@@ -79,7 +79,7 @@ const login = async (req, res) => {
     return res.status(500).json({ error: "Erreur interne du serveur." });
   }
 };
-//deconnexion
+//déconnexion
 const logout = async (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
