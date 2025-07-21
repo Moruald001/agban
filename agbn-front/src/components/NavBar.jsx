@@ -25,11 +25,14 @@ export default function NavBar() {
     <div>
       <div className="navbar bg-none shadow-sm">
         <div className="flex-1">
-          <a className="btn btn-ghost text-Md">AGBAN</a>
+          <a href="/" className=" cursor-pointer text-Md">
+            AGBAN
+          </a>
         </div>
         {isAuthenticated ? (
           <div className="flex gap-4 items-center">
-            <p className="capitalize">{user?.name}</p>
+            <p className="capitalize">{user?.name}: </p>
+            <p className=" capitalize">{user?.role}</p>
             <button
               onClick={handleLogout}
               className="capitalize btn btn-neutral opacity-60"

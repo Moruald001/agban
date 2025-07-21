@@ -46,21 +46,31 @@ export function Home() {
             2000,
           ]}
           className={
-            "  text-2xl text-center mb-20 font-roboto font-bold text-gray-600  md:max-2xl:text-4xl capitalize"
+            "  text-3xl text-center mb-20 font-roboto font-bold text-gray-600  md:max-2xl:text-4xl capitalize"
           }
           speed={50}
           repeat={Infinity}
           cursor={false}
         />
         {isAuthenticated ? (
-          <Link
-            className={
-              "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110  "
-            }
-            to={"/add-client"}
-          >
-            Ajouter un client
-          </Link>
+          <div className="flex gap-4">
+            <Link
+              className={
+                "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110 transition-transform duration-600  "
+              }
+              to={"/create-list"}
+            >
+              Créer une liste
+            </Link>
+            <Link
+              className={
+                "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110 transition-transform duration-600  "
+              }
+              to={"/list"}
+            >
+              Voir toutes les listes
+            </Link>
+          </div>
         ) : (
           <Link
             className={
@@ -71,6 +81,11 @@ export function Home() {
             se connecter
           </Link>
         )}
+        <div className=" w-screen  px-20 fle flex-col justify-center items-start mt-10">
+          <p>Dernières listes crées</p>
+          <hr className="border-b-1 mt-2 opacity-30" />
+          <div className="flex flex-col"></div>
+        </div>
       </div>
     </>
   );

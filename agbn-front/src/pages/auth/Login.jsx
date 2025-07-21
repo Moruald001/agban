@@ -109,12 +109,12 @@ export function Login() {
           </p>
         )}
         <Btn
-          title="Se connecter"
+          title={isPending ? "connexion.." : "Se connecter"}
           position=" self-center mt-10 "
           weight=" px-5"
           fontStyle=" font-bold text-xl  text-gray-700"
           attributes="submit"
-          disable={isPending && "disable"}
+          disable={isPending && " disabled:bg-gray-300"}
         />{" "}
         <p className=" text-sm">
           Vous n'avez pas de compte?{" "}
