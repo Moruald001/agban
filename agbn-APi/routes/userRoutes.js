@@ -7,7 +7,7 @@ const loginRateLimiter = require("../middlewares/loginRateLimiter");
 const auth = require("../middlewares/authMiddleware");
 
 router.post("/register", validate(registerUserSchema), register);
-router.post("/login", validate(loginSchema), login);
+router.post("/login", loginRateLimiter, validate(loginSchema), login);
 router.post("/logout", logout);
 
 module.exports = router;

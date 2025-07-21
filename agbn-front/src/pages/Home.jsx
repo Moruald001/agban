@@ -81,7 +81,7 @@ export function Home() {
             se connecter
           </Link>
         )}
-        <div className=" w-screen  px-20 fle flex-col justify-center items-start mt-10">
+        <div className=" w-screen  px-15 fle flex-col justify-center items-start mt-10">
           <p>Dernières listes crées</p>
           <hr className="border-b-1 mt-2 opacity-30" />
           <div className="flex flex-col"></div>

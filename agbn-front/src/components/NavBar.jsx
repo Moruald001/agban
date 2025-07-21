@@ -30,12 +30,12 @@ export default function NavBar() {
           </a>
         </div>
         {isAuthenticated ? (
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-2 items-center">
             <p className="capitalize">{user?.name}: </p>
             <p className=" capitalize">{user?.role}</p>
             <button
               onClick={handleLogout}
-              className="capitalize btn btn-neutral opacity-60"
+              className="capitalize btn btn-neutral  opacity-60"
             >
               {isPending ? "Déconnexion.." : "Déconnecté"}
             </button>{" "}
