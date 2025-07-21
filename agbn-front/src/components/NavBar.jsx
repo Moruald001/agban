@@ -13,9 +13,9 @@ export default function NavBar() {
   const handleLogout = async () => {
     try {
       const res = await mutateAsync();
-      res ? toast.success(res.message) : toast.error("échec de la déconnexion");
-
+      res && toast.success(res.message);
       await logout();
+      await localStorage.removeItem("user-storage");
     } catch (error) {
       console.log(error);
       toast.error(`${error}`);
@@ -34,7 +34,7 @@ export default function NavBar() {
               onClick={handleLogout}
               className="capitalize btn btn-neutral opacity-60"
             >
-              déconnexion
+              {isPending ? "Déconnexion.." : "Déconnecté"}
             </button>{" "}
           </div>
         ) : (

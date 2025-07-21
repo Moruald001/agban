@@ -13,11 +13,10 @@ const useAuthStore = create(
         set({ user: null, isAuthenticated: false }),
           (window.location.href = "/");
       },
-      clearUsers: () => set({ users: {} }),
     }),
     {
       name: "user-storage", // clé dans localStorage
-      getStorage: () => localStorage, // ou sessionStorage
+      getStorage: () => localStorage,
     }
   )
 );
