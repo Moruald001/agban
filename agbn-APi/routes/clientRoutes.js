@@ -9,11 +9,13 @@ const {
   getLists,
   updateClient,
   deleteClient,
+  getListsLatest,
 } = require("../controllers/Client.controller");
 const { createClientSchema, createListSchema } = require("../utils/schema");
 const auth = require("../middlewares/authMiddleware");
 const isCeoMiddleware = require("../middlewares/isCeo");
 
+// creation
 router.post(
   "/add-client",
   auth,
@@ -29,6 +31,7 @@ router.post(
   validate(createListSchema),
   createList
 );
+// modification
 router.put(
   "/update-client/:id",
   auth,
@@ -36,8 +39,12 @@ router.put(
   validate(createClientSchema),
   updateClient
 );
+// suppression
+
 router.delete("/delete-client/:id", auth, isCeoMiddleware, deleteClient);
+//recuperation
 router.get("/clients", auth, getClients);
 router.get("/lists", auth, getLists);
+router.get("/latest-lists", auth, getListsLatest);
 
 module.exports = router;

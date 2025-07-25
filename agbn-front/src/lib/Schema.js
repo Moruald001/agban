@@ -8,9 +8,10 @@ export const schemaRegister = yup.object().shape({
     .required("Le mot de passe est requis")
     .min(6, "Le mot de passe doit contenir au moins 6 caractères")
     .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])/,
-      "Le mot de passe doit contenir au moins une lettre, un chiffre et un caractère spécial"
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]$/,
+      "Le mot de passe doit contenir au moins une lettre, un chiffre, un caractère spécial et avoir 8 caractères minimum"
     ),
+
   confirmPassword: yup
     .string()
     .oneOf(
@@ -26,4 +27,15 @@ export const schemaLogin = yup.object().shape({
     .email("Email invalide")
     .required("Ce champs ne peut etre vide"),
   password: yup.string().required("Veuillez entrer votre mot de passe svp"),
+});
+
+export const createListSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Veuillez entrer un nom ")
+    .matches(
+      /^[a-zA-Z0-9\s]+$/,
+
+      " le nom ne peut contenir que des lettres et des chiffres"
+    ),
 });

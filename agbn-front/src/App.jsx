@@ -5,8 +5,7 @@ import { AddClient } from "./pages/AddClient";
 import { Register } from "./pages/auth/Register";
 import { Login } from "./pages/auth/login";
 import { NotFound } from "./pages/notFound";
-import { Toaster } from "solid-toast";
-// import { List } from "./pages/list";
+import { List } from "./pages/List";
 
 function App() {
   return (
@@ -15,6 +14,8 @@ function App() {
       <Route path={"/add-client"} element={<AddClient />} />
       <Route path={"/register"} element={<Register />} />
       <Route path={"/login"} element={<Login />} />
+      <Route path={"/list"} element={<List />} />
+
       <Route path={"*"} element={<NotFound />} />
 
       {/* <Route path={"/list"} element={<List />} /> */}

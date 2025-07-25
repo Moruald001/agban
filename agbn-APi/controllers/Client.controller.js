@@ -129,7 +129,25 @@ const getLists = async (req, res) => {
       ],
     });
 
-    res.status(200).json({ "liste ": lists });
+    res.status(200).json({ lists });
+  } catch (error) {
+    res.status(500).json({ error: "erreur serveur" }, error);
+  }
+};
+const getListsLatest = async (req, res) => {
+  try {
+    const lists = await List.findAll({
+      order: [["createdAt", "DESC"]],
+      limit: 3,
+      include: [
+        {
+          model: Client,
+          include: [Img],
+        },
+      ],
+    });
+
+    res.status(200).json({ lists });
   } catch (error) {
     res.status(500).json({ error: "erreur serveur" }, error);
   }
@@ -207,4 +225,5 @@ module.exports = {
   getLists,
   updateClient,
   deleteClient,
+  getListsLatest,
 };
