@@ -153,7 +153,7 @@ const getListsLatest = async (req, res) => {
   }
 };
 
-// modifier un client(tout sauf les images)
+// modifier
 const updateClient = async (req, res) => {
   const id = req.params.id;
   const { name, description, contact, keep } = req.body;
@@ -179,6 +179,31 @@ const updateClient = async (req, res) => {
     res.status(200).json({ message: "info client mise à jour " });
   } catch (error) {
     console.error("❌ Erreur update client:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+const updateList = async (req, res) => {
+  const id = req.params.id;
+  const { name } = req.body;
+
+  const list = await List.findByPk(id);
+  if (list === null) {
+    return res.status(400).json({
+      message: "impossible de mettre à jour ce ls list",
+    });
+  }
+  try {
+    await List.update(
+      { name },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info liste mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update liste:", error);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -218,6 +243,38 @@ const deleteClient = async (req, res) => {
   }
 };
 
+// Suppression d'un client
+const deleteList = async (req, res) => {
+  const id = req.params.id;
+
+  const list = await List.findByPk(id);
+  if (list === null) {
+    return res.status(400).json({
+      message: "impossible de mettre à jour cette ",
+    });
+  }
+
+  try {
+    const response = await List.destroy({
+      where: {
+        id,
+      },
+      force: true,
+    });
+
+    if (!response) {
+      res.status(500).json({ erreur: "la suppression à echoué" });
+      throw new Error("la suppression à echoué");
+    }
+    res
+      .status(200)
+      .json({ message: "la suppression à été effectué avec succès", list });
+  } catch (error) {
+    console.log("erreur serveur ", error);
+    res.status(500).json({ erreur: "la suppression à echoué" });
+  }
+};
+
 module.exports = {
   createClient,
   createList,
@@ -225,5 +282,7 @@ module.exports = {
   getLists,
   updateClient,
   deleteClient,
+  deleteList,
   getListsLatest,
+  updateList,
 };

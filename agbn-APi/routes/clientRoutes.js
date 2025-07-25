@@ -8,7 +8,9 @@ const {
   getClients,
   getLists,
   updateClient,
+  updateList,
   deleteClient,
+  deleteList,
   getListsLatest,
 } = require("../controllers/Client.controller");
 const { createClientSchema, createListSchema } = require("../utils/schema");
@@ -39,9 +41,19 @@ router.put(
   validate(createClientSchema),
   updateClient
 );
+
+router.put(
+  "/update-list/:id",
+  auth,
+  isCeoMiddleware,
+  validate(createList),
+  updateList
+);
 // suppression
 
 router.delete("/delete-client/:id", auth, isCeoMiddleware, deleteClient);
+router.delete("/delete-list/:id", auth, isCeoMiddleware, deleteList);
+
 //recuperation
 router.get("/clients", auth, getClients);
 router.get("/lists", auth, getLists);
