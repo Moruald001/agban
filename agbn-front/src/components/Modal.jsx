@@ -34,7 +34,7 @@ export const Modal = ({ showModal, onClose, modalType, listId }) => {
     },
   });
   const listSelected = lists.find((item) => item.id === listId);
-  // const list = lists?.lists[listId];
+  console.log(listSelected);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: modalType === "updateList" ? updateList : createList,
@@ -49,7 +49,7 @@ export const Modal = ({ showModal, onClose, modalType, listId }) => {
         await refetch();
         onClose();
       } else {
-        toast.success(`Liste  ${data?.name}crée`);
+        toast.success(`Liste  ${data?.name} crée`);
         await refetch();
         onClose();
       }

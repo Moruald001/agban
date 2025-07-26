@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteList, getList } from "../../utils/otherFetcher";
-import { ArrowLeft, Pen, UserRoundPlus } from "lucide-react";
+import { ArrowLeft, Pen, PlusSquare, UserRoundPlus } from "lucide-react";
 import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { Modal } from "../components/modal";
@@ -89,7 +89,11 @@ export const List = () => {
                     <th>{list.id} </th>
                     <td className="capitalize">{list.name} </td>
                     <td>{formatDate(list.createdAt)} </td>
-                    <td>ajouter un client </td>
+                    <td>
+                      <button className="cursor-pointer hover:scale-105  transition-transform duration-300">
+                        <PlusSquare size={20} strokeWidth="2" color="green" />
+                      </button>
+                    </td>
 
                     <td className="flex gap-4 items-center">
                       <button
