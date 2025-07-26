@@ -37,3 +37,17 @@ export const getList = async () => {
 
   return res.json();
 };
+
+export const deleteList = async (id) => {
+  const res = await fetch(`${apiUrl}/client/delete-list/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) throw new Error("Erreur réseau");
+
+  return res.json();
+};
