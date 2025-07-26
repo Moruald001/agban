@@ -6,14 +6,19 @@ import { Register } from "./pages/auth/Register";
 import { Login } from "./pages/auth/login";
 import { NotFound } from "./pages/notFound";
 import { List } from "./pages/List";
+import { Guard } from "./pages/auth/Guard";
 
 function App() {
   return (
     <Routes>
       <Route path={"/"} element={<Home />} />
       <Route path={"/add-client"} element={<AddClient />} />
-      <Route path={"/register"} element={<Register />} />
-      <Route path={"/login"} element={<Login />} />
+      <Guard>
+        <Route path={"/register"} element={<Register />} />
+      </Guard>
+      <Guard>
+        <Route path={"/login"} element={<Login />} />
+      </Guard>
       <Route path={"/list"} element={<List />} />
 
       <Route path={"*"} element={<NotFound />} />
