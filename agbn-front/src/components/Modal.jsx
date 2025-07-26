@@ -42,7 +42,6 @@ export const Modal = ({ showModal, onClose, modalType, listId }) => {
 
   const onSubmit = async (data) => {
     try {
-      console.log(listId);
       await mutateAsync({ data: data, id: listId });
 
       if (modalType === "updateList") {
