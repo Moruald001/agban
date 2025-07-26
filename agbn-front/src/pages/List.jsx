@@ -9,14 +9,18 @@ import { SyncLoader } from "react-spinners";
 import { formatDate } from "../../utils/formatDate";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import useAuthStore from "../../store/useAuthStore";
 
 export const List = () => {
   const [showModal, setShowModal] = useState(false);
   const [listId, setListId] = useState(null);
+  const { isAuthenticated } = useAuthStore();
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["lists"],
     queryFn: getList,
+    enabled: isAuthenticated === true ? true : false,
+    refetchOnWindowFocus: false,
   });
 
   const { mutateAsync } = useMutation({
@@ -29,7 +33,7 @@ export const List = () => {
   };
 
   const handleDelete = async (id) => {
-    const response = confirm("vous etes sur le point de supprimer cette liste");
+    const response = confirm("vous êtes sur le point de supprimer cette liste");
     if (!response) {
       return;
     }

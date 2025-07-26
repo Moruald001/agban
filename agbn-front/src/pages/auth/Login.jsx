@@ -7,7 +7,7 @@ import { doLogin } from "../../../utils/authFetcher";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from "../../../store/useAuth";
+import useAuthStore from "../../../store/useAuthStore";
 import { useState } from "react";
 
 export function Login() {

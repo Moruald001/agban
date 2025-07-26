@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { doRegistration } from "../../../utils/authFetcher";
 import { useNavigate, Link } from "react-router-dom";
-import useAuthStore from "../../../store/useAuth";
+import useAuthStore from "../../../store/useAuthStore";
 import { useState } from "react";
 
 export function Register() {

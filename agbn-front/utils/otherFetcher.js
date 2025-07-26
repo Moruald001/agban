@@ -1,6 +1,7 @@
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const createList = async (data) => {
+export const createList = async ({ data }) => {
+  const name = { ...data };
   const res = await fetch(`${apiUrl}/client/create-list`, {
     method: "POST",
     headers: {
@@ -8,7 +9,7 @@ export const createList = async (data) => {
     },
 
     credentials: "include",
-    body: JSON.stringify(data),
+    body: JSON.stringify(name),
   });
   if (!res.ok) {
     const errData = await res.json();

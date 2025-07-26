@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { TypeAnimation } from "react-type-animation";
 import NavBar from "../components/NavBar";
-import useAuthStore from "../../store/useAuth";
+import useAuthStore from "../../store/useAuthStore";
 import { ThreeDot } from "react-loading-indicators";
 import { useState, useEffect } from "react";
 import { Modal } from "../components/modal";
@@ -11,7 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getListLatest } from "../../utils/otherFetcher";
 import { SyncLoader } from "react-spinners";
 import toast from "react-hot-toast";
-// import Card from "../components/Card"
 
 export function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -20,8 +19,10 @@ export function Home() {
   const { isAuthenticated, user } = useAuthStore();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["lists"],
+    queryKey: ["latest_lists"],
     queryFn: getListLatest,
+    enabled: isAuthenticated === true ? true : false,
+    refetchOnWindowFocus: false,
   });
 
   if (error) {
