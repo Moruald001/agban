@@ -15,9 +15,7 @@ export function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schemaLogin),
-  });
+  } = useForm({ resolver: yupResolver(schemaLogin) });
   const navigate = useNavigate();
   const { login } = useAuthStore();
   const [togglePassword, setTogglePassword] = useState("password");
@@ -37,7 +35,7 @@ export function Login() {
     toast.success("Connexion réussi");
     await login(user.user);
     setTimeout(() => {
-      navigate("/");
+      navigate("/", { replace: true });
     }, 1000);
 
     if (isError) {

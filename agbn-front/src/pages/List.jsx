@@ -68,9 +68,9 @@ export const List = () => {
         <h1 className="text-2xl text-gray-500 text-center font-bold">
           Toutes les listes
         </h1>
-        <div className="  shadow-[10px_10px_40px_black]/20 w-[70vw]  bg-gray-900/5 rounded-box h-auto ">
-          <div className="rounded-box border border-base-content/5   mx-10    ">
-            <table className="table table-zebra hover   rounded-box ">
+        <div className=" overflow-x-hidden shadow-[10px_10px_40px_black]/20 min-w-[70vw]  bg-gray-900/5 rounded-box h-auto mx-5  ">
+          <div className="overflow-x-auto rounded-box border border-base-content/5      ">
+            <table className="table table-zebra hover   rounded-box  ">
               {/* head */}
               <thead>
                 <tr>

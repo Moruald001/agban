@@ -13,12 +13,23 @@ function App() {
     <Routes>
       <Route path={"/"} element={<Home />} />
       <Route path={"/add-client"} element={<AddClient />} />
-      <Guard>
-        <Route path={"/register"} element={<Register />} />
-      </Guard>
-      <Guard>
-        <Route path={"/login"} element={<Login />} />
-      </Guard>
+
+      <Route
+        path={"/register"}
+        element={
+          <Guard>
+            <Register />{" "}
+          </Guard>
+        }
+      />
+      <Route
+        path={"/login"}
+        element={
+          <Guard>
+            <Login />{" "}
+          </Guard>
+        }
+      />
       <Route path={"/list"} element={<List />} />
 
       <Route path={"*"} element={<NotFound />} />
