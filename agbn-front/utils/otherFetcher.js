@@ -1,9 +1,25 @@
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const createList = async (data) => {
-  console.log(data);
   const res = await fetch(`${apiUrl}/client/create-list`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(errData.error || "Erreur lors de la creation de la liste");
+  }
+  return await res.json();
+};
+
+export const updateList = async ({ data, id }) => {
+  const res = await fetch(`${apiUrl}/client/update-list/${id}`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },

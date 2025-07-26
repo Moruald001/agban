@@ -10,6 +10,7 @@ import { Button } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { getListLatest } from "../../utils/otherFetcher";
 import { SyncLoader } from "react-spinners";
+import toast from "react-hot-toast";
 // import Card from "../components/Card"
 
 export function Home() {
@@ -23,7 +24,10 @@ export function Home() {
     queryFn: getListLatest,
   });
 
-  console.log(data?.lists);
+  if (error) {
+    toast.error(error.message);
+  }
+
   const statusLoading = async (value) => {
     await setLoading(value);
   };
@@ -100,6 +104,7 @@ export function Home() {
           </Link>
         )}
         <Modal
+          modalType="createList"
           showModal={showModal}
           onClose={() => {
             setShowModal(false);
@@ -123,7 +128,9 @@ export function Home() {
             </div>
           </div>
         ) : (
-          <SyncLoader />
+          <div className="w-screen h-screen flex justify-center items-end ">
+            <SyncLoader />
+          </div>
         )}
       </div>
     </>

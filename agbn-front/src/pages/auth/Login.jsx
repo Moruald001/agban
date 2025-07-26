@@ -42,7 +42,7 @@ export function Login() {
 
     if (isError) {
       console.log(error.toString().split(": ")[1]);
-      await toast.error(`${error}`);
+      toast.error(`${error}`);
     }
   };
 

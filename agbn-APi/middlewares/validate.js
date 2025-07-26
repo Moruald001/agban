@@ -1,7 +1,5 @@
 // middlewares/validate.js
 const validate = (schema) => async (req, res, next) => {
-  console.log(req.body);
-
   try {
     req.body = await schema.validate(req.body, {
       abortEarly: false,

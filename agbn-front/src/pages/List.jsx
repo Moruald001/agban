@@ -1,12 +1,20 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteList, getList } from "../../utils/otherFetcher";
-import dayjs from "dayjs";
-import { Pen } from "lucide-react";
+import { ArrowLeft, Pen, UserRoundPlus } from "lucide-react";
 import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
+import { Modal } from "../components/modal";
+import { useState } from "react";
+import { SyncLoader } from "react-spinners";
+import { formatDate } from "../../utils/formatDate";
+import { Link } from "react-router-dom";
+import NavBar from "../components/NavBar";
 
 export const List = () => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const [showModal, setShowModal] = useState(false);
+  const [listId, setListId] = useState(null);
+
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["lists"],
     queryFn: getList,
   });
@@ -14,6 +22,11 @@ export const List = () => {
   const { mutateAsync } = useMutation({
     mutationFn: deleteList,
   });
+
+  const handleUpdate = async (id) => {
+    await setShowModal(true);
+    await setListId(id);
+  };
 
   const handleDelete = async (id) => {
     const response = confirm("vous etes sur le point de supprimer cette liste");
@@ -30,44 +43,79 @@ export const List = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <SyncLoader color="gray" />
+      </div>
+    );
+  }
+
   return (
-    <div className="w-screen h-screen  flex flex-col justify-center items-center gap-10 ">
-      <h1 className="text-2xl text-gray-500 text-center">Toutes les listes</h1>
-      <div className="overflow-x-auto ">
-        <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 ">
-          <table className="table table-zebra ">
-            {/* head */}
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Nom</th>
-                <th>Date de creation</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.lists.map((list) => (
+    <>
+      <NavBar />
+      <div className="w-screen h-screen  flex flex-col justify-start items-center gap-10  ">
+        <Link
+          to={"/"}
+          className="ml-10 mt-10 p-2  w-auto hover:hover:bg-slate-800/65 hover:text-white rounded-box  duration-300  transition-colors inline-block cursor-pointe self-start"
+        >
+          <ArrowLeft className="" />
+        </Link>
+        <h1 className="text-2xl text-gray-500 text-center font-bold">
+          Toutes les listes
+        </h1>
+        <div className="  shadow-[10px_10px_40px_black]/30 w-screen h-auto ">
+          <div className="rounded-box border border-base-content/5   mx-10  ">
+            <table className="table table-zebra hover bg-gray-900/10   rounded-box ">
+              {/* head */}
+              <thead>
                 <tr>
-                  <th>{list.id} </th>
-                  <td className="capitalize">{list.name} </td>
-                  <td>{dayjs(list.createdAt).format("DD/MM/YYYY")} </td>
-                  <td className="flex gap-2 items-center">
-                    <button className="cursor-pointer">
-                      <Pen color="black" size={15} />
-                    </button>
-                    <button
-                      className="cursor-pointer"
-                      onClick={() => handleDelete(list.id)}
-                    >
-                      <Trash color="black" size={15} />
-                    </button>
-                  </td>
+                  <th>No</th>
+                  <th>Nom</th>
+                  <th>Date de creation</th>
+                  <th>
+                    <UserRoundPlus size={20} strokeWidth="2" />
+                  </th>
+                  <th>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data?.lists.map((list) => (
+                  <tr key={list.id}>
+                    <th>{list.id} </th>
+                    <td className="capitalize">{list.name} </td>
+                    <td>{formatDate(list.createdAt)} </td>
+                    <td>ajouter un client </td>
+
+                    <td className="flex gap-4 items-center">
+                      <button
+                        className="cursor-pointer hover:bg-gray-900/30 "
+                        onClick={() => handleUpdate(list.id)}
+                      >
+                        <Pen color="black" size={15} className="" />
+                      </button>
+                      <button
+                        className="cursor-pointer"
+                        onClick={() => handleDelete(list.id)}
+                      >
+                        <Trash color="black" size={15} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Modal
+              showModal={showModal}
+              modalType="updateList"
+              listId={listId}
+              onClose={() => {
+                setShowModal(false);
+              }}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

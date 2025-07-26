@@ -5,7 +5,7 @@ import { persist } from "zustand/middleware";
 const useClientStore = create(
   persist(
     (set) => ({
-      list: [],
+      lists: null,
 
       create: (list) => set((state) => ({ ...list, state })),
       remove: () => {

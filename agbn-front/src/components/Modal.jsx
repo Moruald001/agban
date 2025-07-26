@@ -10,10 +10,11 @@ import { createListSchema } from "../lib/Schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { createList } from "../../utils/otherFetcher";
-import { getListLatest } from "../../utils/otherFetcher";
+import { createList, updateList, getList } from "../../utils/otherFetcher";
+import useClientStore from "../../store/clientStore";
+import { useEffect } from "react";
 
-export const Modal = ({ showModal, onClose }) => {
+export const Modal = ({ showModal, onClose, modalType, listId }) => {
   const {
     register,
     handleSubmit,
@@ -22,22 +23,37 @@ export const Modal = ({ showModal, onClose }) => {
   } = useForm({
     resolver: yupResolver(createListSchema),
   });
-  const { refetch } = useQuery({
+  const { lists, create } = useClientStore();
+
+  const { data, refetch } = useQuery({
     queryKey: ["lists"],
-    queryFn: getListLatest,
+    queryFn: getList,
+    // @ts-ignore
+    onSuccess: () => {
+      create(data);
+    },
   });
+  const listSelected = lists.find((item) => item.id === listId);
+  // const list = lists?.lists[listId];
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: createList,
+    mutationFn: modalType === "updateList" ? updateList : createList,
   });
 
   const onSubmit = async (data) => {
     try {
-      const list = await mutateAsync(data);
+      console.log(listId);
+      await mutateAsync({ data: data, id: listId });
 
-      toast.success(`Liste crée ${data.name}`);
-      await refetch();
-      onClose();
+      if (modalType === "updateList") {
+        toast.success(`Liste ${data?.name} mise à jour`);
+        await refetch();
+        onClose();
+      } else {
+        toast.success(`Liste  ${data?.name}crée`);
+        await refetch();
+        onClose();
+      }
     } catch (error) {
       console.log(error.toString().split(": ")[1]);
       toast.error(error.message || "Erreur lors de la création");
@@ -50,7 +66,6 @@ export const Modal = ({ showModal, onClose }) => {
         as="div"
         className="relative z-10 "
         onClose={onClose}
-        __demoMode
       >
         <DialogBackdrop className="fixed inset-0 bg-black/30 " />
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -79,7 +94,11 @@ export const Modal = ({ showModal, onClose }) => {
                   className={`border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden`}
                   type="text"
                   id="name"
-                  placeholder="Ex:liste Juin 2025"
+                  placeholder={
+                    modalType === "updateList"
+                      ? listSelected?.name
+                      : "Ex: liste Juin 2025"
+                  }
                   {...register("name")}
                 />
                 {errors.name && (
@@ -103,7 +122,7 @@ export const Modal = ({ showModal, onClose }) => {
                     disabled={isPending ? true : false}
                     className="inline-flex items-center gap-2 rounded-md bg-gray-700 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-600 data-open:bg-gray-700 transition-colors duration-300 cursor-pointer"
                   >
-                    Créer
+                    {modalType === "updateList" ? "Appliquer" : "Créer"}
                   </Button>
                 </div>
               </form>

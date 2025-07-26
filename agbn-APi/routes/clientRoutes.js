@@ -46,7 +46,7 @@ router.put(
   "/update-list/:id",
   auth,
   isCeoMiddleware,
-  validate(createList),
+  validate(createListSchema),
   updateList
 );
 // suppression
