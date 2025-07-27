@@ -96,9 +96,12 @@ export const List = () => {
                 <tbody>
                   {data?.lists.map((list) => (
                     <tr key={list.id}>
-                      <td className="capitalize">{list.name} </td>
+                      <td className="capitalize">
+                        <Link to={`/list-details/${list.id}`} className="">
+                          {list.name}
+                        </Link>{" "}
+                      </td>
                       <td>{formatDate(list.createdAt)} </td>
-
                       <td className="flex gap-4 items-center">
                         <button
                           className="cursor-pointer hover:scale-105 transition-transform duration-300 "

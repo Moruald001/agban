@@ -9,7 +9,9 @@ export function NotFound() {
 
   return (
     <div>
-      <h1 className="scale-125">Oups mauvaise page🤷</h1>
+      <h1 className="scale-125 w-screen h-screen flex justify-center items-center">
+        Oups mauvaise page🤷
+      </h1>
       {timer && <Navigate to="/" />}
     </div>
   );
