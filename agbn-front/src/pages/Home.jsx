@@ -149,34 +149,40 @@ export function Home() {
             <hr className="border-b-2 mt-2 opacity-30" />
             <div className="flex flex-col gap-2 justify-evenly mt-5">
               <ul className="  bg-gray-200/69 rounded-box shadow-md ">
-                {data?.lists.map((list) => (
-                  <li
-                    key={list.id}
-                    className="list-row p-4 my-4 gap-2 transition-colors duration-300 hover:bg-slate-600/15  "
-                  >
-                    <div className="flex  justify-between gap-4">
-                      <p className="capitalize">{list.name} </p>
-                      <div className="flex gap-8">
-                        <button
-                          className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                          onClick={() => {
-                            setModaltype("updateList"), handleUpdate(list.id);
-                          }}
-                        >
-                          <Pen color="black" size={20} />
-                        </button>
-                        <button
-                          className="cursor-pointer hover:scale-105 transition-transform duration-300"
-                          onClick={() => {
-                            handleDelete(list.id);
-                          }}
-                        >
-                          <Trash color="black" size={20} />
-                        </button>
+                {data?.lists.length > 0 ? (
+                  data?.lists.map((list) => (
+                    <li
+                      key={list.id}
+                      className="list-row p-4 my-4 gap-2 transition-colors duration-300 hover:bg-slate-600/15  "
+                    >
+                      <div className="flex  justify-between gap-4">
+                        <p className="capitalize">{list.name} </p>
+                        <div className="flex gap-8">
+                          <button
+                            className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                            onClick={() => {
+                              setModaltype("updateList"), handleUpdate(list.id);
+                            }}
+                          >
+                            <Pen color="black" size={20} />
+                          </button>
+                          <button
+                            className="cursor-pointer hover:scale-105 transition-transform duration-300"
+                            onClick={() => {
+                              handleDelete(list.id);
+                            }}
+                          >
+                            <Trash color="black" size={20} />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  ))
+                ) : (
+                  <p className="p-4 text-center text-gray-400">
+                    Aucune liste pour le moment
+                  </p>
+                )}
               </ul>
             </div>
           </div>

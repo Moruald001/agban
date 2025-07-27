@@ -68,59 +68,66 @@ export const List = () => {
         <h1 className="text-2xl text-gray-500 text-center font-bold">
           Toutes les listes
         </h1>
-        <div className=" overflow-x-hidden shadow-[10px_10px_40px_black]/20 min-w-[70vw]  bg-gray-900/5 rounded-box h-auto mx-5  ">
-          <div className="overflow-x-auto rounded-box border border-base-content/5      ">
-            <table className="table table-zebra hover   rounded-box  ">
-              {/* head */}
-              <thead>
-                <tr>
-                  <th>Nom</th>
-                  <th>Date de creation</th>
-                  <th>
-                    <UserRoundPlus size={18} strokeWidth="3" />
-                  </th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.lists.map((list) => (
-                  <tr key={list.id}>
-                    <td className="capitalize">{list.name} </td>
-                    <td>{formatDate(list.createdAt)} </td>
-                    <td>
-                      <button className="cursor-pointer hover:scale-105  transition-transform duration-300">
-                        <PlusSquare size={20} strokeWidth="2" color="green" />
-                      </button>
-                    </td>
-
-                    <td className="flex gap-4 items-center">
-                      <button
-                        className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                        onClick={() => handleUpdate(list.id)}
-                      >
-                        <Pen color="black" size={15} className="" />
-                      </button>
-                      <button
-                        className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                        onClick={() => handleDelete(list.id)}
-                      >
-                        <Trash color="black" size={15} />
-                      </button>
-                    </td>
+        {data.lists.length > 0 ? (
+          <div className=" overflow-x-hidden shadow-[10px_10px_40px_black]/20 min-w-[70vw]  bg-gray-900/5 rounded-box h-auto mx-5  ">
+            <div className="overflow-x-auto rounded-box border border-base-content/5      ">
+              <table className="table table-zebra hover   rounded-box  ">
+                {/* head */}
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Date de creation</th>
+                    <th>
+                      <UserRoundPlus size={18} strokeWidth="3" />
+                    </th>
+                    <th>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <Modal
-              showModal={showModal}
-              modalType="updateList"
-              listId={listId}
-              onClose={() => {
-                setShowModal(false);
-              }}
-            />
+                </thead>
+                <tbody>
+                  {data?.lists.map((list) => (
+                    <tr key={list.id}>
+                      <td className="capitalize">{list.name} </td>
+                      <td>{formatDate(list.createdAt)} </td>
+                      <td>
+                        <button className="cursor-pointer hover:scale-105  transition-transform duration-300">
+                          <PlusSquare size={20} strokeWidth="2" color="green" />
+                        </button>
+                      </td>
+
+                      <td className="flex gap-4 items-center">
+                        <button
+                          className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                          onClick={() => handleUpdate(list.id)}
+                        >
+                          <Pen color="black" size={15} className="" />
+                        </button>
+                        <button
+                          className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                          onClick={() => handleDelete(list.id)}
+                        >
+                          <Trash color="black" size={15} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Modal
+                location={"list"}
+                showModal={showModal}
+                modalType="updateList"
+                listId={listId}
+                onClose={() => {
+                  setShowModal(false);
+                }}
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          <p className="p-4 text-center text-gray-400">
+            Aucune liste pour le moment
+          </p>
+        )}
       </div>
     </>
   );
