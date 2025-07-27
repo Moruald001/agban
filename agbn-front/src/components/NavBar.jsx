@@ -3,9 +3,11 @@ import useAuthStore from "../../store/useAuthStore";
 import { useMutation } from "@tanstack/react-query";
 import { doLogout } from "../../utils/authFetcher";
 import { useQueryClient } from "@tanstack/react-query";
+import useClientStore from "../../store/clientStore";
 
 export default function NavBar() {
   const { user, isAuthenticated, logout } = useAuthStore();
+  const { remove } = useClientStore();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: doLogout,
   });
@@ -16,11 +18,13 @@ export default function NavBar() {
     try {
       const res = await mutateAsync();
       res && toast.success(res.message);
-      await logout();
       queryClient.cancelQueries(); // arrête les requêtes en cours
       queryClient.removeQueries();
       queryClient.clear();
+      remove();
+      logout();
       await localStorage.removeItem("user-storage");
+      await localStorage.removeItem("user-list");
     } catch (error) {
       console.log(error);
       toast.error(`${error}`);

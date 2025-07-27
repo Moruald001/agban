@@ -3,9 +3,9 @@ import { Navigate } from "react-router-dom";
 import useAuthStore from "../../../store/useAuthStore";
 
 export const Guard = ({ children }) => {
-  const isAuthenticated = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore();
 
-  if (isAuthenticated) {
+  if (isAuthenticated === true) {
     return <Navigate to="/" replace />;
   }
 

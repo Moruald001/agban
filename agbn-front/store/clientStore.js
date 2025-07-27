@@ -6,8 +6,11 @@ const useClientStore = create(
   persist(
     (set) => ({
       lists: null,
+      latestList: null,
 
       create: (list) => set((state) => ({ ...list, state })),
+      createLatestList: (list) => set((state) => ({ ...list, state })),
+
       remove: () => {
         set({ list: null });
       },

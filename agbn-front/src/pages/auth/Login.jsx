@@ -111,7 +111,7 @@ export function Login() {
           weight=" px-5"
           fontStyle=" font-bold text-xl  text-gray-700"
           attributes="submit"
-          disable={isPending && " disabled:bg-gray-300"}
+          disable={isPending && true}
         />{" "}
         <p className=" text-sm">
           Vous n'avez pas de compte?{" "}

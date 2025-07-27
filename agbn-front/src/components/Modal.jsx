@@ -12,7 +12,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { createList, updateList, getList } from "../../utils/otherFetcher";
 import useClientStore from "../../store/clientStore";
-import { useEffect } from "react";
+// import { useEffect } from "react";
+import useAuthStore from "../../store/useAuthStore";
 
 export const Modal = ({ showModal, onClose, modalType, listId }) => {
   const {
@@ -24,6 +25,7 @@ export const Modal = ({ showModal, onClose, modalType, listId }) => {
     resolver: yupResolver(createListSchema),
   });
   const { lists, create } = useClientStore();
+  const isAuthenticated = useAuthStore();
 
   const { data, refetch } = useQuery({
     queryKey: ["lists"],
@@ -32,8 +34,10 @@ export const Modal = ({ showModal, onClose, modalType, listId }) => {
     onSuccess: () => {
       create(data);
     },
+    enabled: isAuthenticated === true ? true : false,
+    refetchOnWindowFocus: false,
   });
-  const listSelected = lists.find((item) => item.id === listId);
+  const listSelected = lists?.find((item) => item.id === listId);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: modalType === "updateList" ? updateList : createList,
