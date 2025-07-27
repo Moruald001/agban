@@ -143,23 +143,26 @@ export function Home() {
         />
 
         {isAuthenticated && !isLoading ? (
-          <div className=" w-screen  px-15 fle flex-col justify-center items-start mt-10 ">
+          <div className=" min-w-[60vw] max-w-[80vw] h-auto mt-10  rounded-box">
             <p className="pl-2">Dernières listes crées</p>
-            <hr className="border-b-1 mt-2 opacity-30" />
+            <hr className="border-b-2 mt-2 opacity-30" />
             <div className="flex flex-col gap-2 justify-evenly mt-5">
-              <ul className="list bg-gray-200/69 rounded-box shadow-md">
+              <ul className="  bg-gray-200/69 rounded-box shadow-md ">
                 {data?.lists.map((list) => (
-                  <li key={list.id} className="list-row gap-2">
+                  <li
+                    key={list.id}
+                    className="list-row p-4 my-4 gap-2 transition-colors duration-300 hover:bg-slate-600/15  "
+                  >
                     <div className="flex  justify-between gap-4">
                       <p className="capitalize">{list.name} </p>
-                      <div className="flex gap-2">
+                      <div className="flex gap-8">
                         <button
                           className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                           onClick={() => {
                             setModaltype("updateList"), handleUpdate(list.id);
                           }}
                         >
-                          <Pen color="black" size={15} className="" />
+                          <Pen color="black" size={20} />
                         </button>
                         <button
                           className="cursor-pointer hover:scale-105 transition-transform duration-300"
@@ -167,7 +170,7 @@ export function Home() {
                             handleDelete(list.id);
                           }}
                         >
-                          <Trash color="black" size={15} />
+                          <Trash color="black" size={20} />
                         </button>
                       </div>
                     </div>
@@ -178,7 +181,7 @@ export function Home() {
           </div>
         ) : (
           <div className="w-screen h-screen flex justify-center items-end ">
-            <SyncLoader />
+            <SyncLoader color="grey" />
           </div>
         )}
       </div>

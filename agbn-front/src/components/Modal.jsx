@@ -34,7 +34,6 @@ export const Modal = ({ showModal, onClose, modalType, listId }) => {
     },
   });
   const listSelected = lists.find((item) => item.id === listId);
-  console.log(listSelected);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: modalType === "updateList" ? updateList : createList,

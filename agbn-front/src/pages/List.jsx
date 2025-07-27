@@ -74,11 +74,10 @@ export const List = () => {
               {/* head */}
               <thead>
                 <tr>
-                  <th>No</th>
                   <th>Nom</th>
                   <th>Date de creation</th>
                   <th>
-                    <UserRoundPlus size={20} strokeWidth="2" />
+                    <UserRoundPlus size={18} strokeWidth="3" />
                   </th>
                   <th>Action</th>
                 </tr>
@@ -86,7 +85,6 @@ export const List = () => {
               <tbody>
                 {data?.lists.map((list) => (
                   <tr key={list.id}>
-                    <th>{list.id} </th>
                     <td className="capitalize">{list.name} </td>
                     <td>{formatDate(list.createdAt)} </td>
                     <td>
@@ -97,13 +95,13 @@ export const List = () => {
 
                     <td className="flex gap-4 items-center">
                       <button
-                        className="cursor-pointer hover:bg-gray-900/30 "
+                        className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                         onClick={() => handleUpdate(list.id)}
                       >
                         <Pen color="black" size={15} className="" />
                       </button>
                       <button
-                        className="cursor-pointer"
+                        className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                         onClick={() => handleDelete(list.id)}
                       >
                         <Trash color="black" size={15} />
