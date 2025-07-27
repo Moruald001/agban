@@ -151,7 +151,7 @@ export function Home() {
               <ul className="  bg-gray-200/69 rounded-box shadow-md ">
                 {data?.lists.length > 0 ? (
                   data?.lists.map((list) => (
-                    <Link to={`/list-details/${list.id}`}>
+                    <Link key={list.id} to={`/list-details/${list.id}`}>
                       <li
                         key={list.id}
                         className="list-row p-4 my-4 gap-2 transition-colors duration-300 hover:bg-slate-600/15  "

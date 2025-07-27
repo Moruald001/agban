@@ -44,7 +44,8 @@ export default function NavBar() {
             <p className=" capitalize">{user?.role}</p>
             <button
               onClick={handleLogout}
-              className="capitalize btn btn-neutral  opacity-60"
+              className={`capitalize btn btn-neutral  opacity-60           ${isPending} ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
+`}
             >
               {isPending ? "Déconnexion.." : "Déconnecté"}
             </button>{" "}
