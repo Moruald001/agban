@@ -10,9 +10,11 @@ import { formatDate } from "../../utils/formatDate";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import useAuthStore from "../../store/useAuthStore";
+import { Button } from "@headlessui/react";
 
 export const List = () => {
   const [showModal, setShowModal] = useState(false);
+  const [modalType, setModaltype] = useState("createList");
   const [listId, setListId] = useState(null);
   const { isAuthenticated } = useAuthStore();
 
@@ -68,6 +70,17 @@ export const List = () => {
         <h1 className="text-2xl text-gray-500 text-center font-bold">
           Toutes les listes
         </h1>
+        <Button
+          onClick={() => {
+            setShowModal(true);
+            setModaltype("createList");
+          }}
+          className={
+            "fixed bottom-[10vh] right-8 bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center cursor-pointer hover:scale-110 transition-transform duration-600  "
+          }
+        >
+          Créer une liste
+        </Button>
         {data.lists.length > 0 ? (
           <div className=" overflow-x-hidden shadow-[10px_10px_40px_black]/20 min-w-[70vw]  bg-gray-900/5 rounded-box h-auto mx-5  ">
             <div className="overflow-x-auto rounded-box border border-base-content/5      ">
@@ -77,9 +90,6 @@ export const List = () => {
                   <tr>
                     <th>Nom</th>
                     <th>Date de creation</th>
-                    <th>
-                      <UserRoundPlus size={18} strokeWidth="3" />
-                    </th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -88,11 +98,6 @@ export const List = () => {
                     <tr key={list.id}>
                       <td className="capitalize">{list.name} </td>
                       <td>{formatDate(list.createdAt)} </td>
-                      <td>
-                        <button className="cursor-pointer hover:scale-105  transition-transform duration-300">
-                          <PlusSquare size={20} strokeWidth="2" color="green" />
-                        </button>
-                      </td>
 
                       <td className="flex gap-4 items-center">
                         <button
@@ -129,6 +134,15 @@ export const List = () => {
           </p>
         )}
       </div>
+      <Modal
+        listId={listId}
+        modalType={modalType}
+        showModal={showModal}
+        location="list"
+        onClose={() => {
+          setShowModal(false);
+        }}
+      />
     </>
   );
 };
