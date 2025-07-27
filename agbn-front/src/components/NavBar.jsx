@@ -32,7 +32,7 @@ export default function NavBar() {
   };
   return (
     <div>
-      <div className="navbar bg-none shadow-sm">
+      <div className="navbar bg-none shadow-sm px-8">
         <div className="flex-1">
           <a href="/" className=" cursor-pointer text-Md">
             AGBAN

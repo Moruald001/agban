@@ -6,6 +6,7 @@ import { Login } from "./pages/auth/Login";
 import { NotFound } from "./pages/notFound";
 import { List } from "./pages/List";
 import { Guard, Protected } from "./pages/auth/Guard";
+import ListDetails from "./pages/ListDetails";
 
 function App() {
   return (
@@ -36,6 +37,15 @@ function App() {
           <Protected>
             {" "}
             <List />{" "}
+          </Protected>
+        }
+      />
+      <Route
+        path={"/list-details/:id"}
+        element={
+          <Protected>
+            {" "}
+            <ListDetails />{" "}
           </Protected>
         }
       />
