@@ -10,12 +10,17 @@ import { createListSchema } from "../lib/Schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { createList, updateList, getList } from "../../utils/otherFetcher";
+import {
+  createList,
+  updateList,
+  getList,
+  getListLatest,
+} from "../../utils/otherFetcher";
 import useClientStore from "../../store/clientStore";
 // import { useEffect } from "react";
 import useAuthStore from "../../store/useAuthStore";
 
-export const Modal = ({ showModal, onClose, modalType, listId }) => {
+export const Modal = ({ showModal, onClose, modalType, listId, location }) => {
   const {
     register,
     handleSubmit,
@@ -28,8 +33,8 @@ export const Modal = ({ showModal, onClose, modalType, listId }) => {
   const isAuthenticated = useAuthStore();
 
   const { data, refetch } = useQuery({
-    queryKey: ["lists"],
-    queryFn: getList,
+    queryKey: location === "home" ? ["latest_lists"] : ["lists"],
+    queryFn: location === "home" ? getListLatest : getList,
     // @ts-ignore
     onSuccess: () => {
       create(data);
@@ -49,7 +54,10 @@ export const Modal = ({ showModal, onClose, modalType, listId }) => {
 
       if (modalType === "updateList") {
         toast.success(`Liste ${data?.name} mise à jour`);
-        await refetch();
+
+        const res = await refetch();
+        console.log(res);
+
         onClose();
       } else {
         toast.success(`Liste  ${data?.name} crée`);

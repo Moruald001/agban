@@ -46,7 +46,7 @@ export function Home() {
     try {
       await mutateAsync(id);
       toast.success("Suppression effectué");
-      await refetch();
+      refetch();
     } catch (error) {
       console.log(error);
       toast.error(`Erreur lors de la suppression ${error}`);
@@ -137,6 +137,7 @@ export function Home() {
           listId={listId}
           modalType={modalType}
           showModal={showModal}
+          location="home"
           onClose={() => {
             setShowModal(false);
           }}
