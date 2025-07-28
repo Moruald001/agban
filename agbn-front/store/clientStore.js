@@ -9,7 +9,8 @@ const useClientStore = create(
       latestList: null,
 
       create: (list) => set((state) => ({ ...list, state })),
-      createLatestList: (list) => set((state) => ({ ...list, state })),
+      createLatestList: (latestList) =>
+        set((state) => ({ ...latestList, state })),
 
       remove: () => {
         set({ list: null });

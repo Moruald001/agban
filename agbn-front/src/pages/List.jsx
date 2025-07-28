@@ -4,19 +4,21 @@ import { ArrowLeft, Pen, PlusSquare, UserRoundPlus } from "lucide-react";
 import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { Modal } from "../components/modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
 import { formatDate } from "../../utils/formatDate";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import useAuthStore from "../../store/useAuthStore";
 import { Button } from "@headlessui/react";
+import useClientStore from "../../store/clientStore";
 
 export const List = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("createList");
   const [listId, setListId] = useState(null);
   const { isAuthenticated } = useAuthStore();
+  const { create } = useClientStore();
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["lists"],
@@ -24,7 +26,9 @@ export const List = () => {
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: false,
   });
-
+  useEffect(() => {
+    create(data);
+  }, []);
   const { mutateAsync } = useMutation({
     mutationFn: deleteList,
   });
