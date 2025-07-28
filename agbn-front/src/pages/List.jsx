@@ -34,6 +34,7 @@ export const List = () => {
   });
 
   const handleUpdate = async (id) => {
+    await setModaltype("updateList");
     await setShowModal(true);
     await setListId(id);
   };
@@ -124,15 +125,6 @@ export const List = () => {
                   ))}
                 </tbody>
               </table>
-              <Modal
-                location={"list"}
-                showModal={showModal}
-                modalType="updateList"
-                listId={listId}
-                onClose={() => {
-                  setShowModal(false);
-                }}
-              />
             </div>
           </div>
         ) : (

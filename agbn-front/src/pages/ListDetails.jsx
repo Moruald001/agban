@@ -2,7 +2,6 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import useClientStore from "../../store/clientStore";
 import NavBar from "../components/NavBar";
-import { number } from "yup";
 
 export default function ListDetails() {
   const listId = useParams();
