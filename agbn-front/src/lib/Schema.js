@@ -1,5 +1,8 @@
 import * as yup from "yup";
 
+const FILE_SIZE_LIMIT = 6 * 1024 * 1024; // 6MB
+const SUPPORTED_FORMATS = ["image/jpeg", "image/png"];
+
 export const schemaRegister = yup.object().shape({
   name: yup.string().required("le pseudo est requis").min(3),
   email: yup.string().required("L'email  est requis").email("email invalide"),
@@ -38,4 +41,36 @@ export const createListSchema = yup.object().shape({
 
       " le nom ne peut contenir que des lettres et des chiffres"
     ),
+});
+
+export const createClientSchema = yup.object({
+  name: yup.string().required("Le nom est requis").min(4),
+  contact: yup
+    .string()
+    .required("Le contact est requis")
+    .min(8, "le contact doit etre de 8 caractère minimum")
+    .matches(/^\+[0-9]+$/, "le numero n'est pas valide "),
+  description: yup.string().required("La description est requise").min(6),
+  images: yup
+    .mixed()
+    .required("Au moins une image est requise")
+    .test(
+      "maxFiles",
+      "Maximum 10 fichiers",
+      (value) => value && value.length <= 10
+    )
+    .test(
+      "fileSize",
+      "Chaque fichier doit faire moins de 6MB",
+      (value) =>
+        value && Array.from(value).every((file) => file.size < FILE_SIZE_LIMIT)
+    )
+    .test(
+      "fileFormat",
+      "Seuls les formats JPEG et PNG sont acceptés",
+      (value) =>
+        value &&
+        Array.from(value).every((file) => SUPPORTED_FORMATS.includes(file.type))
+    ),
+  keep: yup.boolean().required("keep est soit true ou false"),
 });

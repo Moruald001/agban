@@ -68,3 +68,26 @@ export const deleteList = async (id) => {
 
   return res.json();
 };
+
+export const createClient = async (formData) => {
+  const res = await fetch(`${apiUrl}/client/add-client`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(errData.error || "Erreur lors de la creation de la liste");
+  }
+  return await res.json();
+};
+
+export const getClients = async () => {
+  const res = await fetch(`${apiUrl}/client/lists`, {
+    credentials: "include",
+  });
+
+  if (!res.ok) throw new Error("Erreur réseau");
+
+  return res.json();
+};

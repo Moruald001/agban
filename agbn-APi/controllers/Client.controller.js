@@ -1,39 +1,7 @@
 const { Client, List, Img } = require("../models");
-// Creation d'une liste
-const createList = async (req, res) => {
-  const { name } = req.body;
-  const user = req.user;
-  const ListExist = await List.findOne({ where: { name } });
-
-  if (ListExist !== null) {
-    return res.status(404).json({
-      message: "Cette liste existe déjà",
-    });
-  }
-
-  try {
-    const response = await List.create({
-      name,
-      userId: user.id,
-    });
-
-    if (response === undefined) {
-      return res
-        .status(400)
-        .json({ message: "erreur lors de la creation de la liste" });
-    }
-
-    console.log("Liste crée avec succès");
-    const list = response.toJSON();
-    res.status(201).json({
-      message: `Liste crée avec succès`,
-      list,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: `erreur serveur  ` });
-  }
-};
+const fs = require("fs").promises;
+const path = require("path");
+const { fileTypeFromBuffer } = require("file-type");
 
 //Ajout d'un client
 
@@ -84,13 +52,45 @@ const createClient = async (req, res) => {
     const client = response.toJSON();
 
     if (req.files && req.files.length > 0) {
-      const images = req.files.map((file) => ({
-        img: `/images/${file.filename}`,
-        clientId: client.id,
-      }));
+      const images = [];
 
-      await Img.bulkCreate(images);
+      for (const file of req.files) {
+        if (!file.buffer) {
+          throw new Error("file.buffer est undefined !");
+        }
+
+        // Vérification du contenu réel du fichier
+        const type = await fileTypeFromBuffer(file.buffer);
+        if (
+          !type ||
+          !["image/jpeg", "image/png", "image/webp"].includes(type.mime)
+        ) {
+          return res
+            .status(400)
+            .json({ error: "Contenu du fichier image invalide" });
+        }
+
+        const uniqueName = `${Date.now()}-${file.originalname}`;
+        const filePath = path.join(__dirname, "..", "images", uniqueName);
+
+        try {
+          await fs.writeFile(filePath, file.buffer);
+          images.push({
+            img: `/images/${uniqueName}`,
+            clientId: client.id,
+          });
+        } catch (err) {
+          console.error("❌ Erreur d'écriture de l'image:", err);
+          return res.status(500).json({ error: "Erreur enregistrement image" });
+        }
+      }
+      try {
+        await Img.bulkCreate(images);
+      } catch (error) {
+        res.status(400).json({ error: "echec de l'enregistrement des images" });
+      }
     }
+
     console.log("client ajouté avec succès");
 
     console.log(client);
@@ -114,6 +114,105 @@ const getClients = async (req, res) => {
     res.status(200).json({ "liste des clients": clientsList });
   } catch (error) {
     res.status(500).json({ error: "erreur serveur" }, error);
+  }
+};
+// modifier
+const updateClient = async (req, res) => {
+  const id = req.params.id;
+  const { name, description, contact, keep } = req.body;
+
+  const client = await Client.findByPk(id);
+  if (client === null) {
+    res.status(400).json({
+      message: "impossible de mettre à jour ce client, il est introuvable",
+    });
+    throw new Error(
+      "impossible de mettre à jour ce client car il est introuvable"
+    );
+  }
+  try {
+    await Client.update(
+      { name, description, contact, keep },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info client mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update client:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+// Suppression d'un client
+const deleteClient = async (req, res) => {
+  const id = req.params.id;
+
+  const client = await Client.findByPk(id);
+  if (client === null) {
+    res.status(400).json({
+      message: "impossible de mettre à jour ce client car il est introuvable",
+    });
+    throw new Error(
+      "impossible de mettre à jour ce client car il est introuvable"
+    );
+  }
+
+  try {
+    const response = await Client.destroy({
+      where: {
+        id,
+      },
+      force: true,
+    });
+
+    if (!response) {
+      res.status(500).json({ erreur: "la suppression à echoué" });
+      throw new Error("la suppression à echoué");
+    }
+    res
+      .status(200)
+      .json({ message: "la suppression à été effectué avec succès", client });
+  } catch (error) {
+    console.log("erreur serveur ", error);
+    res.status(500).json({ erreur: "la suppression à echoué" });
+  }
+};
+
+// Creation d'une liste
+const createList = async (req, res) => {
+  const { name } = req.body;
+  const user = req.user;
+  const ListExist = await List.findOne({ where: { name } });
+
+  if (ListExist !== null) {
+    return res.status(404).json({
+      message: "Cette liste existe déjà",
+    });
+  }
+
+  try {
+    const response = await List.create({
+      name,
+      userId: user.id,
+    });
+
+    if (response === undefined) {
+      return res
+        .status(400)
+        .json({ message: "erreur lors de la creation de la liste" });
+    }
+
+    console.log("Liste crée avec succès");
+    const list = response.toJSON();
+    res.status(201).json({
+      message: `Liste crée avec succès`,
+      list,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: `erreur serveur  ` });
   }
 };
 
@@ -153,35 +252,6 @@ const getListsLatest = async (req, res) => {
   }
 };
 
-// modifier
-const updateClient = async (req, res) => {
-  const id = req.params.id;
-  const { name, description, contact, keep } = req.body;
-
-  const client = await Client.findByPk(id);
-  if (client === null) {
-    res.status(400).json({
-      message: "impossible de mettre à jour ce client, il est introuvable",
-    });
-    throw new Error(
-      "impossible de mettre à jour ce client car il est introuvable"
-    );
-  }
-  try {
-    await Client.update(
-      { name, description, contact, keep },
-      {
-        where: {
-          id,
-        },
-      }
-    );
-    res.status(200).json({ message: "info client mise à jour " });
-  } catch (error) {
-    console.error("❌ Erreur update client:", error);
-    res.status(500).json({ message: "Erreur serveur" });
-  }
-};
 const updateList = async (req, res) => {
   const id = req.params.id;
   const { name } = req.body;
@@ -208,42 +278,7 @@ const updateList = async (req, res) => {
   }
 };
 
-// Suppression d'un client
-const deleteClient = async (req, res) => {
-  const id = req.params.id;
-
-  const client = await Client.findByPk(id);
-  if (client === null) {
-    res.status(400).json({
-      message: "impossible de mettre à jour ce client car il est introuvable",
-    });
-    throw new Error(
-      "impossible de mettre à jour ce client car il est introuvable"
-    );
-  }
-
-  try {
-    const response = await Client.destroy({
-      where: {
-        id,
-      },
-      force: true,
-    });
-
-    if (!response) {
-      res.status(500).json({ erreur: "la suppression à echoué" });
-      throw new Error("la suppression à echoué");
-    }
-    res
-      .status(200)
-      .json({ message: "la suppression à été effectué avec succès", client });
-  } catch (error) {
-    console.log("erreur serveur ", error);
-    res.status(500).json({ erreur: "la suppression à echoué" });
-  }
-};
-
-// Suppression d'un client
+// Suppression d'un list
 const deleteList = async (req, res) => {
   const id = req.params.id;
 
