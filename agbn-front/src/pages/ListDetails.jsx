@@ -5,23 +5,28 @@ import NavBar from "../components/NavBar";
 import { ArrowLeft, Pen, Plus, Trash } from "lucide-react";
 import { Button } from "@headlessui/react";
 import { AddClientModal } from "../components/AddClientModal";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useAuthStore from "../../store/useAuthStore";
-import { getList } from "../../utils/otherFetcher";
+import { deleteClient, getList } from "../../utils/otherFetcher";
+
+import toast from "react-hot-toast";
 
 export default function ListDetails() {
   const listId = useParams();
-  const { lists } = useClientStore();
   const idNumber = Number(listId.id);
   const [showModal, setShowModal] = useState(false);
   const { isAuthenticated } = useAuthStore();
+  const [clientId, setClientId] = useState();
+  const [modalType, setModalType] = useState("createClient");
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["lists"],
     queryFn: getList,
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: false,
   });
+
+  const { mutateAsync } = useMutation({ mutationFn: deleteClient });
   const listSelected = data?.lists?.find((list) => list.id == idNumber);
 
   const formatStatus = (status) => {
@@ -29,6 +34,26 @@ export default function ListDetails() {
       return "Garder";
     } else {
       return "libérer";
+    }
+  };
+  const handleUpdate = async (clientId) => {
+    await setModalType("updateClient");
+    await setShowModal(true);
+    await setClientId(clientId);
+  };
+
+  const handleDelete = async (clientId) => {
+    const response = confirm("vous êtes sur le point de supprimer cette liste");
+    if (!response) {
+      return;
+    }
+    try {
+      await mutateAsync(clientId);
+      toast.success("Suppression effectué");
+      await refetch();
+    } catch (error) {
+      console.log(error);
+      toast.error(`Erreur lors de la suppression ${error}`);
     }
   };
 
@@ -77,13 +102,13 @@ export default function ListDetails() {
                     <td className="flex gap-4 items-center">
                       <button
                         className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                        onClick={() => handleUpdate(listSelected.id)}
+                        onClick={() => handleUpdate(client.id)}
                       >
                         <Pen color="black" size={15} className="" />
                       </button>
                       <button
                         className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                        onClick={() => handleDelete(listSelected.id)}
+                        onClick={() => handleDelete(client.id)}
                       >
                         <Trash color="black" size={15} />
                       </button>
@@ -99,8 +124,10 @@ export default function ListDetails() {
           )}{" "}
         </div>
         <AddClientModal
+          modalType={modalType}
           showModal={showModal}
-          listId={listSelected?.id}
+          listId={idNumber}
+          clientId={clientId}
           onClose={() => {
             setShowModal(false);
           }}

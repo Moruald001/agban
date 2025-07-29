@@ -30,7 +30,9 @@ export const updateList = async ({ data, id }) => {
   });
   if (!res.ok) {
     const errData = await res.json();
-    throw new Error(errData.error || "Erreur lors de la creation de la liste");
+    throw new Error(
+      errData.error || "Erreur lors de la modification de la liste"
+    );
   }
   return await res.json();
 };
@@ -84,6 +86,32 @@ export const createClient = async (formData) => {
 
 export const getClients = async () => {
   const res = await fetch(`${apiUrl}/client/lists`, {
+    credentials: "include",
+  });
+
+  if (!res.ok) throw new Error("Erreur réseau");
+
+  return res.json();
+};
+
+export const updateClient = async (formData) => {
+  const res = await fetch(`${apiUrl}/client/update-list/${id}`, {
+    method: "PUT",
+
+    credentials: "include",
+    body: formData,
+  });
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(errData.error || "Erreur lors de la modification");
+  }
+  return await res.json();
+};
+
+export const deleteClient = async (clientId) => {
+  const res = await fetch(`${apiUrl}/client/delete-client/${clientId}`, {
+    method: "DELETE",
+
     credentials: "include",
   });
 

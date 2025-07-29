@@ -12,12 +12,18 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createClientSchema } from "../lib/Schema";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createClient, getList } from "../../utils/otherFetcher";
+import { createClient, getList, updateClient } from "../../utils/otherFetcher";
 import toast from "react-hot-toast";
 import useAuthStore from "../../store/useAuthStore";
 import useClientStore from "../../store/clientStore";
 
-export function AddClientModal({ showModal, onClose, listId }) {
+export function AddClientModal({
+  showModal,
+  onClose,
+  listId,
+  modalType,
+  clientId,
+}) {
   const {
     register,
     handleSubmit,
@@ -28,20 +34,25 @@ export function AddClientModal({ showModal, onClose, listId }) {
 
   const { isAuthenticated } = useAuthStore();
   const { create } = useClientStore();
+  const { lists } = useClientStore();
 
   const { data, refetch } = useQuery({
     queryKey: ["lists"],
-    queryFn: getList,
+    queryFn: modalType === "createClient" ? getList : updateClient,
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: isAuthenticated === true ? true : false,
   });
+  const listSelected = lists?.find((item) => item.id === listId);
+  const clientSelected = listSelected.clients.find(
+    (item) => item.id === clientId
+  );
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: createClient,
   });
 
   const images = watch("images");
-  // console.log(images);
+
   const [preview, setPreview] = useState([]);
 
   useEffect(() => {
@@ -128,7 +139,9 @@ export function AddClientModal({ showModal, onClose, listId }) {
                 as="h3"
                 className=" text-center mb-4 font-bold text-gray-700 text-2xl"
               >
-                Ajout d'un client
+                {modalType === "createClient"
+                  ? "Ajout d'un client"
+                  : "Modifier un client"}
               </DialogTitle>
               <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -146,7 +159,11 @@ export function AddClientModal({ showModal, onClose, listId }) {
                   className=" text-center focus:outline-hidden border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs"
                   type="text"
                   id="name"
-                  placeholder="Nom du client"
+                  placeholder={
+                    modalType === "createClient"
+                      ? "Nom du client"
+                      : clientSelected?.name
+                  }
                   {...register("name")}
                 />
                 {errors.name && (
@@ -167,7 +184,11 @@ export function AddClientModal({ showModal, onClose, listId }) {
                   type="text"
                   // name="contact"
                   id="contact"
-                  placeholder="+228 90270099"
+                  placeholder={
+                    modalType === "createClient"
+                      ? "+228 902334534"
+                      : clientSelected?.contact
+                  }
                   {...register("contact")}
                 />
                 {errors.contact && (
@@ -186,7 +207,11 @@ export function AddClientModal({ showModal, onClose, listId }) {
                 <textarea
                   className="border-1 border-solid rounded-[0.6em] text-center focus:outline-hidden border-gray-400 p-2 resize-none min-w-3xs min-h-4"
                   id="description"
-                  placeholder="ex:  1 tonneau "
+                  placeholder={
+                    modalType === "createClient"
+                      ? "1 tonneau"
+                      : clientSelected?.description
+                  }
                   {...register("description")}
                 ></textarea>
                 {errors.description && (
@@ -247,9 +272,11 @@ export function AddClientModal({ showModal, onClose, listId }) {
                 <select
                   className="self-center cursor-pointer  bg-gray-600 text-white p-2 rounded-[0.6em] focus:bg-gray-300 focus:text-black duration-10 ease-in-out"
                   {...register("keep")}
-                  defaultValue={true}
+                  defaultValue={
+                    modalType === "updateCLient" ? clientSelected?.keep : "true"
+                  }
                 >
-                  <option value={false}>Liberer </option>
+                  <option value={false}>Libérer </option>
                   <option value={true}>Garder</option>
                 </select>
                 <div className="mt-4 flex justify-between">
@@ -271,8 +298,7 @@ export function AddClientModal({ showModal, onClose, listId }) {
                         : "hover:bg-blue-600"
                     }`}
                   >
-                    {/* {modalType === "updateList" ? "Appliquer" : "Créer"} */}
-                    ajouter
+                    {modalType === "updateClient" ? "Modifier" : "Ajouter "}
                   </Button>
                 </div>
               </form>
