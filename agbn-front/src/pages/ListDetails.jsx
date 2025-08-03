@@ -28,6 +28,7 @@ export default function ListDetails() {
 
   const { mutateAsync } = useMutation({ mutationFn: deleteClient });
   const listSelected = data?.lists?.find((list) => list.id == idNumber);
+  console.log(listSelected);
 
   const formatStatus = (status) => {
     if (status) {
@@ -95,10 +96,10 @@ export default function ListDetails() {
                 {listSelected?.clients.map((client) => (
                   <tr key={client.id}>
                     <td>{client.name}</td>
-                    <td>{client.contact} </td>
+                    <td>{client.contact}</td>
                     <td>{client.description}</td>
                     <td>fjkljdlafdj</td>
-                    <td> {formatStatus(client.keep)}</td>
+                    <td>{formatStatus(client.keep)}</td>
                     <td className="flex gap-4 items-center">
                       <button
                         className="cursor-pointer hover:scale-105 transition-transform duration-300 "

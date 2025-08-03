@@ -38,17 +38,17 @@ export function AddClientModal({
 
   const { data, refetch } = useQuery({
     queryKey: ["lists"],
-    queryFn: modalType === "createClient" ? getList : updateClient,
+    queryFn: getList,
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: isAuthenticated === true ? true : false,
   });
   const listSelected = lists?.find((item) => item.id === listId);
-  const clientSelected = listSelected.clients.find(
+  const clientSelected = listSelected?.clients?.find(
     (item) => item.id === clientId
   );
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: createClient,
+    mutationFn: modalType === "createClient" ? createClient : updateClient,
   });
 
   const images = watch("images");
@@ -91,7 +91,10 @@ export function AddClientModal({
     });
 
     try {
-      await mutateAsync(formData);
+      await mutateAsync(
+        formData,
+        modalType === "createClient" ? null : clientId
+      );
 
       // if (modalType === "updateList") {
       await refetch();

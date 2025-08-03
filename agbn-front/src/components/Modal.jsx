@@ -90,7 +90,7 @@ export const Modal = ({ showModal, onClose, modalType, listId, location }) => {
               >
                 {modalType === "createList"
                   ? "Creer une liste"
-                  : `Modifier ${listSelected.name}`}
+                  : `Modifier ${listSelected?.name}`}
               </DialogTitle>
               <form
                 className="flex  flex-col"

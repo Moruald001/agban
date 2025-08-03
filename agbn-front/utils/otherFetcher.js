@@ -94,8 +94,8 @@ export const getClients = async () => {
   return res.json();
 };
 
-export const updateClient = async (formData) => {
-  const res = await fetch(`${apiUrl}/client/update-list/${id}`, {
+export const updateClient = async (formData, clientId) => {
+  const res = await fetch(`${apiUrl}/client/update-client/${clientId}`, {
     method: "PUT",
 
     credentials: "include",
