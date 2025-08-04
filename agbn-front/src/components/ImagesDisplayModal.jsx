@@ -68,7 +68,7 @@ export default function ImagesDisplayModal({ showModal, client, onClose }) {
                   <div className="mt-4">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer transition-colors duration-300"
+                      className="inline-flex justify-center rounded-lg border border-transparent bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer transition-colors duration-300"
                       onClick={onClose}
                     >
                       Fermer

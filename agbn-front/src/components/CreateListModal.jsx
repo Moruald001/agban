@@ -19,6 +19,7 @@ import {
 import useClientStore from "../../store/clientStore";
 // import { useEffect } from "react";
 import useAuthStore from "../../store/useAuthStore";
+import { useEffect } from "react";
 
 export const CreateListModal = ({
   showModal,
@@ -48,6 +49,7 @@ export const CreateListModal = ({
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: false,
   });
+
   const listSelected = lists?.find((item) => item.id === listId);
 
   const { mutateAsync, isPending } = useMutation({
@@ -81,7 +83,7 @@ export const CreateListModal = ({
         open={showModal}
         as="div"
         className="relative z-10 "
-        onClose={onClose}
+        onClose={() => {}}
       >
         <DialogBackdrop className="fixed inset-0 bg-black/30 " />
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -112,12 +114,11 @@ export const CreateListModal = ({
                   className={`border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden`}
                   type="text"
                   id="name"
-                  placeholder={
-                    modalType === "updateList"
-                      ? listSelected?.name
-                      : "Ex: liste Juin 2025"
-                  }
+                  placeholder={"Ex: liste Juin 2025"}
                   {...register("name")}
+                  defaultValue={
+                    modalType === "createList" ? "" : listSelected.name
+                  }
                 />
                 {errors.name && (
                   <p className="text-red-400 text-center  after:content-['⚠️']">

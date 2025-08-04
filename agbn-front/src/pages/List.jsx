@@ -33,10 +33,10 @@ export const List = () => {
     mutationFn: deleteList,
   });
 
-  const handleUpdate = async (id) => {
-    await setModaltype("updateList");
-    await setShowModal(true);
-    await setListId(id);
+  const handleUpdate = (id) => {
+    setModaltype("updateList");
+    setShowModal(true);
+    setListId(id);
   };
 
   const handleDelete = async (id) => {

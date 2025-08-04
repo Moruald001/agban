@@ -49,7 +49,7 @@ export const createClientSchema = yup.object({
     .string()
     .required("Le contact est requis")
     .min(8, "le contact doit etre de 8 caractère minimum")
-    .matches(/^\+[0-9]+$/, "le numero n'est pas valide "),
+    .matches(/^\+[0-9]+(\/\+[0-9]+)*$/, "le numero n'est pas valide "),
   description: yup.string().required("La description est requise").min(6),
   images: yup
     .mixed()
