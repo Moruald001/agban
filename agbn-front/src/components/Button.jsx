@@ -20,7 +20,7 @@ export const Btn = ({
           ${fontStyle} ${
           disable
             ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-gray-400 cursor-pointe"
+            : "hover:bg-gray-400 cursor-pointer"
         }`}
         disabled={disable}
       >
