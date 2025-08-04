@@ -6,17 +6,19 @@ export default function Card({ name, contact, description, status, client }) {
   const [showImageModal, SetShowImageModal] = useState(false);
 
   return (
-    <div className="w-screen flex justify-center overflow-hidden mt-10 p-8 ">
-      <div className="card w-96 bg-base-100 card-md shadow-lg  ">
+    <div className="w-[90vw] h-auto flex justify-center overflow-hidden ml-5 mt-10 p-3 ">
+      <div className="card w-full bg-base-100 card-md shadow-lg  ">
         <div className="card-body p-2">
           <h2 className="card-title">{name} </h2>
-          <p>{description}</p>
+          <div className="flex wrap-break-word px-1">
+            <p className="w-[10vw] inline-block">{description}</p>
+          </div>
           <div>
-            <div className="flex justify-between p-4 text-gray-400 text-lg">
+            <div className="flex justify-start gap-30 py-4 text-gray-400 text-lg">
               <span>Status</span>
               <span>Contacts</span>
             </div>
-            <div className="flex justify-between px-4">
+            <div className="flex justify-between wrap-break-word ">
               <h3
                 className={`font-semi-bold ${
                   status !== "Garder" ? "text-green-900" : " text-red-300"
@@ -24,8 +26,8 @@ export default function Card({ name, contact, description, status, client }) {
               >
                 {status}{" "}
               </h3>
-              <div className="w-[20vw]">
-                <h3 className="wrap">{contact} </h3>
+              <div className="w-[40vw]">
+                <span className="">{contact}</span>
               </div>
             </div>
           </div>

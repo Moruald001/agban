@@ -189,7 +189,7 @@ export function AddClientModal({
                   id="contact"
                   placeholder={
                     modalType === "createClient"
-                      ? "+228 902334534"
+                      ? "ex :+228902334534/+22891870964"
                       : clientSelected?.contact
                   }
                   {...register("contact")}
