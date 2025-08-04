@@ -1,9 +1,18 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { SyncLoader } from "react-spinners";
 
 export default function ImagesDisplayModal({ showModal, client, onClose }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedImg, setSelectedImg] = useState(null);
+
   const BASE_URL = import.meta.env.VITE_API_URL;
-  console.log(client);
+  useEffect(() => {
+    setIsLoading(true);
+  }, []);
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 2000);
 
   return (
     <>
@@ -40,12 +49,15 @@ export default function ImagesDisplayModal({ showModal, client, onClose }) {
                     {client?.name + "  photos"}
                   </Dialog.Title>
                   <div className="mt-2 p-5 columns-2">
-                    {client?.imgs.length > 0 ? (
+                    {isLoading ? (
+                      <SyncLoader />
+                    ) : client?.imgs.length > 0 ? (
                       client?.imgs.map((image) => (
                         <img
                           key={image.key}
                           src={`${BASE_URL}${image.img}`}
-                          className="w-full h-full rounded-box shadow-lg mt-2"
+                          className="w-auto h-auto rounded-box shadow-lg mt-2 p-2 border-2 border-gray-600/20 cursor-pointer"
+                          onClick={() => setSelectedImg(image.img)}
                         />
                       ))
                     ) : (
@@ -68,6 +80,19 @@ export default function ImagesDisplayModal({ showModal, client, onClose }) {
           </div>
         </Dialog>
       </Transition>
+      {selectedImg && (
+        <div
+          className="fixed inset-0 z-50 bg-transparent flex items-center justify-center p-4"
+          onClick={() => setSelectedImg(null)}
+        >
+          <img
+            src={`${BASE_URL}${selectedImg}`}
+            alt="Agrandie"
+            className="max-w-full max-h-full rounded-lg shadow-lg"
+            onClick={(e) => e.stopPropagation()} // empêche la fermeture si on clique sur l'image
+          />
+        </div>
+      )}
     </>
   );
 }
