@@ -17,7 +17,6 @@ import {
   getListLatest,
 } from "../../utils/otherFetcher";
 import useClientStore from "../../store/clientStore";
-// import { useEffect } from "react";
 import useAuthStore from "../../store/useAuthStore";
 import { useEffect } from "react";
 
@@ -34,6 +33,9 @@ export const CreateListModal = ({
     reset,
     formState: { errors },
   } = useForm({
+    defaultValues: {
+      name: "",
+    },
     resolver: yupResolver(createListSchema),
   });
   const { lists, create } = useClientStore();
@@ -49,8 +51,16 @@ export const CreateListModal = ({
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: false,
   });
-
   const listSelected = lists?.find((item) => item.id === listId);
+
+  useEffect(() => {
+    // Quand listSelected change, on remet à jour le form
+    if (modalType === "updateList" && listSelected) {
+      reset({ name: listSelected.name });
+    } else {
+      reset({ name: "" });
+    }
+  }, [listSelected, modalType, reset]);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: modalType === "updateList" ? updateList : createList,
@@ -116,9 +126,6 @@ export const CreateListModal = ({
                   id="name"
                   placeholder={"Ex: liste Juin 2025"}
                   {...register("name")}
-                  defaultValue={
-                    modalType === "createList" ? "" : listSelected.name
-                  }
                 />
                 {errors.name && (
                   <p className="text-red-400 text-center  after:content-['⚠️']">
