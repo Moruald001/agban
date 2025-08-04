@@ -25,20 +25,20 @@ export function Login() {
       ? setTogglePassword("text")
       : setTogglePassword("password");
   };
-  const { mutateAsync, isPending, isError, error } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: doLogin,
   });
 
   const onSubmit = async (data) => {
-    const user = await mutateAsync(data);
+    try {
+      const user = await mutateAsync(data);
 
-    toast.success("Connexion réussi");
-    await login(user.user);
-    setTimeout(() => {
-      navigate("/", { replace: true });
-    }, 1000);
-
-    if (isError) {
+      toast.success("Connexion réussi");
+      await login(user.user);
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 1000);
+    } catch (error) {
       console.log(error.toString().split(": ")[1]);
       toast.error(`${error}`);
     }

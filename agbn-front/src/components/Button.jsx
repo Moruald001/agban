@@ -13,12 +13,14 @@ export const Btn = ({
     <>
       <button
         type={attributes}
-        className={`bg-gray-600 p-3 rounded-md text-white font-center font-exo  duration-600 ease-in-out hover:scale-105  transition-transform  cursor-pointer 
+        className={`bg-gray-600 p-3 rounded-md text-white font-center font-exo  duration-600 ease-in-out hover:scale-105  transition-all  r 
           ${animation} 
           ${position} 
           ${weight} 
           ${fontStyle} ${
-          disable ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
+          disable
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:bg-gray-400 cursor-pointe"
         }`}
         disabled={disable}
       >
