@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import useClientStore from "../../store/clientStore";
 import NavBar from "../components/NavBar";
-import { ArrowLeft, Pen, Plus, Trash } from "lucide-react";
+import {
+  ArrowLeft,
+  Image,
+  PanelsRightBottom,
+  Pen,
+  Plus,
+  Trash,
+} from "lucide-react";
 import { Button } from "@headlessui/react";
 import { AddClientModal } from "../components/AddClientModal";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -10,11 +17,14 @@ import useAuthStore from "../../store/useAuthStore";
 import { deleteClient, getList } from "../../utils/otherFetcher";
 
 import toast from "react-hot-toast";
+import ImagesDisplayModal from "../components/ImagesDisplayModal";
 
 export default function ListDetails() {
   const listId = useParams();
   const idNumber = Number(listId.id);
   const [showModal, setShowModal] = useState(false);
+  const [showImageModal, SetShowImageModal] = useState(false);
+
   const { isAuthenticated } = useAuthStore();
   const [clientId, setClientId] = useState();
   const [modalType, setModalType] = useState("createClient");
@@ -28,7 +38,7 @@ export default function ListDetails() {
 
   const { mutateAsync } = useMutation({ mutationFn: deleteClient });
   const listSelected = data?.lists?.find((list) => list.id == idNumber);
-  console.log(listSelected);
+  const client = listSelected?.clients?.find((client) => client.id == clientId);
 
   const formatStatus = (status) => {
     if (status) {
@@ -98,7 +108,16 @@ export default function ListDetails() {
                     <td>{client.name}</td>
                     <td>{client.contact}</td>
                     <td>{client.description}</td>
-                    <td>fjkljdlafdj</td>
+                    <td>
+                      <button
+                        className="cursor-pointer hover:scale-110 transition-transform duration-300"
+                        onClick={() => {
+                          setClientId(client.id), SetShowImageModal(true);
+                        }}
+                      >
+                        <Image />{" "}
+                      </button>
+                    </td>
                     <td>{formatStatus(client.keep)}</td>
                     <td className="flex gap-4 items-center">
                       <button
@@ -124,6 +143,13 @@ export default function ListDetails() {
             </p>
           )}{" "}
         </div>
+        <ImagesDisplayModal
+          showModal={showImageModal}
+          onClose={() => {
+            SetShowImageModal(false);
+          }}
+          client={client}
+        />
         <AddClientModal
           modalType={modalType}
           showModal={showModal}

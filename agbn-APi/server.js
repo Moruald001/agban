@@ -10,6 +10,7 @@ const corsOptions = require("./config/corsOption");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 app.use(helmet());
 app.use(morgan("dev"));
@@ -17,10 +18,17 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  "/images",
+  express.static(path.join(__dirname, "images"), {
+    setHeaders: (res) => {
+      res.set("Cross-Origin-Resource-Policy", " cross-origin");
+    },
+  })
+);
 
 app.use("/auth", userRoutes);
 app.use("/client", clientRoutes);
-app.use("/images", express.static("images"));
 
 app.use((err, req, res, next) => {
   // 🛑 Erreurs Multer (ex: limite de taille, format invalide)

@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 import useAuthStore from "../../store/useAuthStore";
 import { ThreeDot } from "react-loading-indicators";
 import { useState, useEffect } from "react";
-import { Modal } from "../components/modal";
+import { CreateListModal } from "../components/CreateListModal";
 import { Btn } from "../components/button";
 import { Button } from "@headlessui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -133,7 +133,7 @@ export function Home() {
             se connecter
           </Link>
         )}
-        <Modal
+        <CreateListModal
           listId={listId}
           modalType={modalType}
           showModal={showModal}

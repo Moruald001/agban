@@ -3,7 +3,7 @@ import { deleteList, getList } from "../../utils/otherFetcher";
 import { ArrowLeft, Pen, PlusSquare, UserRoundPlus } from "lucide-react";
 import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
-import { Modal } from "../components/modal";
+import { CreateListModal } from "../components/CreateListModal";
 import { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
 import { formatDate } from "../../utils/formatDate";
@@ -86,7 +86,7 @@ export const List = () => {
         >
           Créer une liste
         </Button>
-        {data.lists.length > 0 ? (
+        {data?.lists?.length > 0 ? (
           <div className=" overflow-x-hidden shadow-[10px_10px_40px_black]/20 min-w-[70vw]  bg-gray-900/5 rounded-box h-auto mx-5  ">
             <div className="overflow-x-auto rounded-box border border-base-content/5      ">
               <table className="table table-zebra hover   rounded-box  ">
@@ -133,7 +133,7 @@ export const List = () => {
           </p>
         )}
       </div>
-      <Modal
+      <CreateListModal
         listId={listId}
         modalType={modalType}
         showModal={showModal}

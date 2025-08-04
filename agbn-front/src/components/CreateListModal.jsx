@@ -20,7 +20,13 @@ import useClientStore from "../../store/clientStore";
 // import { useEffect } from "react";
 import useAuthStore from "../../store/useAuthStore";
 
-export const Modal = ({ showModal, onClose, modalType, listId, location }) => {
+export const CreateListModal = ({
+  showModal,
+  onClose,
+  modalType,
+  listId,
+  location,
+}) => {
   const {
     register,
     handleSubmit,
