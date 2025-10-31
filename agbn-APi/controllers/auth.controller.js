@@ -79,6 +79,24 @@ const login = async (req, res) => {
     return res.status(500).json({ error: "Erreur interne du serveur." });
   }
 };
+//recuperation des ceos
+const ceos = async (req, res) => {
+  try {
+    const ceos = await User.findAll({
+      where: {
+        role: "ceo",
+      },
+      attributes: ["id", "email"],
+    });
+    return res.status(200).json({
+      message: "recuperation réussi",
+      ceos,
+    });
+  } catch (error) {
+    console.error("error lors de la recuperation des ceos :", error.message);
+    return res.status(500).json("Erreur lors de la recuperation des ceo");
+  }
+};
 //déconnexion
 const logout = async (req, res) => {
   res.clearCookie("token", {
@@ -90,4 +108,4 @@ const logout = async (req, res) => {
   res.status(200).json({ message: "Déconnecté avec succès." });
 };
 
-module.exports = { register, login, logout };
+module.exports = { register, login, logout, ceos };
