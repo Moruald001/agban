@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { doRegistration, fetchingCeos } from "../../../utils/authFetcher";
 import { useNavigate, Link } from "react-router-dom";
-import useAuthStore from "../../../store/useAuthStore";
+// import useAuthStore from "../../../store/useAuthStore";
 import { useEffect, useState } from "react";
 
 export function Register() {
@@ -15,10 +15,14 @@ export function Register() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schemaRegister) });
+  } = useForm({
+    resolver: yupResolver(schemaRegister),
+    shouldUnregister: true,
+  });
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  // const { login } = useAuthStore();
   const [togglePassword1, setTogglePassword1] = useState("password");
   const [togglePassword2, setTogglePassword2] = useState("password");
   const role = watch("role");
@@ -32,7 +36,12 @@ export function Register() {
       setCeos(data.ceos); // ou data.ceos selon ce que renvoie ton API
     }
   }, [data]);
-  console.log(ceos);
+
+  useEffect(() => {
+    if (role !== "collaborateur") {
+      setValue("ceo", ""); // nettoie la valeur du champ
+    }
+  }, [role, setValue]);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: doRegistration,
@@ -50,12 +59,18 @@ export function Register() {
   };
 
   const onSubmit = async (data) => {
+    console.log("entrer");
+
     const shrinkData = {
       name: data.name,
       email: data.email,
       password: data.password,
       role: data.role,
+      // ...(data.role === "collaborateur" && { ceo: data.ceo }),
     };
+    if (role === "collaborateur") shrinkData.ceo = data.ceo;
+
+    return console.log(shrinkData);
 
     try {
       await mutateAsync(shrinkData);
@@ -222,25 +237,28 @@ export function Register() {
             </p>
           )}
           {role === "collaborateur" && (
-            <div className="dropdown dropdown-start flex justify-center ">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn shadow-sm bg-gray-300"
-              >
-                Choisir votre Ceo
-              </div>
-              <ul
-                tabIndex="-1"
-                className="dropdown-content menu bg-base-300 rounded-box z-1 w-52 p-2 shadow-md "
-              >
-                {ceos?.map((ceo) => (
-                  <li key={ceo.id}>
-                    <a>{ceo.name}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <select
+              defaultValue=""
+              className="select"
+              {...register("ceo", {
+                required:
+                  role === "collaborateur"
+                    ? "Vous devez choisir un CEO"
+                    : false,
+              })}
+            >
+              <option value="">Choisir votre Ceo</option>
+              {ceos?.map((ceo) => (
+                <option key={ceo.id} value={ceo.name}>
+                  {ceo.name}
+                </option>
+              ))}
+            </select>
+          )}
+          {errors.ceo && (
+            <p className="text-red-400 text-center  after:content-['⚠️']">
+              {errors.ceo.message}
+            </p>
           )}
           <Btn
             title="S'inscrire"

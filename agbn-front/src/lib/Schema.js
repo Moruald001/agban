@@ -9,10 +9,11 @@ export const schemaRegister = yup.object().shape({
   password: yup
     .string()
     .required("Le mot de passe est requis")
-    .min(6, "Le mot de passe doit contenir au moins 6 caractères")
+    .min(6, "Le mot de passe doit contenir au moins 8 caractères")
     .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]$/,
-      "Le mot de passe doit contenir au moins une lettre, un chiffre, un caractère spécial et avoir 8 caractères minimum"
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{6,}$/,
+
+      "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre, un caractère spécial et avoir 8 caractères minimum"
     ),
 
   confirmPassword: yup
@@ -21,14 +22,20 @@ export const schemaRegister = yup.object().shape({
       [yup.ref("password")],
       "Le mot de passe entré ne correspond pas au mot de passe"
     ),
-  role: yup.string().required("Veuillez selectionnner votre rôle svp"),
+  role: yup.string().required("Veuillez sélectionner votre rôle svp"),
+  ceo: yup.string().when("role", {
+    is: "collaborateur",
+    then: (schema) =>
+      schema.required("Veuillez choisir votre CEO s'il vous plaît"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
 });
 
 export const schemaLogin = yup.object().shape({
   email: yup
     .string()
     .email("Email invalide")
-    .required("Ce champs ne peut etre vide"),
+    .required("Ce champs ne peut être vide"),
   password: yup.string().required("Veuillez entrer votre mot de passe svp"),
 });
 
