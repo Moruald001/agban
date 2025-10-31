@@ -2,23 +2,37 @@ import { useForm } from "react-hook-form";
 import { Btn } from "../../components/button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaRegister } from "../../lib/Schema";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { doRegistration } from "../../../utils/authFetcher";
+import { doRegistration, fetchingCeos } from "../../../utils/authFetcher";
 import { useNavigate, Link } from "react-router-dom";
 import useAuthStore from "../../../store/useAuthStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function Register() {
+  const [ceos, setCeos] = useState([]);
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schemaRegister) });
   const navigate = useNavigate();
   const { login } = useAuthStore();
   const [togglePassword1, setTogglePassword1] = useState("password");
   const [togglePassword2, setTogglePassword2] = useState("password");
+  const role = watch("role");
+  const { data } = useQuery({
+    queryKey: ["latest_lists"],
+    queryFn: fetchingCeos,
+    refetchOnWindowFocus: false,
+  });
+  useEffect(() => {
+    if (data) {
+      setCeos(data.ceos); // ou data.ceos selon ce que renvoie ton API
+    }
+  }, [data]);
+  console.log(ceos);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: doRegistration,
@@ -44,7 +58,7 @@ export function Register() {
     };
 
     try {
-      const user = await mutateAsync(shrinkData);
+      await mutateAsync(shrinkData);
       toast.success("Inscription réussi");
       setTimeout(() => {
         navigate("/login");
@@ -206,6 +220,27 @@ export function Register() {
             <p className="text-red-400 text-center  after:content-['⚠️']">
               {errors.role.message}
             </p>
+          )}
+          {role === "collaborateur" && (
+            <div className="dropdown dropdown-start flex justify-center ">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn shadow-sm bg-gray-300"
+              >
+                Choisir votre Ceo
+              </div>
+              <ul
+                tabIndex="-1"
+                className="dropdown-content menu bg-base-300 rounded-box z-1 w-52 p-2 shadow-md "
+              >
+                {ceos?.map((ceo) => (
+                  <li key={ceo.id}>
+                    <a>{ceo.name}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
           <Btn
             title="S'inscrire"

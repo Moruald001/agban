@@ -86,7 +86,7 @@ const ceos = async (req, res) => {
       where: {
         role: "ceo",
       },
-      attributes: ["id", "email"],
+      attributes: ["id", "name"],
     });
     return res.status(200).json({
       message: "recuperation réussi",

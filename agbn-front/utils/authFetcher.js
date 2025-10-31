@@ -46,3 +46,12 @@ export const doLogout = async () => {
   }
   return await res.json();
 };
+
+export const fetchingCeos = async () => {
+  const res = await fetch(`${apiUrl}/auth/ceos`);
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(errData.error || "Erreur lors de l'inscription");
+  }
+  return await res.json();
+};
