@@ -30,6 +30,11 @@ const registerUserSchema = yup.object({
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])/,
       "Le mot de passe doit contenir au moins une lettre, un chiffre et un caractère spécial"
     ),
+  ceo: yup.string().when("role", {
+    is: "collaborateur", // si role === 'collaborateur'
+    then: (schema) => schema.required("Le champ CEO est requis"),
+    otherwise: (schema) => schema.notRequired().nullable(),
+  }),
 });
 
 const loginSchema = yup.object({

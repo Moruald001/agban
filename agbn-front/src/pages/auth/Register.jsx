@@ -62,8 +62,6 @@ export function Register() {
       ...(data.role === "collaborateur" && { ceo: data.ceo }),
     };
 
-    return console.log(shrinkData);
-
     try {
       await mutateAsync(shrinkData);
       toast.success("Inscription réussi");

@@ -8,16 +8,7 @@ const User = sequelize.define(
     email: { type: DataTypes.STRING, allowNull: false },
     password: { type: DataTypes.STRING, allowNull: false },
     role: { type: DataTypes.STRING, allowNull: false },
-  },
-  {
-    timestamps: false,
-  }
-);
-
-const AccountCount = sequelize.define(
-  "accountCount",
-  {
-    count: { type: DataTypes.NUMBER, allowNull: false },
+    ceo: { type: DataTypes.STRING, allowNull: true },
   },
   {
     timestamps: false,
@@ -83,4 +74,4 @@ List.belongsTo(User, {
   },
 });
 
-module.exports = { sequelize, List, Client, Img, AccountCount, User };
+module.exports = { sequelize, List, Client, Img, User };
