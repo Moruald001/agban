@@ -15,7 +15,6 @@ export function Register() {
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaRegister),
@@ -36,12 +35,6 @@ export function Register() {
       setCeos(data.ceos); // ou data.ceos selon ce que renvoie ton API
     }
   }, [data]);
-
-  useEffect(() => {
-    if (role !== "collaborateur") {
-      setValue("ceo", ""); // nettoie la valeur du champ
-    }
-  }, [role, setValue]);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: doRegistration,
@@ -66,9 +59,8 @@ export function Register() {
       email: data.email,
       password: data.password,
       role: data.role,
-      // ...(data.role === "collaborateur" && { ceo: data.ceo }),
+      ...(data.role === "collaborateur" && { ceo: data.ceo }),
     };
-    if (role === "collaborateur") shrinkData.ceo = data.ceo;
 
     return console.log(shrinkData);
 
@@ -213,7 +205,7 @@ export function Register() {
                 className="  border-gray-400/20 bg-gray-400 p-2  text-center scale-130 "
                 type="radio"
                 value="ceo"
-                id="role"
+                id="ceo"
                 {...register("role")}
               />
             </div>
@@ -225,7 +217,7 @@ export function Register() {
               <input
                 className=" border-gray-400  text-center scale-130 "
                 type="radio"
-                id="role"
+                id="collaborateur"
                 value="collaborateur"
                 {...register("role")}
               />
@@ -237,17 +229,8 @@ export function Register() {
             </p>
           )}
           {role === "collaborateur" && (
-            <select
-              defaultValue=""
-              className="select"
-              {...register("ceo", {
-                required:
-                  role === "collaborateur"
-                    ? "Vous devez choisir un CEO"
-                    : false,
-              })}
-            >
-              <option value="">Choisir votre Ceo</option>
+            <select defaultValue="" className="select" {...register("ceo")}>
+              <option value="">Choisir votre CEO</option>
               {ceos?.map((ceo) => (
                 <option key={ceo.id} value={ceo.name}>
                   {ceo.name}

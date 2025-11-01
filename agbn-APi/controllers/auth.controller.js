@@ -10,10 +10,8 @@ const register = async (req, res) => {
 
   try {
     const emailExist = await User.findOne({ where: { email } });
-    const count = await AccountCount.findByPk(1);
-    const countLimit = count?.count;
 
-    if (emailExist || (countLimit && countLimit === 3)) {
+    if (emailExist) {
       return res
         .status(400)
         .json({ message: "Impossible de créer le compte." });
@@ -32,9 +30,7 @@ const register = async (req, res) => {
     res.status(201).json({ message: `Utilisateur créé, ${user.name}` });
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({ errors: "Erreur lors de la création de l'utilisateur" });
+    res.status(500).json({ errors: "Impossible de créer le compte." });
   }
 };
 
