@@ -124,14 +124,24 @@ export function Home() {
             </Link>
           </div>
         ) : (
-          <Link
-            className={
-              "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110 capitalize "
-            }
-            to={"/login"}
-          >
-            se connecter
-          </Link>
+          <div className="flex gap-x-4">
+            <Link
+              className={
+                "bg-transparent  p-3 rounded-lg opacity-80 text-black font-center border-2  hover:scale-110  transition-all duration-300 "
+              }
+              to={"/login"}
+            >
+              Se connecter
+            </Link>
+            <Link
+              className={
+                "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110 transition-all duration-300  "
+              }
+              to={"/register"}
+            >
+              Créer un compte
+            </Link>
+          </div>
         )}
         <CreateListModal
           listId={listId}
