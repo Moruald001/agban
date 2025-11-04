@@ -67,9 +67,13 @@ const createClient = async (req, res) => {
           }
 
           // Upload sur Cloudinary et récupère le secure_url
-          const url = await uploadToCloudinary(file.buffer);
+          const result = await uploadToCloudinary(file.buffer);
 
-          return { img: url, clientId: client.id };
+          return {
+            img: result.secure_url,
+            publicId: result.public_id,
+            clientId: client.id,
+          };
         })
       );
 
@@ -134,17 +138,21 @@ const updateClient = async (req, res) => {
 const deleteClient = async (req, res) => {
   const id = req.params.id;
 
-  const client = await Client.findByPk(id);
-  if (client === null) {
-    res.status(400).json({
-      message: "impossible de mettre à jour ce client car il est introuvable",
-    });
-    throw new Error(
-      "impossible de mettre à jour ce client car il est introuvable"
-    );
-  }
-
   try {
+    const client = await Client.findByPk(id, { include: Img });
+    if (client === null) {
+      res.status(400).json({
+        message: "Erreur lors de la suppression ",
+      });
+      throw new Error(
+        "impossible de supprimer  ce client car il est introuvable"
+      );
+    }
+    // 2. Supprimer les images sur Cloudinary
+    const destroyImagesPromises = client.Imgs.map((img) =>
+      cloudinary.uploader.destroy(img.publicId)
+    );
+    await Promise.all(destroyImagesPromises);
     const response = await Client.destroy({
       where: {
         id,

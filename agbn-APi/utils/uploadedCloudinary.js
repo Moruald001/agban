@@ -7,7 +7,7 @@ const uploadToCloudinary = (buffer, folder = "clientsColis") => {
       { folder, resource_type: "image" },
       (error, result) => {
         if (error) return reject(error);
-        resolve(result.secure_url); // retourne le lien HTTPS
+        resolve(result); // retourne le lien HTTPS
       }
     );
     streamifier.createReadStream(buffer).pipe(uploadStream);
