@@ -18,7 +18,7 @@ import { AddClientModal } from "../components/AddClientModal";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useAuthStore from "../../store/useAuthStore";
 import { deleteClient, getList } from "../../utils/otherFetcher";
-import html2pdf from "html2pdf.js";
+// import html2pdf from "html2pdf.js";
 
 import toast from "react-hot-toast";
 import ImagesDisplayModal from "../components/ImagesDisplayModal";
