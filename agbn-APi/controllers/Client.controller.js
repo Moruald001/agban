@@ -4,6 +4,7 @@ const fs = require("fs").promises;
 const path = require("path");
 const { fileTypeFromBuffer } = require("file-type");
 const uploadToCloudinary = require("../utils/uploadedCloudinary");
+const { log } = require("console");
 
 //Ajout d'un client
 
@@ -140,6 +141,7 @@ const deleteClient = async (req, res) => {
 
   try {
     const client = await Client.findByPk(id, { include: Img });
+
     if (client === null) {
       res.status(400).json({
         message: "Erreur lors de la suppression ",
@@ -149,7 +151,7 @@ const deleteClient = async (req, res) => {
       );
     }
     // 2. Supprimer les images sur Cloudinary
-    const destroyImagesPromises = client.Imgs.map((img) =>
+    const destroyImagesPromises = client.imgs.map((img) =>
       cloudinary.uploader.destroy(img.publicId)
     );
     await Promise.all(destroyImagesPromises);
@@ -169,7 +171,7 @@ const deleteClient = async (req, res) => {
       .json({ message: "la suppression à été effectué avec succès", client });
   } catch (error) {
     console.log("erreur serveur ", error);
-    res.status(500).json({ erreur: "la suppression à echoué" });
+    res.status(500).json({ erreur: "la suppression à echoué " });
   }
 };
 
