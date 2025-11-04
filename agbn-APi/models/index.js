@@ -47,6 +47,7 @@ const Img = sequelize.define(
   "img",
   {
     img: { type: DataTypes.STRING, allowNull: false },
+    publicId: { type: DataTypes.STRING, allowNull: false },
   },
   {
     timestamps: false,
