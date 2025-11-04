@@ -55,7 +55,7 @@ export default function ImagesDisplayModal({ showModal, client, onClose }) {
                       client?.imgs.map((image) => (
                         <img
                           key={image.key}
-                          src={`${BASE_URL}${image.img}`}
+                          src={`${image.img}`}
                           className="w-auto h-auto rounded-box shadow-lg mt-2 p-2 border-2 border-gray-600/20 cursor-pointer"
                           onClick={() => setSelectedImg(image.img)}
                         />
@@ -82,13 +82,13 @@ export default function ImagesDisplayModal({ showModal, client, onClose }) {
       </Transition>
       {selectedImg && (
         <div
-          className="fixed inset-0 z-50 bg-transparent flex items-center justify-center p-4"
+          className="fixed inset-0 z-50  bg-black/50  flex items-center justify-center p-4"
           onClick={() => setSelectedImg(null)}
         >
           <img
-            src={`${BASE_URL}${selectedImg}`}
+            src={`${selectedImg}`}
             alt="Agrandie"
-            className="max-w-full max-h-full rounded-lg shadow-lg"
+            className="max-w-full max-h-full rounded-lg shadow-2xl transition-discrete duration-300 "
             onClick={(e) => e.stopPropagation()} // empêche la fermeture si on clique sur l'image
           />
         </div>

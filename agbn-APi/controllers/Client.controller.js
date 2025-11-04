@@ -1,7 +1,9 @@
 const { Client, List, Img } = require("../models");
+const cloudinary = require("../config/cloudinary");
 const fs = require("fs").promises;
 const path = require("path");
 const { fileTypeFromBuffer } = require("file-type");
+const uploadToCloudinary = require("../utils/uploadedCloudinary");
 
 //Ajout d'un client
 
@@ -52,45 +54,28 @@ const createClient = async (req, res) => {
     const client = response.toJSON();
 
     if (req.files && req.files.length > 0) {
-      const images = [];
+      const images = await Promise.all(
+        req.files.map(async (file) => {
+          if (!file.buffer) throw new Error("file.buffer est undefined !");
 
-      for (const file of req.files) {
-        if (!file.buffer) {
-          throw new Error("file.buffer est undefined !");
-        }
+          const type = await fileTypeFromBuffer(file.buffer);
+          if (
+            !type ||
+            !["image/jpeg", "image/png", "image/webp"].includes(type.mime)
+          ) {
+            throw new Error("Contenu du fichier image invalide");
+          }
 
-        // Vérification du contenu réel du fichier
-        const type = await fileTypeFromBuffer(file.buffer);
-        if (
-          !type ||
-          !["image/jpeg", "image/png", "image/webp"].includes(type.mime)
-        ) {
-          return res
-            .status(400)
-            .json({ error: "Contenu du fichier image invalide" });
-        }
+          // Upload sur Cloudinary et récupère le secure_url
+          const url = await uploadToCloudinary(file.buffer);
 
-        const uniqueName = `${Date.now()}-${file.originalname}`;
-        const filePath = path.join(__dirname, "..", "images", uniqueName);
+          return { img: url, clientId: client.id };
+        })
+      );
 
-        try {
-          await fs.writeFile(filePath, file.buffer);
-          images.push({
-            img: `/images/${uniqueName}`,
-            clientId: client.id,
-          });
-        } catch (err) {
-          console.error("❌ Erreur d'écriture de l'image:", err);
-          return res.status(500).json({ error: "Erreur enregistrement image" });
-        }
-      }
-      try {
-        await Img.bulkCreate(images);
-      } catch (error) {
-        res.status(400).json({ error: "echec de l'enregistrement des images" });
-      }
+      // On enregistre toutes les images en base
+      await Img.bulkCreate(images);
     }
-
     console.log("client ajouté avec succès");
 
     console.log(client);
