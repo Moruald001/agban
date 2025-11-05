@@ -8,7 +8,7 @@ const useClientStore = create(
       lists: null,
       latestList: null,
 
-      create: (list) => set((state) => ({ ...list, state })),
+      create: (lists) => set((state) => ({ ...lists, state })),
       createLatestList: (latestList) =>
         set((state) => ({ ...latestList, state })),
 

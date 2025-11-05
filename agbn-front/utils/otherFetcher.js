@@ -58,22 +58,22 @@ export const archivedList = async ({ data, id }) => {
   return await res.json();
 };
 
-export const getListLatest = async () => {
-  const res = await fetch(`${apiUrl}/client/latest-lists`, {
+export const getListLatest = async (id) => {
+  const res = await fetch(`${apiUrl}/client/latest-lists/${id}`, {
     credentials: "include",
   });
 
-  if (!res.ok) throw new Error("Erreur réseau");
+  if (!res.ok) throw new Error("Échec de la recuperation des listes récentes");
 
   return res.json();
 };
 
-export const getList = async () => {
-  const res = await fetch(`${apiUrl}/client/lists`, {
+export const getList = async (id) => {
+  const res = await fetch(`${apiUrl}/client/lists/${id}`, {
     credentials: "include",
   });
 
-  if (!res.ok) throw new Error("Erreur réseau");
+  if (!res.ok) throw new Error("Erreur lors de la recuperation des listes");
 
   return res.json();
 };
@@ -87,7 +87,7 @@ export const deleteList = async (id) => {
     credentials: "include",
   });
 
-  if (!res.ok) throw new Error("Erreur réseau");
+  if (!res.ok) throw new Error("Échec de la suppression");
 
   return res.json();
 };

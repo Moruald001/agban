@@ -85,7 +85,7 @@ router.delete("/delete-list/:id", auth, isCeoMiddleware, deleteList);
 
 //recuperation
 router.get("/clients", auth, getClients);
-router.get("/lists", auth, getLists);
-router.get("/latest-lists", auth, getListsLatest);
+router.get("/lists/:id", auth, getLists);
+router.get("/latest-lists/:id", auth, getListsLatest);
 
 module.exports = router;

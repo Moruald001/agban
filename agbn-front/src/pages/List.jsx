@@ -18,15 +18,16 @@ export const List = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("createList");
   const [listId, setListId] = useState(null);
-  const { isAuthenticated } = useAuthStore();
-  const { create } = useClientStore();
+  const { user, isAuthenticated } = useAuthStore();
+  const { lists, create } = useClientStore();
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["lists"],
-    queryFn: getList,
+    queryKey: ["lists", user.id],
+    queryFn: ({ queryKey }) => getList(queryKey[1]),
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: false,
   });
+  console.log(data);
   useEffect(() => {
     create(data);
   }, []);

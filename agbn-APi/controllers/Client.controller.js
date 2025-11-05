@@ -241,8 +241,10 @@ const createList = async (req, res) => {
 
 //Reuperation des listes
 const getLists = async (req, res) => {
+  const id = req.params.id;
   try {
     const lists = await List.findAll({
+      where: { userId: id },
       include: [
         {
           model: Client,
