@@ -135,6 +135,34 @@ const updateClient = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
+const delivredClient = async (req, res) => {
+  const id = req.params.id;
+  const { delivred } = req.body;
+
+  const client = await Client.findByPk(id);
+  if (client === null) {
+    res.status(400).json({
+      message: "impossible de mettre à jour ce client, il est introuvable",
+    });
+    throw new Error(
+      "impossible de mettre à jour ce client car il est introuvable"
+    );
+  }
+  try {
+    await Client.update(
+      { delivred },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info client mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update client:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
 // Suppression d'un client
 const deleteClient = async (req, res) => {
   const id = req.params.id;
@@ -246,7 +274,7 @@ const getListsLatest = async (req, res) => {
     res.status(500).json({ error: "erreur serveur" }, error);
   }
 };
-
+// modification de liste
 const updateList = async (req, res) => {
   const id = req.params.id;
   const { name } = req.body;
@@ -254,12 +282,89 @@ const updateList = async (req, res) => {
   const list = await List.findByPk(id);
   if (list === null) {
     return res.status(400).json({
-      message: "impossible de mettre à jour ce ls list",
+      message: "impossible de mettre à jour cette liste",
     });
   }
   try {
     await List.update(
       { name },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info liste mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update liste:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+const publishList = async (req, res) => {
+  const id = req.params.id;
+  const { publish } = req.body;
+
+  const list = await List.findByPk(id);
+  if (list === null) {
+    return res.status(400).json({
+      message: "impossible de mettre à jour cette liste",
+    });
+  }
+  try {
+    await List.update(
+      { publish },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info liste mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update liste:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+const delivredList = async (req, res) => {
+  const id = req.params.id;
+  const { delivred } = req.body;
+
+  const list = await List.findByPk(id);
+  if (list === null) {
+    return res.status(400).json({
+      message: "impossible de mettre à jour cette liste",
+    });
+  }
+  try {
+    await List.update(
+      { delivred },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info liste mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update liste:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+const archivedList = async (req, res) => {
+  const id = req.params.id;
+  const { archived } = req.body;
+
+  const list = await List.findByPk(id);
+  if (list === null) {
+    return res.status(400).json({
+      message: "impossible de mettre à jour cette liste",
+    });
+  }
+  try {
+    await List.update(
+      { archived },
       {
         where: {
           id,
@@ -315,4 +420,7 @@ module.exports = {
   deleteList,
   getListsLatest,
   updateList,
+  publishList,
+  delivredList,
+  archivedList,
 };

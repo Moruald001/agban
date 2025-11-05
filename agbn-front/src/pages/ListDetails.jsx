@@ -69,6 +69,7 @@ export default function ListDetails() {
       await mutateAsync(clientId);
       toast.success("Suppression effectué");
       await refetch();
+      window.location.reload();
     } catch (error) {
       console.log(error);
       toast.error(`Erreur lors de la suppression ${error}`);

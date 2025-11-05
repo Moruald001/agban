@@ -23,6 +23,11 @@ const Client = sequelize.define(
     description: { type: DataTypes.TEXT, allowNull: false },
     keep: { type: DataTypes.BOOLEAN, allowNull: false },
     listId: { type: DataTypes.INTEGER, allowNull: false },
+    delivred: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     timestamps: true,
@@ -36,6 +41,21 @@ const List = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    archived: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    delivred: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    publish: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
   },
   {
