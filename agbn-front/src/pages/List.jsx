@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { deleteList, getList } from "../../utils/otherFetcher";
+import { archivedList, deleteList, getList } from "../../utils/otherFetcher";
 import { ArrowLeft, Pen, PlusSquare, UserRoundPlus } from "lucide-react";
 import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
@@ -12,6 +12,7 @@ import NavBar from "../components/NavBar";
 import useAuthStore from "../../store/useAuthStore";
 import { Button } from "@headlessui/react";
 import useClientStore from "../../store/clientStore";
+import { mutate } from "../../utils/mutationHelper";
 
 export const List = () => {
   const [showModal, setShowModal] = useState(false);
@@ -29,14 +30,30 @@ export const List = () => {
   useEffect(() => {
     create(data);
   }, []);
-  const { mutateAsync } = useMutation({
-    mutationFn: deleteList,
-  });
+
+  const toDelete = mutate(deleteList);
+  const toArchived = mutate(archivedList);
 
   const handleUpdate = (id) => {
     setModaltype("updateList");
     setShowModal(true);
     setListId(id);
+  };
+
+  const handleArchived = async (id, archived) => {
+    const response = confirm("vous êtes sur le point d'archiver cette liste");
+
+    if (!response) {
+      return;
+    }
+    try {
+      await toArchived({ data: archived, id: id });
+      toast.success("operation effectué ");
+      await refetch();
+    } catch (error) {
+      console.log(error);
+      toast.error(`Echec de l’opération`);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -45,12 +62,12 @@ export const List = () => {
       return;
     }
     try {
-      await mutateAsync(id);
+      await toDelete(id);
       toast.success("Suppression effectué");
       await refetch();
     } catch (error) {
       console.log(error);
-      toast.error(`Erreur lors de la suppression ${error}`);
+      toast.error(`Erreur lors de la suppression `);
     }
   };
 
@@ -119,6 +136,14 @@ export const List = () => {
                           onClick={() => handleDelete(list.id)}
                         >
                           <Trash color="black" size={15} />
+                        </button>
+                        <button
+                          className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                          onClick={() =>
+                            handleArchived(list.id, !list.archived)
+                          }
+                        >
+                          {!list.archived ? "Archiver" : "Désarchiver"}{" "}
                         </button>
                       </td>
                     </tr>

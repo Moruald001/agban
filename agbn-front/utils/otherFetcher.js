@@ -37,6 +37,27 @@ export const updateList = async ({ data, id }) => {
   return await res.json();
 };
 
+export const archivedList = async ({ data, id }) => {
+  console.log(data, id);
+
+  const res = await fetch(`${apiUrl}/client/archived-list/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    credentials: "include",
+    body: JSON.stringify({ archived: data }),
+  });
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(
+      errData.error || "Erreur lors de la modification de la liste"
+    );
+  }
+  return await res.json();
+};
+
 export const getListLatest = async () => {
   const res = await fetch(`${apiUrl}/client/latest-lists`, {
     credentials: "include",

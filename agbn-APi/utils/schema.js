@@ -22,11 +22,11 @@ const publishSchema = yup.object({
   publish: yup.boolean().required("Erreur lors de la publication "),
 });
 const delivredSchema = yup.object({
-  publish: yup.boolean().required(),
+  delivred: yup.boolean().required(),
 });
 
 const archivedSchema = yup.object({
-  publish: yup.boolean().required(),
+  archived: yup.boolean().required(),
 });
 
 const registerUserSchema = yup.object({
