@@ -13,7 +13,7 @@ const useClientStore = create(
         set((state) => ({ latestList: newLatestList })),
 
       remove: () => {
-        set({ list: [], latestList: [] });
+        set({ lists: [], latestList: [] });
       },
     }),
     {

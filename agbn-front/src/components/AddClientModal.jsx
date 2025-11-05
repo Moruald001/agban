@@ -40,13 +40,13 @@ export function AddClientModal({
     resolver: yupResolver(createClientSchema),
   });
 
-  const { isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const { create } = useClientStore();
   const { lists } = useClientStore();
 
   const { data, refetch } = useQuery({
-    queryKey: ["lists"],
-    queryFn: getList,
+    queryKey: ["lists", user.id],
+    queryFn: ({ queryKey }) => getList(queryKey[1]),
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: isAuthenticated === true ? true : false,
   });
@@ -133,8 +133,8 @@ export function AddClientModal({
     }
   };
   useEffect(() => {
-    create(data);
-  }, []);
+    create(data.lists);
+  }, [data]);
 
   return (
     <Dialog

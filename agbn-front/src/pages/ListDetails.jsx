@@ -35,16 +35,17 @@ export default function ListDetails() {
   const { isAuthenticated } = useAuthStore();
   const [clientId, setClientId] = useState();
   const [modalType, setModalType] = useState("createClient");
+  const { lists, create } = useClientStore();
 
-  const { data, refetch } = useQuery({
-    queryKey: ["lists"],
-    queryFn: getList,
-    enabled: isAuthenticated === true ? true : false,
-    refetchOnWindowFocus: false,
-  });
+  // const { data, refetch } = useQuery({
+  //   queryKey: ["lists"],
+  //   queryFn: getList,
+  //   enabled: isAuthenticated === true ? true : false,
+  //   refetchOnWindowFocus: false,
+  // });
 
   const { mutateAsync } = useMutation({ mutationFn: deleteClient });
-  const listSelected = data?.lists?.find((list) => list.id == idNumber);
+  const listSelected = lists?.find((list) => list.id == idNumber);
   const client = listSelected?.clients?.find((client) => client.id == clientId);
 
   const formatStatus = (status) => {

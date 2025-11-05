@@ -1,25 +1,11 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   archivedList,
   deleteList,
   getList,
   publishList,
 } from "../../utils/otherFetcher";
-import {
-  Archive,
-  ArchiveIcon,
-  ArrowLeft,
-  LucideArchiveRestore,
-  LucideBackpack,
-  LucideSend,
-  LucideSendHorizonal,
-  Pen,
-  PlusSquare,
-  Send,
-  SendToBack,
-  UserRoundPlus,
-  Wifi,
-} from "lucide-react";
+import { Archive, ArrowLeft, Pen } from "lucide-react";
 import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { CreateListModal } from "../components/CreateListModal";
@@ -48,6 +34,7 @@ export const List = () => {
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: false,
   });
+
   useEffect(() => {
     create(data?.lists);
   }, [data]);
@@ -133,7 +120,7 @@ export const List = () => {
         </h1>
         <div className="flex gap-3  ">
           <Button
-            onClick={async () => await setCategorySelected("non-archived")}
+            onClick={() => setCategorySelected("non-archived")}
             className={` border-2 border-dotted p-1 rounded-lg  text-black font-center cursor-pointer ${
               categorySelected === "non-archived"
                 ? "bg-gray-600 text-white"
@@ -143,8 +130,8 @@ export const List = () => {
             Non-archivés
           </Button>
           <Button
-            onClick={async () => {
-              await setCategorySelected("archived");
+            onClick={() => {
+              setCategorySelected("archived");
             }}
             className={` border-2 border-dotted p-1 rounded-lg  text-black font-center cursor-pointer ${
               categorySelected === "archived"
