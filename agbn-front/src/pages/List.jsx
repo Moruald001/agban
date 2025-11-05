@@ -1,6 +1,25 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { archivedList, deleteList, getList } from "../../utils/otherFetcher";
-import { ArrowLeft, Pen, PlusSquare, UserRoundPlus } from "lucide-react";
+import {
+  archivedList,
+  deleteList,
+  getList,
+  publishList,
+} from "../../utils/otherFetcher";
+import {
+  Archive,
+  ArchiveIcon,
+  ArrowLeft,
+  LucideArchiveRestore,
+  LucideBackpack,
+  LucideSend,
+  LucideSendHorizonal,
+  Pen,
+  PlusSquare,
+  Send,
+  SendToBack,
+  UserRoundPlus,
+  Wifi,
+} from "lucide-react";
 import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { CreateListModal } from "../components/CreateListModal";
@@ -13,6 +32,7 @@ import useAuthStore from "../../store/useAuthStore";
 import { Button } from "@headlessui/react";
 import useClientStore from "../../store/clientStore";
 import { mutate } from "../../utils/mutationHelper";
+import useWindowSize from "../components/useWindowsSize";
 
 export const List = () => {
   const [showModal, setShowModal] = useState(false);
@@ -20,6 +40,7 @@ export const List = () => {
   const [listId, setListId] = useState(null);
   const { user, isAuthenticated } = useAuthStore();
   const { lists, create } = useClientStore();
+  const { width } = useWindowSize();
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["lists", user.id],
@@ -27,18 +48,35 @@ export const List = () => {
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: false,
   });
-  console.log(data);
   useEffect(() => {
-    create(data);
-  }, []);
+    create(data?.lists);
+  }, [data]);
+  console.log(lists);
 
   const toDelete = mutate(deleteList);
   const toArchived = mutate(archivedList);
+  const toPublish = mutate(publishList);
 
   const handleUpdate = (id) => {
     setModaltype("updateList");
     setShowModal(true);
     setListId(id);
+  };
+
+  const handlePublish = async (id, publish) => {
+    const response = confirm("vous êtes sur le point de publier  cette liste");
+
+    if (!response) {
+      return;
+    }
+    try {
+      await toPublish({ data: publish, id: id });
+      toast.success("operation effectué ");
+      await refetch();
+    } catch (error) {
+      console.log(error);
+      toast.error(`Echec de l’opération`);
+    }
   };
 
   const handleArchived = async (id, archived) => {
@@ -117,35 +155,120 @@ export const List = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.lists.map((list) => (
+                  {lists?.map((list) => (
                     <tr key={list.id}>
-                      <td className="capitalize">
-                        <Link to={`/list-details/${list.id}`} className="">
+                      <td className="capitalize ">
+                        <Link
+                          to={`/list-details/${list.id}`}
+                          className="flex gap-1"
+                        >
                           {list.name}
+                          {list.publish ? (
+                            <img
+                              src="../../assets/publish-Ico.png"
+                              alt="icon de publication"
+                              className="w-3 h-3"
+                            />
+                          ) : (
+                            // <Wifi color="black" size={15}  />
+                            ""
+                          )}
                         </Link>{" "}
                       </td>
                       <td>{formatDate(list.createdAt)} </td>
-                      <td className="flex gap-4 items-center">
-                        <button
-                          className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                          onClick={() => handleUpdate(list.id)}
-                        >
-                          <Pen color="black" size={15} className="" />
-                        </button>
-                        <button
-                          className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                          onClick={() => handleDelete(list.id)}
-                        >
-                          <Trash color="black" size={15} />
-                        </button>
-                        <button
-                          className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                          onClick={() =>
-                            handleArchived(list.id, !list.archived)
-                          }
-                        >
-                          {!list.archived ? "Archiver" : "Désarchiver"}{" "}
-                        </button>
+                      <td>
+                        {width >= 610 ? (
+                          <div className="flex gap-4 items-center">
+                            <button
+                              className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                              onClick={() => handleUpdate(list.id)}
+                            >
+                              <Pen color="black" size={15} className="" />
+                            </button>
+                            <button
+                              className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                              onClick={() => handleDelete(list.id)}
+                            >
+                              <Trash color="black" size={15} />
+                            </button>
+                            <button
+                              className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                              onClick={() =>
+                                handleArchived(list.id, !list.archived)
+                              }
+                            >
+                              {!list.archived ? "Archiver" : "Désarchiver"}{" "}
+                            </button>
+                            <button
+                              className="cursor-pointer hover:scale-105 transition-transform duration-300 border-2 p-1 rounded-lg bg-gray-500 text-white "
+                              onClick={() =>
+                                handlePublish(list.id, !list.publish)
+                              }
+                            >
+                              {!list.publish ? "publier" : "dissimuler"}{" "}
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="dropdown dropdown-center flex justify-start">
+                            <div
+                              tabIndex={0}
+                              role="button"
+                              className="btn m-1 text-2xl"
+                            >
+                              ...
+                            </div>
+                            <div
+                              tabIndex="-1"
+                              className="dropdown-content  bg-base-400 back rounded-box z-1 w-40 p-2 mr-10 shadow-sm flex gap-4 items-center  backdrop-blur-lg p-1"
+                            >
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                onClick={() => handleUpdate(list.id)}
+                              >
+                                <Pen color="black" className="" />
+                              </button>
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                onClick={() => handleDelete(list.id)}
+                              >
+                                <Trash color="black" />
+                              </button>
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                onClick={() =>
+                                  handleArchived(list.id, !list.archived)
+                                }
+                              >
+                                {!list.archived ? (
+                                  <Archive color="black" />
+                                ) : (
+                                  <img
+                                    src="../../assets/unarchive.png"
+                                    className="w-60 h-auto"
+                                  />
+                                )}{" "}
+                              </button>
+                              <button
+                                className="cursor-pointer hover:scale-205 transition-transform duration-300 border-2 p-1 rounded-lg bg-gray-500 text-white "
+                                onClick={() =>
+                                  handlePublish(list.id, !list.publish)
+                                }
+                              >
+                                {!list.publish ? (
+                                  <img
+                                    src="../../assets/publish-Ico.png"
+                                    className="w-30 h-auto"
+                                  />
+                                ) : (
+                                  <img
+                                    src="../../assets/wifi-off.png"
+                                    className="w-30 h-auto"
+                                  />
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}

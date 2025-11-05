@@ -259,10 +259,13 @@ const getLists = async (req, res) => {
   }
 };
 const getListsLatest = async (req, res) => {
+  const id = req.params.id;
   try {
     const lists = await List.findAll({
       order: [["createdAt", "DESC"]],
       limit: 3,
+      where: { userId: id },
+
       include: [
         {
           model: Client,

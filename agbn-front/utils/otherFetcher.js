@@ -58,6 +58,27 @@ export const archivedList = async ({ data, id }) => {
   return await res.json();
 };
 
+export const publishList = async ({ data, id }) => {
+  console.log(data, id);
+
+  const res = await fetch(`${apiUrl}/client/publish-list/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    credentials: "include",
+    body: JSON.stringify({ publish: data }),
+  });
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(
+      errData.error || "Erreur lors de la publication de la liste"
+    );
+  }
+  return await res.json();
+};
+
 export const getListLatest = async (id) => {
   const res = await fetch(`${apiUrl}/client/latest-lists/${id}`, {
     credentials: "include",

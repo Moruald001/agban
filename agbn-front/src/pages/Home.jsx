@@ -8,26 +8,36 @@ import { CreateListModal } from "../components/CreateListModal";
 import { Btn } from "../components/button";
 import { Button } from "@headlessui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { deleteList, getListLatest } from "../../utils/otherFetcher";
+import {
+  createList,
+  deleteList,
+  getListLatest,
+} from "../../utils/otherFetcher";
 import { SyncLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react";
 import { Pen } from "lucide-react";
+import useClientStore from "../../store/clientStore";
 
 export function Home() {
   const [showModal, setShowModal] = useState(false);
   const [listId, setListId] = useState(null);
   const [modalType, setModaltype] = useState("createList");
+  const { latestList, createLatestList } = useClientStore();
 
   const [Loading, setLoading] = useState(false);
   const { isAuthenticated, user } = useAuthStore();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["latest_lists"],
-    queryFn: getListLatest,
+    queryKey: ["latest_lists", user.id],
+    queryFn: ({ queryKey }) => getListLatest(queryKey[1]),
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    createLatestList(data?.lists);
+  }, [data]);
 
   const { mutateAsync } = useMutation({
     mutationFn: deleteList,
@@ -159,8 +169,8 @@ export function Home() {
             <hr className="border-b-2 mt-2 opacity-30" />
             <div className="flex flex-col gap-2 justify-evenly mt-5">
               <ul className="  bg-gray-200/69 rounded-box shadow-md ">
-                {data?.lists.length > 0 ? (
-                  data?.lists.map((list) => (
+                {latestList?.length > 0 ? (
+                  latestList.map((list) => (
                     <li
                       key={list.id}
                       className="list-row p-4 my-4 gap-2 transition-colors duration-300 hover:bg-slate-600/15  "

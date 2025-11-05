@@ -5,15 +5,15 @@ import { persist } from "zustand/middleware";
 const useClientStore = create(
   persist(
     (set) => ({
-      lists: null,
-      latestList: null,
+      lists: [],
+      latestList: [],
 
-      create: (lists) => set((state) => ({ ...lists, state })),
-      createLatestList: (latestList) =>
-        set((state) => ({ ...latestList, state })),
+      create: (newList) => set((state) => ({ lists: newList })),
+      createLatestList: (newLatestList) =>
+        set((state) => ({ latestList: newLatestList })),
 
       remove: () => {
-        set({ list: null });
+        set({ list: [], latestList: [] });
       },
     }),
     {
