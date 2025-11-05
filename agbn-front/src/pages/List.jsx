@@ -51,7 +51,12 @@ export const List = () => {
   useEffect(() => {
     create(data?.lists);
   }, [data]);
-  console.log(lists);
+
+  const archivedLIsts = lists?.filter((list) => list.archived === true);
+  const nonArchivedLists = lists?.filter((list) => list.archived === false);
+  const [categorySelected, setCategorySelected] = useState("non-archived");
+  const listToDisplayed =
+    categorySelected === "non-archived" ? nonArchivedLists : archivedLIsts;
 
   const toDelete = mutate(deleteList);
   const toArchived = mutate(archivedList);
@@ -80,11 +85,6 @@ export const List = () => {
   };
 
   const handleArchived = async (id, archived) => {
-    const response = confirm("vous êtes sur le point d'archiver cette liste");
-
-    if (!response) {
-      return;
-    }
     try {
       await toArchived({ data: archived, id: id });
       toast.success("operation effectué ");
@@ -121,7 +121,7 @@ export const List = () => {
   return (
     <>
       <NavBar />
-      <div className="w-screen h-screen  flex flex-col justify-start items-center gap-10  ">
+      <div className="w-screen h-screen  flex flex-col justify-start items-center gap-8  ">
         <Link
           to={"/"}
           className="ml-10 mt-10 p-2  w-auto hover:hover:bg-slate-800/65 hover:text-white rounded-box  duration-300  transition-colors inline-block cursor-pointe self-start"
@@ -131,6 +131,31 @@ export const List = () => {
         <h1 className="text-2xl text-gray-500 text-center font-bold">
           Toutes les listes
         </h1>
+        <div className="flex gap-3  ">
+          <Button
+            onClick={async () => await setCategorySelected("non-archived")}
+            className={` border-2 border-dotted p-1 rounded-lg  text-black font-center cursor-pointer ${
+              categorySelected === "non-archived"
+                ? "bg-gray-600 text-white"
+                : "bg-transparent  text-black "
+            }`}
+          >
+            Non-archivés
+          </Button>
+          <Button
+            onClick={async () => {
+              await setCategorySelected("archived");
+            }}
+            className={` border-2 border-dotted p-1 rounded-lg  text-black font-center cursor-pointer ${
+              categorySelected === "archived"
+                ? "bg-gray-600 text-white"
+                : "bg-transparent  text-black "
+            }`}
+          >
+            Archivés
+          </Button>
+        </div>
+
         <Button
           onClick={() => {
             setShowModal(true);
@@ -155,7 +180,7 @@ export const List = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {lists?.map((list) => (
+                  {listToDisplayed?.map((list) => (
                     <tr key={list.id}>
                       <td className="capitalize ">
                         <Link
