@@ -133,7 +133,7 @@ export function AddClientModal({
     }
   };
   useEffect(() => {
-    create(data.lists);
+    create(data?.lists);
   }, [data]);
 
   return (

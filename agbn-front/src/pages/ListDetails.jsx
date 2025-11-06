@@ -30,19 +30,11 @@ export default function ListDetails() {
   const [showModal, setShowModal] = useState(false);
   const [showImageModal, SetShowImageModal] = useState(false);
   const { width } = useWindowSize();
-  console.log(width);
 
-  const { isAuthenticated } = useAuthStore();
+  // const { user, isAuthenticated } = useAuthStore();
   const [clientId, setClientId] = useState();
   const [modalType, setModalType] = useState("createClient");
-  const { lists, create } = useClientStore();
-
-  // const { data, refetch } = useQuery({
-  //   queryKey: ["lists"],
-  //   queryFn: getList,
-  //   enabled: isAuthenticated === true ? true : false,
-  //   refetchOnWindowFocus: false,
-  // });
+  const { lists } = useClientStore();
 
   const { mutateAsync } = useMutation({ mutationFn: deleteClient });
   const listSelected = lists?.find((list) => list.id == idNumber);
@@ -69,11 +61,10 @@ export default function ListDetails() {
     try {
       await mutateAsync(clientId);
       toast.success("Suppression effectué");
-      await refetch();
       window.location.reload();
     } catch (error) {
       console.log(error);
-      toast.error(`Erreur lors de la suppression ${error}`);
+      toast.error(` ${error}`);
     }
   };
 
