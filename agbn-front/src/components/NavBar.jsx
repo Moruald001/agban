@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { doLogout } from "../../utils/authFetcher";
 import { useQueryClient } from "@tanstack/react-query";
 import useClientStore from "../../store/clientStore";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
   const { user, isAuthenticated, logout } = useAuthStore();
@@ -42,7 +43,14 @@ export default function NavBar() {
         </div>
         {isAuthenticated ? (
           <div className="flex gap-2 items-center">
-            <p className="capitalize">{user?.name}: </p>
+            <details className="dropdown">
+              <summary className="btn m-1">{user?.name} </summary>
+              <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                <li>
+                  <Link to={"/profil"}>Profil</Link>
+                </li>
+              </ul>
+            </details>
             <p className=" capitalize">{user?.role}</p>
             <button
               onClick={handleLogout}

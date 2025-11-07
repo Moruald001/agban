@@ -17,12 +17,18 @@ import { Button } from "@headlessui/react";
 import { AddClientModal } from "../components/AddClientModal";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useAuthStore from "../../store/useAuthStore";
-import { deleteClient, getList } from "../../utils/otherFetcher";
+import {
+  archivedList,
+  deleteClient,
+  delivredList,
+  getList,
+} from "../../utils/otherFetcher";
 
 import toast from "react-hot-toast";
 import ImagesDisplayModal from "../components/ImagesDisplayModal";
 import useWindowSize from "../components/useWindowsSize";
 import Card from "../components/Card";
+import { mutate } from "../../utils/mutationHelper";
 
 export default function ListDetails() {
   const listId = useParams();
@@ -47,6 +53,35 @@ export default function ListDetails() {
       return "libérer";
     }
   };
+  const toFinishList = mutate(delivredList);
+  const toArchived = mutate(archivedList);
+
+  const finishedList = async (id, delivred) => {
+    const response = confirm("vous êtes sur le point de terminer  cette liste");
+    if (!response) {
+      return;
+    }
+
+    try {
+      toFinishList({ data: delivred, id: id });
+      toast.success("Liste terminée");
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+      toast.error(` ${error}`);
+    }
+  };
+
+  const handleArchived = async (id, archived) => {
+    try {
+      await toArchived({ data: archived, id: id });
+      await refetch();
+    } catch (error) {
+      console.log(error);
+      toast.error(`Echec de l’opération`);
+    }
+  };
+
   const handleUpdate = async (clientId) => {
     await setModalType("updateClient");
     await setShowModal(true);
@@ -88,7 +123,10 @@ export default function ListDetails() {
         <Plus className="inline" /> Un client
       </Button>
       <div>
-        <h1 className="text-center text-2xl mt-[7vh]">{listSelected?.name} </h1>
+        <h1 className="text-center text-2xl mt-[7vh]">
+          {listSelected?.name}
+          {listSelected?.delivred === false ? "" : `(Terminée)`}{" "}
+        </h1>
         {listSelected && (
           <div className="flex justify-center mt-4">
             <PDFDownloadLink
@@ -106,57 +144,70 @@ export default function ListDetails() {
         {width >= 610 ? (
           <div className="overflow-x-auto w-screen h-screen flex justify-center items-start mt-[8vh]">
             {listSelected?.clients.length > 0 ? (
-              <table className="table table-xs w-[70vw]">
-                <thead>
-                  <tr>
-                    <th>Nom</th>
-                    <th>Contact</th>
-                    <th>Description</th>
-                    <th>Images</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {listSelected?.clients.map((client) => (
-                    <tr key={client.id}>
-                      <td>{client.name}</td>
-                      <td>{client.contact}</td>
-                      <td>{client.description}</td>
-                      <td>
-                        <button
-                          className="cursor-pointer hover:scale-110 transition-transform duration-300"
-                          onClick={() => {
-                            setClientId(client.id), SetShowImageModal(true);
-                          }}
-                        >
-                          <Image />{" "}
-                        </button>
-                      </td>
-                      <td>{formatStatus(client.keep)}</td>
-                      <td className="flex gap-4 items-center">
-                        <button
-                          className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                          onClick={() => handleUpdate(client.id)}
-                        >
-                          <Pen color="black" size={15} className="" />
-                        </button>
-                        <button
-                          className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                          onClick={() => handleDelete(client.id)}
-                        >
-                          <Trash color="black" size={15} />
-                        </button>
-                      </td>{" "}
+              <div className="relative">
+                <table className="table table-xs w-[70vw] ">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Contact</th>
+                      <th>Description</th>
+                      <th>Images</th>
+                      <th>Status</th>
+                      <th>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {listSelected?.clients.map((client) => (
+                      <tr key={client.id}>
+                        <td>{client.name}</td>
+                        <td>{client.contact}</td>
+                        <td>{client.description}</td>
+                        <td>
+                          <button
+                            className="cursor-pointer hover:scale-110 transition-transform duration-300"
+                            onClick={() => {
+                              setClientId(client.id), SetShowImageModal(true);
+                            }}
+                          >
+                            <Image />{" "}
+                          </button>
+                        </td>
+                        <td>{formatStatus(client.keep)}</td>
+                        <td className="flex gap-4 items-center">
+                          <button
+                            className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                            onClick={() => handleUpdate(client.id)}
+                          >
+                            <Pen color="black" size={15} className="" />
+                          </button>
+                          <button
+                            className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                            onClick={() => handleDelete(client.id)}
+                          >
+                            <Trash color="black" size={15} />
+                          </button>
+                        </td>{" "}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <Button
+                  className="m-4 cursor-pointer absolute left-1/3 btn btn-ghost text-black "
+                  onClick={() => {
+                    finishedList(listSelected?.id, !listSelected?.delivred);
+                    handleArchived(listSelected?.id, !listSelected?.archived);
+                  }}
+                >
+                  {listSelected?.delivred === false
+                    ? "Terminer liste"
+                    : " Activer la liste"}
+                </Button>
+              </div>
             ) : (
               <p className="p-4 text-center text-gray-400">
                 Aucune client pour le moment
               </p>
-            )}{" "}
+            )}
           </div>
         ) : (
           listSelected?.clients.map((client) => (
@@ -170,6 +221,15 @@ export default function ListDetails() {
             />
           ))
         )}
+        <Button
+          className="m-4 cursor-pointer absolute left-1/3 btn btn-ghost text-black "
+          onClick={() =>
+            finishedList(listSelected?.id, !listSelected?.delivred)
+          }
+        >
+          Terminer liste
+        </Button>
+
         <ImagesDisplayModal
           showModal={showImageModal}
           onClose={() => {

@@ -60,7 +60,7 @@ export default function ImagesDisplayModal({ showModal, client, onClose }) {
                     ) : client?.imgs.length > 0 ? (
                       client?.imgs.map((image) => (
                         <img
-                          key={image.key}
+                          key={image.id}
                           src={`${image.img}`}
                           className="w-auto h-auto rounded-box shadow-lg mt-2 p-2 border-2 border-gray-600/20 cursor-pointer"
                           onClick={() => setSelectedImg(image.img)}

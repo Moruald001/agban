@@ -58,6 +58,27 @@ export const archivedList = async ({ data, id }) => {
   return await res.json();
 };
 
+export const delivredList = async ({ data, id }) => {
+  console.log(data, id);
+
+  const res = await fetch(`${apiUrl}/client/delivred-list/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    credentials: "include",
+    body: JSON.stringify({ delivred: data }),
+  });
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(
+      errData.error || "Erreur lors de la modification de la liste"
+    );
+  }
+  return await res.json();
+};
+
 export const publishList = async ({ data, id }) => {
   console.log(data, id);
 
