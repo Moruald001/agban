@@ -7,10 +7,12 @@ import ClientListPDF from "../components/ClientListPdf"; // ajuste le chemin si 
 
 import {
   ArrowLeft,
+  Check,
   Image,
   PanelsRightBottom,
   Pen,
   Plus,
+  Redo,
   Trash,
 } from "lucide-react";
 import { Button } from "@headlessui/react";
@@ -20,6 +22,7 @@ import useAuthStore from "../../store/useAuthStore";
 import {
   archivedList,
   deleteClient,
+  delivredClient,
   delivredList,
   getList,
 } from "../../utils/otherFetcher";
@@ -55,6 +58,7 @@ export default function ListDetails() {
   };
   const toFinishList = mutate(delivredList);
   const toArchived = mutate(archivedList);
+  const toDelivredClient = mutate(delivredClient);
 
   const finishedList = async (id, delivred) => {
     const response = confirm("vous êtes sur le point de terminer  cette liste");
@@ -75,7 +79,16 @@ export default function ListDetails() {
   const handleArchived = async (id, archived) => {
     try {
       await toArchived({ data: archived, id: id });
-      await refetch();
+    } catch (error) {
+      console.log(error);
+      toast.error(`Echec de l’opération`);
+    }
+  };
+
+  const handleDelivredClient = async (id, delivred) => {
+    try {
+      await toDelivredClient({ data: delivred, id: id });
+      window.location.reload();
     } catch (error) {
       console.log(error);
       toast.error(`Echec de l’opération`);
@@ -158,7 +171,12 @@ export default function ListDetails() {
                   </thead>
                   <tbody>
                     {listSelected?.clients.map((client) => (
-                      <tr key={client.id}>
+                      <tr
+                        key={client.id}
+                        className={`${
+                          client.delivred === true && "line-through"
+                        }`}
+                      >
                         <td>{client.name}</td>
                         <td>{client.contact}</td>
                         <td>{client.description}</td>
@@ -173,19 +191,48 @@ export default function ListDetails() {
                           </button>
                         </td>
                         <td>{formatStatus(client.keep)}</td>
-                        <td className="flex gap-4 items-center">
-                          <button
-                            className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                            onClick={() => handleUpdate(client.id)}
-                          >
-                            <Pen color="black" size={15} className="" />
-                          </button>
-                          <button
-                            className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                            onClick={() => handleDelete(client.id)}
-                          >
-                            <Trash color="black" size={15} />
-                          </button>
+                        <td className=" flex items-center h-1/2 relative">
+                          <div className="dropdown dropdown-center  ">
+                            <button
+                              tabIndex={0}
+                              role="button"
+                              className="p-1 cursor-pointer scale-125 hover:scale-150 transition-all duration-300 text-2xl absolute bottom-[-1em]"
+                            >
+                              ...
+                            </button>
+                            <div
+                              tabIndex="-1"
+                              className="dropdown-content bg-base-400 back rounded-box z-1 w-auto p-2 mr-10 shadow-sm flex gap-4 items-center backdrop-blur-lg p-1"
+                            >
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                onClick={() => handleUpdate(client.id)}
+                              >
+                                <Pen color="black" className="" />
+                              </button>
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                onClick={() => handleDelete(client.id)}
+                              >
+                                <Trash color="black" />
+                              </button>
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                onClick={() =>
+                                  handleDelivredClient(
+                                    client.id,
+                                    !client.delivred
+                                  )
+                                }
+                              >
+                                {!client.delivred ? (
+                                  <Check color="black" />
+                                ) : (
+                                  <Redo />
+                                )}
+                              </button>
+                            </div>
+                          </div>
                         </td>{" "}
                       </tr>
                     ))}
@@ -200,7 +247,7 @@ export default function ListDetails() {
                 >
                   {listSelected?.delivred === false
                     ? "Terminer liste"
-                    : " Activer la liste"}
+                    : " Activer liste"}
                 </Button>
               </div>
             ) : (

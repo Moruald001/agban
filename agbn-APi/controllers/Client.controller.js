@@ -428,4 +428,5 @@ module.exports = {
   publishList,
   delivredList,
   archivedList,
+  delivredClient,
 };

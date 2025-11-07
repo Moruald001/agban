@@ -15,6 +15,7 @@ const {
   publishList,
   delivredList,
   archivedList,
+  delivredClient,
 } = require("../controllers/Client.controller");
 const {
   createClientSchema,
@@ -73,7 +74,7 @@ router.put(
   "/delivred-client/:id",
   auth,
   validate(delivredSchema),
-  delivredList
+  delivredClient
 );
 
 router.put("/archived-list/:id", auth, validate(archivedSchema), archivedList);
