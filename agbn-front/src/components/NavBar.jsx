@@ -15,16 +15,18 @@ export default function NavBar() {
   const queryClient = useQueryClient();
 
   const handleLogout = async () => {
+    const response = confirm("Voulez vous vraiment vous deconnecter?");
+    if (!response) return;
     try {
       const res = await mutateAsync();
       res && toast.success(res.message);
       queryClient.cancelQueries(); // arrête les requêtes en cours
       queryClient.removeQueries();
       queryClient.clear();
+      await localStorage.removeItem("user-list");
+      await localStorage.removeItem("user-storage");
       remove();
       logout();
-      await localStorage.removeItem("user-storage");
-      await localStorage.removeItem("user-list");
     } catch (error) {
       console.log(error);
       toast.error(`${error}`);

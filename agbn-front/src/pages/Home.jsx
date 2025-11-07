@@ -29,9 +29,9 @@ export function Home() {
   const { isAuthenticated, user } = useAuthStore();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["latest_lists", user.id],
+    queryKey: ["latest_lists", user?.id],
     queryFn: ({ queryKey }) => getListLatest(queryKey[1]),
-    enabled: isAuthenticated === true ? true : false,
+    enabled: isAuthenticated === true && !!user?.id,
     refetchOnWindowFocus: false,
   });
 
