@@ -1,5 +1,5 @@
 [build]
-  base = "agban-front"
+  base = "agbn-front"
   command = "pnpm build"
   publish = "dist"
 
