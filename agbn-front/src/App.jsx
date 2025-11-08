@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Register } from "./pages/auth/Register";
 import { Login } from "./pages/auth/Login";
-import { NotFound } from "./pages/notFound";
+import { NotFound } from "./pages/NotFound";
 import { List } from "./pages/List";
 import { Guard, Protected } from "./pages/auth/Guard";
 import ListDetails from "./pages/ListDetails";
