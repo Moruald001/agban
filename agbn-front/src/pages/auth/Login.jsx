@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Btn } from "../../components/button";
+import { Btn } from "../../components/Button";
 import { schemaLogin } from "../../lib/Schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link } from "react-router-dom";
