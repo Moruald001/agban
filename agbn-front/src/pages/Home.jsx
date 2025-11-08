@@ -5,14 +5,10 @@ import useAuthStore from "../../store/useAuthStore";
 import { ThreeDot } from "react-loading-indicators";
 import { useState, useEffect } from "react";
 import { CreateListModal } from "../components/CreateListModal";
-import { Btn } from "../components/button";
+import { Btn } from "../components/Button";
 import { Button } from "@headlessui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  createList,
-  deleteList,
-  getListLatest,
-} from "../../utils/otherFetcher";
+import { deleteList, getListLatest } from "../../utils/otherFetcher";
 import { SyncLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react";
