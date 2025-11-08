@@ -7,11 +7,14 @@ import { NotFound } from "./pages/notFound";
 import { List } from "./pages/List";
 import { Guard, Protected } from "./pages/auth/Guard";
 import ListDetails from "./pages/ListDetails";
+import Profil from "./pages/Profil";
 
 function App() {
   return (
     <Routes>
       <Route path={"/"} element={<Home />} />
+
+      <Route path={"/profil"} element={<Profil />} />
 
       <Route
         path={"/register"}

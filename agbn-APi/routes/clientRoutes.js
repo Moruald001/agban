@@ -12,8 +12,18 @@ const {
   deleteClient,
   deleteList,
   getListsLatest,
+  publishList,
+  delivredList,
+  archivedList,
+  delivredClient,
 } = require("../controllers/Client.controller");
-const { createClientSchema, createListSchema } = require("../utils/schema");
+const {
+  createClientSchema,
+  createListSchema,
+  publishSchema,
+  delivredSchema,
+  archivedSchema,
+} = require("../utils/schema");
 const auth = require("../middlewares/authMiddleware");
 const isCeoMiddleware = require("../middlewares/isCeo");
 
@@ -49,6 +59,26 @@ router.put(
   validate(createListSchema),
   updateList
 );
+
+router.put(
+  "/publish-list/:id",
+  auth,
+  isCeoMiddleware,
+  validate(publishSchema),
+  publishList
+);
+
+router.put("/delivred-list/:id", auth, validate(delivredSchema), delivredList);
+
+router.put(
+  "/delivred-client/:id",
+  auth,
+  validate(delivredSchema),
+  delivredClient
+);
+
+router.put("/archived-list/:id", auth, validate(archivedSchema), archivedList);
+
 // suppression
 
 router.delete("/delete-client/:id", auth, isCeoMiddleware, deleteClient);
@@ -56,7 +86,7 @@ router.delete("/delete-list/:id", auth, isCeoMiddleware, deleteList);
 
 //recuperation
 router.get("/clients", auth, getClients);
-router.get("/lists", auth, getLists);
-router.get("/latest-lists", auth, getListsLatest);
+router.get("/lists/:id", auth, getLists);
+router.get("/latest-lists/:id", auth, getListsLatest);
 
 module.exports = router;

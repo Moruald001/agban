@@ -1,7 +1,10 @@
 const { Client, List, Img } = require("../models");
+const cloudinary = require("../config/cloudinary");
 const fs = require("fs").promises;
 const path = require("path");
 const { fileTypeFromBuffer } = require("file-type");
+const uploadToCloudinary = require("../utils/uploadedCloudinary");
+const { log } = require("console");
 
 //Ajout d'un client
 
@@ -52,45 +55,32 @@ const createClient = async (req, res) => {
     const client = response.toJSON();
 
     if (req.files && req.files.length > 0) {
-      const images = [];
+      const images = await Promise.all(
+        req.files.map(async (file) => {
+          if (!file.buffer) throw new Error("file.buffer est undefined !");
 
-      for (const file of req.files) {
-        if (!file.buffer) {
-          throw new Error("file.buffer est undefined !");
-        }
+          const type = await fileTypeFromBuffer(file.buffer);
+          if (
+            !type ||
+            !["image/jpeg", "image/png", "image/webp"].includes(type.mime)
+          ) {
+            throw new Error("Contenu du fichier image invalide");
+          }
 
-        // Vérification du contenu réel du fichier
-        const type = await fileTypeFromBuffer(file.buffer);
-        if (
-          !type ||
-          !["image/jpeg", "image/png", "image/webp"].includes(type.mime)
-        ) {
-          return res
-            .status(400)
-            .json({ error: "Contenu du fichier image invalide" });
-        }
+          // Upload sur Cloudinary et récupère le secure_url
+          const result = await uploadToCloudinary(file.buffer);
 
-        const uniqueName = `${Date.now()}-${file.originalname}`;
-        const filePath = path.join(__dirname, "..", "images", uniqueName);
-
-        try {
-          await fs.writeFile(filePath, file.buffer);
-          images.push({
-            img: `/images/${uniqueName}`,
+          return {
+            img: result.secure_url,
+            publicId: result.public_id,
             clientId: client.id,
-          });
-        } catch (err) {
-          console.error("❌ Erreur d'écriture de l'image:", err);
-          return res.status(500).json({ error: "Erreur enregistrement image" });
-        }
-      }
-      try {
-        await Img.bulkCreate(images);
-      } catch (error) {
-        res.status(400).json({ error: "echec de l'enregistrement des images" });
-      }
-    }
+          };
+        })
+      );
 
+      // On enregistre toutes les images en base
+      await Img.bulkCreate(images);
+    }
     console.log("client ajouté avec succès");
 
     console.log(client);
@@ -145,21 +135,54 @@ const updateClient = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
-// Suppression d'un client
-const deleteClient = async (req, res) => {
+const delivredClient = async (req, res) => {
   const id = req.params.id;
+  const { delivred } = req.body;
 
   const client = await Client.findByPk(id);
   if (client === null) {
     res.status(400).json({
-      message: "impossible de mettre à jour ce client car il est introuvable",
+      message: "impossible de mettre à jour ce client, il est introuvable",
     });
     throw new Error(
       "impossible de mettre à jour ce client car il est introuvable"
     );
   }
+  try {
+    await Client.update(
+      { delivred },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info client mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update client:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+// Suppression d'un client
+const deleteClient = async (req, res) => {
+  const id = req.params.id;
 
   try {
+    const client = await Client.findByPk(id, { include: Img });
+
+    if (client === null) {
+      res.status(400).json({
+        message: "Erreur lors de la suppression ",
+      });
+      throw new Error(
+        "impossible de supprimer  ce client car il est introuvable"
+      );
+    }
+    // 2. Supprimer les images sur Cloudinary
+    const destroyImagesPromises = client.imgs.map((img) =>
+      cloudinary.uploader.destroy(img.publicId)
+    );
+    await Promise.all(destroyImagesPromises);
     const response = await Client.destroy({
       where: {
         id,
@@ -176,7 +199,7 @@ const deleteClient = async (req, res) => {
       .json({ message: "la suppression à été effectué avec succès", client });
   } catch (error) {
     console.log("erreur serveur ", error);
-    res.status(500).json({ erreur: "la suppression à echoué" });
+    res.status(500).json({ erreur: "la suppression à echoué " });
   }
 };
 
@@ -218,8 +241,10 @@ const createList = async (req, res) => {
 
 //Reuperation des listes
 const getLists = async (req, res) => {
+  const id = req.params.id;
   try {
     const lists = await List.findAll({
+      where: { userId: id },
       include: [
         {
           model: Client,
@@ -234,10 +259,13 @@ const getLists = async (req, res) => {
   }
 };
 const getListsLatest = async (req, res) => {
+  const id = req.params.id;
   try {
     const lists = await List.findAll({
       order: [["createdAt", "DESC"]],
       limit: 3,
+      where: { userId: id },
+
       include: [
         {
           model: Client,
@@ -251,7 +279,7 @@ const getListsLatest = async (req, res) => {
     res.status(500).json({ error: "erreur serveur" }, error);
   }
 };
-
+// modification de liste
 const updateList = async (req, res) => {
   const id = req.params.id;
   const { name } = req.body;
@@ -259,12 +287,89 @@ const updateList = async (req, res) => {
   const list = await List.findByPk(id);
   if (list === null) {
     return res.status(400).json({
-      message: "impossible de mettre à jour ce ls list",
+      message: "impossible de mettre à jour cette liste",
     });
   }
   try {
     await List.update(
       { name },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info liste mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update liste:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+const publishList = async (req, res) => {
+  const id = req.params.id;
+  const { publish } = req.body;
+
+  const list = await List.findByPk(id);
+  if (list === null) {
+    return res.status(400).json({
+      message: "impossible de mettre à jour cette liste",
+    });
+  }
+  try {
+    await List.update(
+      { publish },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info liste mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update liste:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+const delivredList = async (req, res) => {
+  const id = req.params.id;
+  const { delivred } = req.body;
+
+  const list = await List.findByPk(id);
+  if (list === null) {
+    return res.status(400).json({
+      message: "impossible de mettre à jour cette liste",
+    });
+  }
+  try {
+    await List.update(
+      { delivred },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.status(200).json({ message: "info liste mise à jour " });
+  } catch (error) {
+    console.error("❌ Erreur update liste:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+const archivedList = async (req, res) => {
+  const id = req.params.id;
+  const { archived } = req.body;
+
+  const list = await List.findByPk(id);
+  if (list === null) {
+    return res.status(400).json({
+      message: "impossible de mettre à jour cette liste",
+    });
+  }
+  try {
+    await List.update(
+      { archived },
       {
         where: {
           id,
@@ -320,4 +425,8 @@ module.exports = {
   deleteList,
   getListsLatest,
   updateList,
+  publishList,
+  delivredList,
+  archivedList,
+  delivredClient,
 };

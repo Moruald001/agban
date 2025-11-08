@@ -1,18 +1,19 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
-import { SyncLoader } from "react-spinners";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function ImagesDisplayModal({ showModal, client, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImg, setSelectedImg] = useState(null);
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
+  // const BASE_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     setIsLoading(true);
   }, []);
   setTimeout(() => {
     setIsLoading(false);
-  }, 2000);
+  }, 5000);
 
   return (
     <>
@@ -48,14 +49,19 @@ export default function ImagesDisplayModal({ showModal, client, onClose }) {
                   >
                     {client?.name + "  photos"}
                   </Dialog.Title>
-                  <div className="mt-2 p-5 columns-2">
+                  <div className="mt-2 p-5  columns-2  h-auto ">
                     {isLoading ? (
-                      <SyncLoader />
+                      <div className="">
+                        <Skeleton className="p-4 w-30 h-40 m-4" />
+                        <Skeleton className="p-4 w-30 h-20 m-4" />
+                        <Skeleton className="p-4 w-30 h-80 m-4" />
+                        <Skeleton className="p-4 w-30 h-40 m-4" />
+                      </div>
                     ) : client?.imgs.length > 0 ? (
                       client?.imgs.map((image) => (
                         <img
-                          key={image.key}
-                          src={`${BASE_URL}${image.img}`}
+                          key={image.id}
+                          src={`${image.img}`}
                           className="w-auto h-auto rounded-box shadow-lg mt-2 p-2 border-2 border-gray-600/20 cursor-pointer"
                           onClick={() => setSelectedImg(image.img)}
                         />
@@ -82,13 +88,13 @@ export default function ImagesDisplayModal({ showModal, client, onClose }) {
       </Transition>
       {selectedImg && (
         <div
-          className="fixed inset-0 z-50 bg-transparent flex items-center justify-center p-4"
+          className="fixed inset-0 z-50  bg-black/50  flex items-center justify-center p-4"
           onClick={() => setSelectedImg(null)}
         >
           <img
-            src={`${BASE_URL}${selectedImg}`}
-            alt="Agrandie"
-            className="max-w-full max-h-full rounded-lg shadow-lg"
+            src={`${selectedImg}`}
+            alt="image agrandie"
+            className="max-w-full max-h-full rounded-lg shadow-2xl transition-discrete duration-300 "
             onClick={(e) => e.stopPropagation()} // empêche la fermeture si on clique sur l'image
           />
         </div>

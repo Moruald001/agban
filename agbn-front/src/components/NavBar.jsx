@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { doLogout } from "../../utils/authFetcher";
 import { useQueryClient } from "@tanstack/react-query";
 import useClientStore from "../../store/clientStore";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
   const { user, isAuthenticated, logout } = useAuthStore();
@@ -15,16 +16,18 @@ export default function NavBar() {
   const queryClient = useQueryClient();
 
   const handleLogout = async () => {
+    const response = confirm("Voulez vous vraiment vous deconnecter?");
+    if (!response) return;
     try {
       const res = await mutateAsync();
       res && toast.success(res.message);
       queryClient.cancelQueries(); // arrête les requêtes en cours
       queryClient.removeQueries();
       queryClient.clear();
+      await localStorage.removeItem("user-list");
+      await localStorage.removeItem("user-storage");
       remove();
       logout();
-      await localStorage.removeItem("user-storage");
-      await localStorage.removeItem("user-list");
     } catch (error) {
       console.log(error);
       toast.error(`${error}`);
@@ -40,7 +43,14 @@ export default function NavBar() {
         </div>
         {isAuthenticated ? (
           <div className="flex gap-2 items-center">
-            <p className="capitalize">{user?.name}: </p>
+            <details className="dropdown">
+              <summary className="btn m-1">{user?.name} </summary>
+              <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                <li>
+                  <Link to={"/profil"}>Profil</Link>
+                </li>
+              </ul>
+            </details>
             <p className=" capitalize">{user?.role}</p>
             <button
               onClick={handleLogout}

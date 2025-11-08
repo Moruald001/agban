@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const { User, AccountCount } = require("../models");
-const accountCountIncrementer = require("../utils/accounCountIncrementer");
 const jwtokenGenerator = require("../utils/jwtokenGenerator");
 
 //Creation d'un utilisateur

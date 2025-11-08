@@ -18,6 +18,17 @@ const createListSchema = yup.object({
   name: yup.string().required("Veuillez entrer un nom ").min(4),
 });
 
+const publishSchema = yup.object({
+  publish: yup.boolean().required("Erreur lors de la publication "),
+});
+const delivredSchema = yup.object({
+  delivred: yup.boolean().required(),
+});
+
+const archivedSchema = yup.object({
+  archived: yup.boolean().required(),
+});
+
 const registerUserSchema = yup.object({
   name: yup.string().required("Le nom est requis").min(4),
   email: yup.string().required("L'email  est requis").email("email invalide"),
@@ -47,4 +58,7 @@ module.exports = {
   createListSchema,
   registerUserSchema,
   loginSchema,
+  publishSchema,
+  archivedSchema,
+  delivredSchema,
 };
