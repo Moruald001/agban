@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useForm } from "react-hook-form";
-import { Btn } from "./button";
+import { Btn } from "../components/Button";
 import { useEffect, useState } from "react";
 import {
   Button,
