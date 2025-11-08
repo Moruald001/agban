@@ -1,5 +1,6 @@
 [build]
-  command = "pnpm run build"
+  base = "agban-front"
+  command = "pnpm build"
   publish = "dist"
 
 [[redirects]]
