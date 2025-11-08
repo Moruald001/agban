@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../../store/useAuthStore";
 import { useState } from "react";
+import oeilFermé from "../../assets/oeilFermé.png";
+import oeilOuvert from "../../assets/oeilFermé.png";
 
 export function Login() {
   const {
@@ -91,11 +93,7 @@ export function Login() {
           >
             <img
               className="w-7 h-7 "
-              src={
-                togglePassword === "password"
-                  ? "../assets/oeil-fermé.png"
-                  : "../assets/oeil-ouvert.png"
-              }
+              src={togglePassword === "password" ? oeilFermé : oeilOuvert}
               alt=""
             />
           </button>

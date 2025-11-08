@@ -6,7 +6,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { doRegistration, fetchingCeos } from "../../../utils/authFetcher";
 import { useNavigate, Link } from "react-router-dom";
-// import useAuthStore from "../../../store/useAuthStore";
+import oeilFermé from "../../assets/oeilFermé.png";
+import oeilOuvert from "../../assets/oeilFermé.png";
 import { useEffect, useState } from "react";
 
 export function Register() {
@@ -140,11 +141,7 @@ export function Register() {
             >
               <img
                 className="w-7 h-7 "
-                src={
-                  togglePassword1 === "password"
-                    ? "../assets/oeil-fermé.png"
-                    : "../assets/oeil-ouvert.png"
-                }
+                src={togglePassword1 === "password" ? oeilFermé : oeilOuvert}
                 alt=""
               />
             </button>
@@ -178,8 +175,8 @@ export function Register() {
                 className="w-7 h-7 "
                 src={
                   togglePassword2 === "password"
-                    ? "../assets/oeil-fermé.png"
-                    : "../assets/oeil-ouvert.png"
+                    ? "../../../public/assets/oeilOuvert.png"
+                    : "../../../public/assets/oeilFermé.png"
                 }
                 alt=""
               />

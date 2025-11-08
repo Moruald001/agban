@@ -1,6 +1,6 @@
 [build]
   base = "agbn-front"
-  command = "pnpm build"
+  command = "pnpm install && pnpm build"
   publish = "dist"
 
 [[redirects]]
