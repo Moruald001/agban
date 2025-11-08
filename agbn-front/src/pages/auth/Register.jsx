@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Btn } from "../../components/button";
+import { Btn } from "../../components/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaRegister } from "../../lib/Schema";
 import { useMutation, useQuery } from "@tanstack/react-query";
