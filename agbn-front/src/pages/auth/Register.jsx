@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { doRegistration, fetchingCeos } from "../../../utils/authFetcher";
 import { useNavigate, Link } from "react-router-dom";
 import oeilFermé from "../../assets/oeilFermé.png";
-import oeilOuvert from "../../assets/oeilFermé.png";
+import oeilOuvert from "../../assets/oeilOuvert.png";
 import { useEffect, useState } from "react";
 
 export function Register() {
@@ -173,11 +173,7 @@ export function Register() {
             >
               <img
                 className="w-7 h-7 "
-                src={
-                  togglePassword2 === "password"
-                    ? "../../../public/assets/oeilOuvert.png"
-                    : "../../../public/assets/oeilFermé.png"
-                }
+                src={togglePassword2 === "password" ? oeilFermé : oeilOuvert}
                 alt=""
               />
             </button>

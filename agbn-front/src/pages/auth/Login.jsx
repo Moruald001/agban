@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../../store/useAuthStore";
 import { useState } from "react";
 import oeilFermé from "../../assets/oeilFermé.png";
-import oeilOuvert from "../../assets/oeilFermé.png";
+import oeilOuvert from "../../assets/oeilOuvert.png";
 
 export function Login() {
   const {
