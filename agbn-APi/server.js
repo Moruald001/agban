@@ -1,6 +1,6 @@
 const { sequelize } = require("./models/index");
 const express = require("express");
-const port = 5001;
+const port = process.env.PORT || 3000;
 const clientRoutes = require("./routes/clientRoutes");
 const userRoutes = require("./routes/authRoutes");
 const multer = require("multer");
@@ -13,6 +13,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 
 app.use(helmet());
+app.enable("trust proxy");
 app.use(morgan("dev"));
 app.use(cors(corsOptions));
 app.use(cookieParser());
@@ -59,7 +60,7 @@ async function main() {
     await sequelize.sync({ alter: true });
     console.log("📦 Synchronisation des modèles terminée.");
     app.listen(port, () => {
-      console.log(`Serveur demarré sur http://localhost:${port}`);
+      console.log(`Serveur ecoute sur le port : ${port}`);
     });
   } catch (error) {
     console.error("❌ Erreur de connexion à la base :", error);
