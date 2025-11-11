@@ -55,8 +55,8 @@ const login = async (req, res) => {
     const token = jwtokenGenerator(user.id);
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000, //24h
     });
     return res.status(200).json({
@@ -64,7 +64,6 @@ const login = async (req, res) => {
       user: {
         id: user.id,
         name: user.name,
-        email: user.email,
         role: user.role,
       },
     });
