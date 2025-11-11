@@ -30,7 +30,6 @@ export function Home() {
     enabled: isAuthenticated === true && !!user?.id,
     refetchOnWindowFocus: false,
   });
-  console.log("API URL =>", import.meta.env.VITE_API_URL);
 
   useEffect(() => {
     createLatestList(data?.lists);

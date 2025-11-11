@@ -13,7 +13,6 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 
 app.use(helmet());
-app.enable("trust proxy");
 app.use(morgan("dev"));
 app.use(cors(corsOptions));
 app.use(cookieParser());
