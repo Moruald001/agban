@@ -45,8 +45,12 @@ export const List = () => {
   const archivedLIsts = lists?.filter((list) => list.archived === true);
   const nonArchivedLists = lists?.filter((list) => list.archived === false);
   const [categorySelected, setCategorySelected] = useState("non-archived");
-  const listToDisplayed =
+  let listToDisplayed =
     categorySelected === "non-archived" ? nonArchivedLists : archivedLIsts;
+
+  if (user?.role !== "ceo") {
+    listToDisplayed = listToDisplayed?.filter((list) => list.publish === true);
+  }
 
   const toDelete = mutate(deleteList);
   const toArchived = mutate(archivedList);
@@ -159,7 +163,7 @@ export const List = () => {
             Créer une liste
           </Button>
         )}
-        {data?.lists?.length > 0 ? (
+        {lists?.length > 0 ? (
           <div className=" overflow-x-hidden shadow-[10px_10px_40px_black]/20 min-w-[70vw]  bg-gray-900/5 rounded-box h-auto mx-5  ">
             <div className="overflow-x-auto rounded-box border border-base-content/5      ">
               <table className="table table-zebra hover   rounded-box  ">
@@ -196,18 +200,22 @@ export const List = () => {
                       <td>
                         {width >= 610 ? (
                           <div className="flex gap-4 items-center">
-                            <button
-                              className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                              onClick={() => handleUpdate(list.id)}
-                            >
-                              <Pen color="black" size={15} className="" />
-                            </button>
-                            <button
-                              className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                              onClick={() => handleDelete(list.id)}
-                            >
-                              <Trash color="black" size={15} />
-                            </button>
+                            {user?.role === "ceo" && (
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                onClick={() => handleUpdate(list.id)}
+                              >
+                                <Pen color="black" size={15} className="" />
+                              </button>
+                            )}
+                            {user?.role === "ceo" && (
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                onClick={() => handleDelete(list.id)}
+                              >
+                                <Trash color="black" size={15} />
+                              </button>
+                            )}
                             <button
                               className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                               onClick={() =>
