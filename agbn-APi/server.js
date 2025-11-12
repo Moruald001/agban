@@ -56,7 +56,7 @@ async function main() {
     await sequelize.authenticate();
     console.log("✅ Connexion à la base réussie.");
 
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log("📦 Synchronisation des modèles terminée.");
     app.listen(port, () => {
       console.log(`Serveur ecoute sur le port : ${port}`);
