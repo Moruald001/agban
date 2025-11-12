@@ -17,7 +17,7 @@ export async function sendLoginEmail(to, loginLink) {
     subject: "validation de compte",
     html: `
       <p></p>
-      <p>Clique ici pour te pour valider ton compte :</p>
+      <p>Clique ici pour te pour valider ton compte  :</p>
       <a href="${loginLink}" style="color:gray;border:1px solid black;font-weight:bold;">Se connecter</a>
     `,
   });
