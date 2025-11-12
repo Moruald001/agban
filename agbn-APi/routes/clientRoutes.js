@@ -16,6 +16,8 @@ const {
   delivredList,
   archivedList,
   delivredClient,
+  getLatestCollaboratorLists,
+  getCollaboratorLists,
 } = require("../controllers/Client.controller");
 const {
   createClientSchema,
@@ -86,7 +88,9 @@ router.delete("/delete-list/:id", auth, isCeoMiddleware, deleteList);
 
 //recuperation
 router.get("/clients", auth, getClients);
+router.get("/latest-lists/:id", auth, isCeoMiddleware, getListsLatest);
 router.get("/lists/:id", auth, getLists);
-router.get("/latest-lists/:id", auth, getListsLatest);
+router.get("latest-lists-collaborator", auth, getLatestCollaboratorLists);
+router.get("lists-collaborator", auth, getCollaboratorLists);
 
 module.exports = router;

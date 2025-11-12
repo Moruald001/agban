@@ -279,6 +279,50 @@ const getListsLatest = async (req, res) => {
     res.status(500).json({ error: "erreur serveur" }, error);
   }
 };
+
+const getLatestCollaboratorLists = async (req, res) => {
+  const ceoId = req.params.id;
+  if (!ceoId) {
+    return res.status(400).json({ message: "id du ceo manquant" });
+  }
+  try {
+    const lists = await List.findAll({
+      order: [["createdAt", "DESC"]],
+      where: { userId: ceoId, publish: true },
+      limit: 3,
+      include: [
+        {
+          model: Client,
+          include: [Img],
+        },
+      ],
+    });
+    res.status(200).json({ lists });
+  } catch (error) {
+    res.status(500).json({ error: "erreur serveur" }, error);
+  }
+};
+const getCollaboratorLists = async (req, res) => {
+  const ceoId = req.params.id;
+  if (!ceoId) {
+    return res.status(400).json({ message: "id du ceo manquant" });
+  }
+  try {
+    const lists = await List.findAll({
+      order: [["createdAt", "DESC"]],
+      where: { userId: ceoId, publish: true },
+      include: [
+        {
+          model: Client,
+          include: [Img],
+        },
+      ],
+    });
+    res.status(200).json({ lists });
+  } catch (error) {
+    res.status(500).json({ error: "erreur serveur" }, error);
+  }
+};
 // modification de liste
 const updateList = async (req, res) => {
   const id = req.params.id;
@@ -429,4 +473,6 @@ module.exports = {
   delivredList,
   archivedList,
   delivredClient,
+  getLatestCollaboratorLists,
+  getCollaboratorLists,
 };
