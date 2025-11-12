@@ -1,6 +1,6 @@
 const { sequelize } = require("./models/index");
 const express = require("express");
-const port = 5000;
+const port = 5001;
 const clientRoutes = require("./routes/clientRoutes");
 const userRoutes = require("./routes/authRoutes");
 const multer = require("multer");
@@ -56,10 +56,10 @@ async function main() {
     await sequelize.authenticate();
     console.log("✅ Connexion à la base réussie.");
 
-    await sequelize.sync();
+    await sequelize.sync({ alter: true });
     console.log("📦 Synchronisation des modèles terminée.");
     app.listen(port, () => {
-      console.log(`Serveur demarré sur http://localhost:${port}`);
+      console.log(`Serveur ecoute sur le port : ${port}`);
     });
   } catch (error) {
     console.error("❌ Erreur de connexion à la base :", error);

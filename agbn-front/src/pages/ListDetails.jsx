@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import useClientStore from "../../store/clientStore";
 import NavBar from "../components/NavBar";

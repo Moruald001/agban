@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
-import { Btn } from "../../components/button";
+import { Btn } from "../../components/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaRegister } from "../../lib/Schema";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { doRegistration, fetchingCeos } from "../../../utils/authFetcher";
 import { useNavigate, Link } from "react-router-dom";
-// import useAuthStore from "../../../store/useAuthStore";
+import oeilFermé from "../../assets/oeilFermé.png";
+import oeilOuvert from "../../assets/oeilOuvert.png";
 import { useEffect, useState } from "react";
 
 export function Register() {
@@ -140,11 +141,7 @@ export function Register() {
             >
               <img
                 className="w-7 h-7 "
-                src={
-                  togglePassword1 === "password"
-                    ? "../assets/oeil-fermé.png"
-                    : "../assets/oeil-ouvert.png"
-                }
+                src={togglePassword1 === "password" ? oeilFermé : oeilOuvert}
                 alt=""
               />
             </button>
@@ -176,11 +173,7 @@ export function Register() {
             >
               <img
                 className="w-7 h-7 "
-                src={
-                  togglePassword2 === "password"
-                    ? "../assets/oeil-fermé.png"
-                    : "../assets/oeil-ouvert.png"
-                }
+                src={togglePassword2 === "password" ? oeilFermé : oeilOuvert}
                 alt=""
               />
             </button>

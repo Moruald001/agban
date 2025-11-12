@@ -19,6 +19,9 @@ import { Button } from "@headlessui/react";
 import useClientStore from "../../store/clientStore";
 import { mutate } from "../../utils/mutationHelper";
 import useWindowSize from "../components/useWindowsSize";
+import publishICO from "../assets/publish-Ico.png";
+import unArchive from "../assets/unarchive.png";
+import wifiOff from "../assets/wifi-off.png";
 
 export const List = () => {
   const [showModal, setShowModal] = useState(false);
@@ -179,7 +182,7 @@ export const List = () => {
                           {list.name}
                           {list.publish ? (
                             <img
-                              src="../../assets/publish-Ico.png"
+                              src={publishICO}
                               alt="icon de publication"
                               className="w-3 h-3"
                             />
@@ -257,7 +260,7 @@ export const List = () => {
                                   <Archive color="black" />
                                 ) : (
                                   <img
-                                    src="../../assets/unarchive.png"
+                                    src={unArchive}
                                     className="w-60 h-auto"
                                   />
                                 )}{" "}
@@ -270,14 +273,11 @@ export const List = () => {
                               >
                                 {!list.publish ? (
                                   <img
-                                    src="../../assets/publish-Ico.png"
+                                    src={publishICO}
                                     className="w-30 h-auto"
                                   />
                                 ) : (
-                                  <img
-                                    src="../../assets/wifi-off.png"
-                                    className="w-30 h-auto"
-                                  />
+                                  <img src={wifiOff} className="w-30 h-auto" />
                                 )}
                               </button>
                             </div>
