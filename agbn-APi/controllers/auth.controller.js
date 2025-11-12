@@ -52,11 +52,18 @@ const login = async (req, res) => {
     }
     let collaborators = [];
 
+    let ceoId ;
+
     if (user.role === "ceo") {
       collaborators = await User.findAll({
         where: { ceo: user.name },
         attributes: ["id", "name", "role"],
-      });
+      })else if(user.role === "collaborateur") {
+        ceoId = await User.findOne({
+          where : {name : user.ceo},
+          attributes : ["id"]
+        })
+      };
     }
     // Générer un token JWT (fonction personnalisée)
     const token = jwtokenGenerator(user.id);
@@ -72,7 +79,7 @@ const login = async (req, res) => {
       user: {
         id: user.id,
         name: user.name,
-
+        ceoId,
         role: user.role,
         collaborators,
       },
