@@ -5,7 +5,6 @@ const jwtokenGenerator = require("../utils/jwtokenGenerator");
 //Creation d'un utilisateur
 const register = async (req, res) => {
   const { name, email, role, password, ceo } = req.body;
-  console.log(ceo);
 
   try {
     const emailExist = await User.findOne({ where: { email } });
@@ -28,7 +27,7 @@ const register = async (req, res) => {
     res.status(201).json({ message: `Utilisateur créé, ${user.name}` });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ errors: "Impossible de créer le compte." });
+    res.status(500).json({ errors: `Impossible de créer le compte.${error}` });
   }
 };
 
@@ -51,6 +50,14 @@ const login = async (req, res) => {
         .status(400)
         .json({ error: "Email ou mot de passe incorrect." });
     }
+    let collaborators = [];
+
+    if (user.role === "ceo") {
+      collaborators = await User.findAll({
+        where: { ceo: user.name },
+        attributes: ["id", "name", "role"],
+      });
+    }
     // Générer un token JWT (fonction personnalisée)
     const token = jwtokenGenerator(user.id);
     res.cookie("token", token, {
@@ -59,13 +66,15 @@ const login = async (req, res) => {
       sameSite: "Lax",
       maxAge: 24 * 60 * 60 * 1000, //24h
     });
+
     return res.status(200).json({
       message: "Connexion réussie",
       user: {
         id: user.id,
         name: user.name,
-        email: user.email,
+
         role: user.role,
+        collaborators,
       },
     });
   } catch (error) {

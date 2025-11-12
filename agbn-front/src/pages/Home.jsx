@@ -113,17 +113,19 @@ export function Home() {
         />
         {isAuthenticated ? (
           <div className="flex gap-4">
-            <Button
-              onClick={() => {
-                setShowModal(true);
-                setModaltype("createList");
-              }}
-              className={
-                "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center cursor-pointer hover:scale-110 transition-transform duration-600  "
-              }
-            >
-              Créer une liste
-            </Button>
+            {user?.role === "ceo" && (
+              <Button
+                onClick={() => {
+                  setShowModal(true);
+                  setModaltype("createList");
+                }}
+                className={
+                  "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center cursor-pointer hover:scale-110 transition-transform duration-600  "
+                }
+              >
+                Créer une liste
+              </Button>
+            )}
             <Link
               className={
                 "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110 transition-transform duration-600  "

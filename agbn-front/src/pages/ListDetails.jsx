@@ -39,6 +39,7 @@ export default function ListDetails() {
   const [showModal, setShowModal] = useState(false);
   const [showImageModal, SetShowImageModal] = useState(false);
   const { width } = useWindowSize();
+  const { user } = useAuthStore();
 
   // const { user, isAuthenticated } = useAuthStore();
   const [clientId, setClientId] = useState();
@@ -125,16 +126,18 @@ export default function ListDetails() {
       >
         <ArrowLeft className="" />
       </Link>
-      <Button
-        onClick={() => {
-          setShowModal(true);
-        }}
-        className={
-          "fixed w-auto bottom-[10vh] right-8 bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center cursor-pointer hover:scale-110 transition-transform duration-600 z-50 "
-        }
-      >
-        <Plus className="inline" /> Un client
-      </Button>
+      {user?.role === "ceo" && (
+        <Button
+          onClick={() => {
+            setShowModal(true);
+          }}
+          className={
+            "fixed w-auto bottom-[10vh] right-8 bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center cursor-pointer hover:scale-110 transition-transform duration-600 z-50 "
+          }
+        >
+          <Plus className="inline" /> Un client
+        </Button>
+      )}
       <div>
         <h1 className="text-center text-2xl mt-[7vh]">
           {listSelected?.name}

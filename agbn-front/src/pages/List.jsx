@@ -143,17 +143,19 @@ export const List = () => {
           </Button>
         </div>
 
-        <Button
-          onClick={() => {
-            setShowModal(true);
-            setModaltype("createList");
-          }}
-          className={
-            "fixed bottom-[10vh] right-8 bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center cursor-pointer hover:scale-110 transition-transform duration-600  "
-          }
-        >
-          Créer une liste
-        </Button>
+        {user?.role === "ceo" && (
+          <Button
+            onClick={() => {
+              setShowModal(true);
+              setModaltype("createList");
+            }}
+            className={
+              "fixed bottom-[10vh] right-8 bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center cursor-pointer hover:scale-110 transition-transform duration-600  "
+            }
+          >
+            Créer une liste
+          </Button>
+        )}
         {data?.lists?.length > 0 ? (
           <div className=" overflow-x-hidden shadow-[10px_10px_40px_black]/20 min-w-[70vw]  bg-gray-900/5 rounded-box h-auto mx-5  ">
             <div className="overflow-x-auto rounded-box border border-base-content/5      ">
