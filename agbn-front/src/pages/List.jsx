@@ -228,14 +228,16 @@ export const List = () => {
                             >
                               {!list.archived ? "Archiver" : "Désarchiver"}{" "}
                             </button>
-                            <button
-                              className="cursor-pointer hover:scale-105 transition-transform duration-300 border-2 p-1 rounded-lg bg-gray-500 text-white "
-                              onClick={() =>
-                                handlePublish(list.id, !list.publish)
-                              }
-                            >
-                              {!list.publish ? "publier" : "dissimuler"}{" "}
-                            </button>
+                            {user?.role === "ceo" && (
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 border-2 p-1 rounded-lg bg-gray-500 text-white "
+                                onClick={() =>
+                                  handlePublish(list.id, !list.publish)
+                                }
+                              >
+                                {!list.publish ? "publier" : "dissimuler"}{" "}
+                              </button>
+                            )}
                           </div>
                         ) : (
                           <div className="dropdown dropdown-center flex justify-start">
@@ -250,18 +252,22 @@ export const List = () => {
                               tabIndex="-1"
                               className="dropdown-content  bg-base-400 back rounded-box z-1 w-40 p-2 mr-10 shadow-sm flex gap-4 items-center  backdrop-blur-lg p-1"
                             >
-                              <button
-                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                                onClick={() => handleUpdate(list.id)}
-                              >
-                                <Pen color="black" className="" />
-                              </button>
-                              <button
-                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                                onClick={() => handleDelete(list.id)}
-                              >
-                                <Trash color="black" />
-                              </button>
+                              {user?.role === "ceo" && (
+                                <button
+                                  className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                  onClick={() => handleUpdate(list.id)}
+                                >
+                                  <Pen color="black" className="" />
+                                </button>
+                              )}
+                              {user?.role === "ceo" && (
+                                <button
+                                  className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                  onClick={() => handleDelete(list.id)}
+                                >
+                                  <Trash color="black" />
+                                </button>
+                              )}
                               <button
                                 className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                                 onClick={() =>
@@ -277,21 +283,26 @@ export const List = () => {
                                   />
                                 )}{" "}
                               </button>
-                              <button
-                                className="cursor-pointer hover:scale-205 transition-transform duration-300 border-2 p-1 rounded-lg bg-gray-500 text-white "
-                                onClick={() =>
-                                  handlePublish(list.id, !list.publish)
-                                }
-                              >
-                                {!list.publish ? (
-                                  <img
-                                    src={publishICO}
-                                    className="w-30 h-auto"
-                                  />
-                                ) : (
-                                  <img src={wifiOff} className="w-30 h-auto" />
-                                )}
-                              </button>
+                              {user?.role === "ceo" && (
+                                <button
+                                  className="cursor-pointer hover:scale-205 transition-transform duration-300 border-2 p-1 rounded-lg bg-gray-500 text-white "
+                                  onClick={() =>
+                                    handlePublish(list.id, !list.publish)
+                                  }
+                                >
+                                  {!list.publish ? (
+                                    <img
+                                      src={publishICO}
+                                      className="w-30 h-auto"
+                                    />
+                                  ) : (
+                                    <img
+                                      src={wifiOff}
+                                      className="w-30 h-auto"
+                                    />
+                                  )}
+                                </button>
+                              )}
                             </div>
                           </div>
                         )}

@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { User, AccountCount } = require("../models");
+const { User } = require("../models");
 const jwtokenGenerator = require("../utils/jwtokenGenerator");
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -81,7 +81,7 @@ const login = async (req, res) => {
       user: {
         id: user.id,
         name: user.name,
-        ceoId: ceoId.id,
+        ceoId: ceoId?.id,
         role: user.role,
         collaborators,
         ceoName: user.ceo,

@@ -20,14 +20,14 @@ export default function NavBar() {
     if (!response) return;
     try {
       const res = await mutateAsync();
-      res && toast.success(res.message);
       queryClient.cancelQueries(); // arrête les requêtes en cours
       queryClient.removeQueries();
       queryClient.clear();
       await localStorage.removeItem("user-list");
       await localStorage.removeItem("user-storage");
-      remove();
+      res && toast.success(res.message);
       logout();
+      remove();
     } catch (error) {
       console.log(error);
       toast.error(`${error}`);
