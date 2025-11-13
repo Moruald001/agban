@@ -110,6 +110,29 @@ export const getListLatest = async (id) => {
   return res.json();
 };
 
+export const getLatestCollaboratorlists = async (ceoId) => {
+  const res = await fetch(
+    `${apiUrl}/client/latest-lists-collaborator/${ceoId}`,
+    {
+      credentials: "include",
+    }
+  );
+
+  if (!res.ok) throw new Error("Échec de la recuperation des listes récentes");
+
+  return res.json();
+};
+
+export const getCollaboratorlists = async (ceoId) => {
+  const res = await fetch(`${apiUrl}/client/lists-collaborator/${ceoId}`, {
+    credentials: "include",
+  });
+
+  if (!res.ok) throw new Error("Échec de la recuperation des listes récentes");
+
+  return res.json();
+};
+
 export const getList = async (id) => {
   const res = await fetch(`${apiUrl}/client/lists/${id}`, {
     credentials: "include",

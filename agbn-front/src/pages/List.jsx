@@ -4,6 +4,7 @@ import {
   deleteList,
   getList,
   publishList,
+  getCollaboratorlists,
 } from "../../utils/otherFetcher";
 import { Archive, ArrowLeft, Pen } from "lucide-react";
 import { Trash } from "lucide-react";
@@ -32,8 +33,11 @@ export const List = () => {
   const { width } = useWindowSize();
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["lists", user.id],
-    queryFn: ({ queryKey }) => getList(queryKey[1]),
+    queryKey: ["lists", user.role === "ceo" ? user?.id : user?.ceoId],
+    queryFn:
+      user.role === "ceo"
+        ? ({ queryKey }) => getList(queryKey[1])
+        : ({ queryKey }) => getCollaboratorlists(queryKey[1]),
     enabled: isAuthenticated === true ? true : false,
     refetchOnWindowFocus: false,
   });

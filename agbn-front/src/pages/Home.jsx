@@ -8,7 +8,11 @@ import { CreateListModal } from "../components/CreateListModal";
 import { Btn } from "../components/Button";
 import { Button } from "@headlessui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { deleteList, getListLatest } from "../../utils/otherFetcher";
+import {
+  deleteList,
+  getLatestCollaboratorlists,
+  getListLatest,
+} from "../../utils/otherFetcher";
 import { SyncLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react";
@@ -25,8 +29,11 @@ export function Home() {
   const { isAuthenticated, user } = useAuthStore();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["latest_lists", user?.id],
-    queryFn: ({ queryKey }) => getListLatest(queryKey[1]),
+    queryKey: ["latest_lists", user?.role === "ceo" ? user?.id : user?.ceoId],
+    queryFn:
+      user?.role === "ceo"
+        ? ({ queryKey }) => getListLatest(queryKey[1])
+        : ({ queryKey }) => getLatestCollaboratorlists(queryKey[1]),
     enabled: isAuthenticated === true && !!user?.id,
     refetchOnWindowFocus: false,
   });

@@ -90,7 +90,7 @@ router.delete("/delete-list/:id", auth, isCeoMiddleware, deleteList);
 router.get("/clients", auth, getClients);
 router.get("/latest-lists/:id", auth, isCeoMiddleware, getListsLatest);
 router.get("/lists/:id", auth, getLists);
-router.get("latest-lists-collaborator/:id", auth, getLatestCollaboratorLists);
-router.get("lists-collaborator/:id", auth, getCollaboratorLists);
+router.get("/latest-lists-collaborator/:id", auth, getLatestCollaboratorLists);
+router.get("/lists-collaborator/:id", auth, getCollaboratorLists);
 
 module.exports = router;

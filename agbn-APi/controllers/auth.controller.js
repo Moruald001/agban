@@ -52,25 +52,25 @@ const login = async (req, res) => {
     }
     let collaborators = [];
 
-    let ceoId ;
+    let ceoId;
 
     if (user.role === "ceo") {
       collaborators = await User.findAll({
         where: { ceo: user.name },
         attributes: ["id", "name", "role"],
-      })else if(user.role === "collaborateur") {
-        ceoId = await User.findOne({
-          where : {name : user.ceo},
-          attributes : ["id"]
-        })
-      };
+      });
+    } else if (user.role === "collaborateur") {
+      ceoId = await User.findOne({
+        where: { name: user.ceo },
+        attributes: ["id"],
+      });
     }
     // Générer un token JWT (fonction personnalisée)
     const token = jwtokenGenerator(user.id);
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: false,
+      sameSite: "lax",
       maxAge: 24 * 60 * 60 * 1000, //24h
     });
 
@@ -79,9 +79,10 @@ const login = async (req, res) => {
       user: {
         id: user.id,
         name: user.name,
-        ceoId,
+        ceoId: ceoId.id,
         role: user.role,
         collaborators,
+        ceoName: user.ceo,
       },
     });
   } catch (error) {
