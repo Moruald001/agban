@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const { User, AccountCount } = require("../models");
 const jwtokenGenerator = require("../utils/jwtokenGenerator");
 
+const isProduction = process.env.NODE_ENV === "production";
+
 //Creation d'un utilisateur
 const register = async (req, res) => {
   const { name, email, role, password, ceo } = req.body;
@@ -69,8 +71,8 @@ const login = async (req, res) => {
     const token = jwtokenGenerator(user.id);
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000, //24h
     });
 
