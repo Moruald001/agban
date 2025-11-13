@@ -9,6 +9,7 @@ const User = sequelize.define(
     password: { type: DataTypes.STRING, allowNull: false },
     role: { type: DataTypes.STRING, allowNull: false },
     ceo: { type: DataTypes.STRING, allowNull: true },
+    isVerified: { type: DataTypes.BOOLEAN, defaultValue: false },
   },
   {
     timestamps: false,
