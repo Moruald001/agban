@@ -39,6 +39,7 @@ export const List = () => {
         ? ({ queryKey }) => getList(queryKey[1])
         : ({ queryKey }) => getCollaboratorlists(queryKey[1]),
     enabled: isAuthenticated === true ? true : false,
+
     refetchOnWindowFocus: false,
   });
 
@@ -49,12 +50,8 @@ export const List = () => {
   const archivedLIsts = lists?.filter((list) => list.archived === true);
   const nonArchivedLists = lists?.filter((list) => list.archived === false);
   const [categorySelected, setCategorySelected] = useState("non-archived");
-  let listToDisplayed =
+  let listToDisplay =
     categorySelected === "non-archived" ? nonArchivedLists : archivedLIsts;
-
-  if (user?.role !== "ceo") {
-    listToDisplayed = listToDisplayed?.filter((list) => list.publish === true);
-  }
 
   const toDelete = mutate(deleteList);
   const toArchived = mutate(archivedList);
@@ -180,7 +177,7 @@ export const List = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {listToDisplayed?.map((list) => (
+                  {listToDisplay?.map((list) => (
                     <tr key={list.id}>
                       <td className="capitalize ">
                         <Link

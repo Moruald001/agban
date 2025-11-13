@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import useClientStore from "../../store/clientStore";
 import NavBar from "../components/NavBar";
@@ -24,6 +24,7 @@ import {
   deleteClient,
   delivredClient,
   delivredList,
+  getCollaboratorlists,
   getList,
 } from "../../utils/otherFetcher";
 
@@ -35,16 +36,32 @@ import { mutate } from "../../utils/mutationHelper";
 
 export default function ListDetails() {
   const listId = useParams();
+
   const idNumber = Number(listId.id);
+
   const [showModal, setShowModal] = useState(false);
   const [showImageModal, SetShowImageModal] = useState(false);
   const { width } = useWindowSize();
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
 
-  // const { user, isAuthenticated } = useAuthStore();
   const [clientId, setClientId] = useState();
   const [modalType, setModalType] = useState("createClient");
-  const { lists } = useClientStore();
+  const { lists, create } = useClientStore();
+
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["lists", user.role === "ceo" ? user?.id : user?.ceoId],
+    queryFn:
+      user.role === "ceo"
+        ? ({ queryKey }) => getList(queryKey[1])
+        : ({ queryKey }) => getCollaboratorlists(queryKey[1]),
+    enabled: isAuthenticated === true ? true : false,
+
+    refetchOnWindowFocus: false,
+  });
+
+  useEffect(() => {
+    create(data?.lists);
+  }, [data]);
 
   const { mutateAsync } = useMutation({ mutationFn: deleteClient });
   const listSelected = lists?.find((list) => list.id == idNumber);
@@ -173,7 +190,7 @@ export default function ListDetails() {
                     </tr>
                   </thead>
                   <tbody>
-                    {listSelected?.clients.map((client) => (
+                    {listSelected?.clients?.map((client) => (
                       <tr
                         key={client.id}
                         className={`${
@@ -207,18 +224,22 @@ export default function ListDetails() {
                               tabIndex="-1"
                               className="dropdown-content bg-base-400 back rounded-box z-1 w-auto p-2 mr-10 shadow-sm flex gap-4 items-center backdrop-blur-lg p-1"
                             >
-                              <button
-                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                                onClick={() => handleUpdate(client.id)}
-                              >
-                                <Pen color="black" className="" />
-                              </button>
-                              <button
-                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                                onClick={() => handleDelete(client.id)}
-                              >
-                                <Trash color="black" />
-                              </button>
+                              {user?.role === "ceo" && (
+                                <button
+                                  className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                  onClick={() => handleUpdate(client.id)}
+                                >
+                                  <Pen color="black" className="" />
+                                </button>
+                              )}
+                              {user?.role === "ceo" && (
+                                <button
+                                  className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                  onClick={() => handleDelete(client.id)}
+                                >
+                                  <Trash color="black" />
+                                </button>
+                              )}
                               <button
                                 className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                                 onClick={() =>
@@ -268,6 +289,10 @@ export default function ListDetails() {
               description={client.description}
               status={formatStatus(client.keep)}
               client={client}
+              role={user?.role}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
+              onDelivred={handleDelivredClient}
             />
           ))
         )}
