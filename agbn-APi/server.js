@@ -56,10 +56,10 @@ async function main() {
     await sequelize.authenticate();
     console.log("✅ Connexion à la base réussie.");
 
-    if (process.env.NODE_ENV !== "production") {
-      await sequelize.sync();
-      console.log("📦 Synchronisation des modèles terminée.");
-    }
+    // if (process.env.NODE_ENV !== "production") {
+    await sequelize.sync({ alter: true });
+    console.log("📦 Synchronisation des modèles terminée.");
+    // }
     app.listen(port, () => {
       console.log(`Serveur ecoute sur le port : ${port}`);
     });
