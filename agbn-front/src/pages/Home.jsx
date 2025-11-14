@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { Trash } from "lucide-react";
 import { Pen } from "lucide-react";
 import useClientStore from "../../store/clientStore";
+import Tippy from "@tippyjs/react";
 
 export function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -193,7 +194,13 @@ export function Home() {
                               setModaltype("updateList"), handleUpdate(list.id);
                             }}
                           >
-                            <Pen color="black" size={20} />
+                            <Tippy
+                              placement="bottom"
+                              theme="tooltip"
+                              content="modifier"
+                            >
+                              <Pen color="black" size={20} />
+                            </Tippy>
                           </button>
                           <button
                             className="cursor-pointer hover:scale-105 transition-transform duration-300"
@@ -201,7 +208,13 @@ export function Home() {
                               handleDelete(list.id);
                             }}
                           >
-                            <Trash color="black" size={20} />
+                            <Tippy
+                              placement="bottom"
+                              content="supprimer"
+                              theme="tooltip"
+                            >
+                              <Trash color="black" size={20} />
+                            </Tippy>
                           </button>
                         </div>
                       </div>

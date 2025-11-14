@@ -14,7 +14,9 @@ const register = async (req, res) => {
     if (emailExist) {
       return res
         .status(400)
-        .json({ message: "Impossible de créer le compte." });
+        .json({
+          message: "Impossible de créer le compte, cet email existe déja.",
+        });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

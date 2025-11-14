@@ -13,7 +13,9 @@ export const createList = async ({ data }) => {
   });
   if (!res.ok) {
     const errData = await res.json();
-    throw new Error(errData.error || "Erreur lors de la creation de la liste");
+    throw new Error(
+      errData.message || "Erreur lors de la creation de la liste"
+    );
   }
   return await res.json();
 };
@@ -31,7 +33,7 @@ export const updateList = async ({ data, id }) => {
   if (!res.ok) {
     const errData = await res.json();
     throw new Error(
-      errData.error || "Erreur lors de la modification de la liste"
+      errData.message || "Erreur lors de la modification de la liste"
     );
   }
   return await res.json();
@@ -52,7 +54,7 @@ export const archivedList = async ({ data, id }) => {
   if (!res.ok) {
     const errData = await res.json();
     throw new Error(
-      errData.error || "Erreur lors de la modification de la liste"
+      errData.message || "Erreur lors de la modification de la liste"
     );
   }
   return await res.json();
@@ -73,7 +75,7 @@ export const delivredClient = async ({ data, id }) => {
   if (!res.ok) {
     const errData = await res.json();
     throw new Error(
-      errData.error || "Erreur lors de la modification du client"
+      errData.message || "Erreur lors de la modification du client"
     );
   }
   return await res.json();
@@ -94,7 +96,7 @@ export const publishList = async ({ data, id }) => {
   if (!res.ok) {
     const errData = await res.json();
     throw new Error(
-      errData.error || "Erreur lors de la publication de la liste"
+      errData.message || "Erreur lors de la publication de la liste"
     );
   }
   return await res.json();

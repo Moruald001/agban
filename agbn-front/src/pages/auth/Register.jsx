@@ -9,6 +9,8 @@ import { useNavigate, Link } from "react-router-dom";
 import oeilFermé from "../../assets/oeilFermé.png";
 import oeilOuvert from "../../assets/oeilOuvert.png";
 import { useEffect, useState } from "react";
+import { LucideHome } from "lucide-react";
+import Tippy from "@tippyjs/react";
 
 export function Register() {
   const [ceos, setCeos] = useState([]);
@@ -75,7 +77,15 @@ export function Register() {
     }
   };
   return (
-    <div>
+    <div className="relative">
+      <Tippy content="Acceuil" theme="tooltip">
+        <Link
+          to={"/"}
+          className="absolute top-15 left-10 hover:scale-115 transition-transform duration-300 hover:"
+        >
+          <LucideHome size={30} color="black" />
+        </Link>
+      </Tippy>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className=" w-screen h-screen -my-10  flex flex-col  items-center justify-center"

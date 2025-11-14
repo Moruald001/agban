@@ -9,3 +9,10 @@
 @theme {
   --breakpoint-3xl: 150rem;
 }
+.tippy-box[data-theme~="tooltip"] {
+  @apply bg-gray-900 text-white rounded-xl shadow-xl px-3 py-1 transition-all duration-300 text-sm;
+}
+
+.tippy-box[data-theme~="tooltip"] > .tippy-arrow::before {
+  color: #111827; /* gray-900 */
+}

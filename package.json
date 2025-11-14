@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"@tippyjs/react": "^4.2.6",
 		"nodemailer": "^7.0.10"
 	}
 }

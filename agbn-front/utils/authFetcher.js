@@ -26,7 +26,7 @@ export const doRegistration = async (data) => {
   });
   if (!res.ok) {
     const errData = await res.json();
-    throw new Error(errData.error || "Erreur lors de l'inscription");
+    throw new Error(errData.message || "Erreur lors de l'inscription");
   }
   return await res.json();
 };
@@ -42,7 +42,7 @@ export const doLogout = async () => {
 
   if (!res.ok) {
     const errData = await res.json().catch(() => ({}));
-    throw new Error(errData.error || "Erreur lors de la déconnexion");
+    throw new Error(errData.message || "Erreur lors de la déconnexion");
   }
   return await res.json();
 };
@@ -51,7 +51,7 @@ export const fetchingCeos = async () => {
   const res = await fetch(`${apiUrl}/auth/ceos`);
   if (!res.ok) {
     const errData = await res.json();
-    throw new Error(errData.error || "Erreur lors de l'inscription");
+    throw new Error(errData.message || "Erreur lors de l'inscription");
   }
   return await res.json();
 };

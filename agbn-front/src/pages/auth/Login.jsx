@@ -11,6 +11,8 @@ import useAuthStore from "../../../store/useAuthStore";
 import { useState } from "react";
 import oeilFermé from "../../assets/oeilFermé.png";
 import oeilOuvert from "../../assets/oeilOuvert.png";
+import { Home, LucideHome } from "lucide-react";
+import Tippy from "@tippyjs/react";
 
 export function Login() {
   const {
@@ -47,77 +49,87 @@ export function Login() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="w-screen h-screen flex flex-col  items-center justify-center  m-auto "
-    >
-      <div className="card  p-10 shadow-[10px_10px_40px_black]/30 flex flex-col  gap-3 ">
-        <label className="text-xl   text-gray-700 font-bold " htmlFor="email">
-          Email
-        </label>
-        <input
-          className={`border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden   ${
-            errors.email && "border-pink-800"
-          } 
-        }`}
-          type="text"
-          // name="contact"
-          id="email"
-          placeholder="example@email.com"
-          {...register("email")}
-        />
-        {errors.email && (
-          <p className="text-red-400 text-center  after:content-['⚠️']">
-            {errors.email.message}
-          </p>
-        )}
-        <label
-          className="text-xl  text-gray-700 font-bold font-exo"
-          htmlFor="password"
+    <div className="relative">
+      <Tippy content="Acceuil" theme="tooltip" placement="bottom">
+        <Link
+          to={"/"}
+          className="absolute top-15 left-10 hover:scale-115 transition-transform duration-300 hover:"
         >
-          Mot de passe
-        </label>
-        <div className="flex flex-row gap-3">
+          <LucideHome size={30} color="black" />
+        </Link>
+      </Tippy>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-screen h-screen flex flex-col  items-center justify-center  m-auto "
+      >
+        <div className="card  p-10 shadow-[10px_10px_40px_black]/30 flex flex-col  gap-3 ">
+          <label className="text-xl   text-gray-700 font-bold " htmlFor="email">
+            Email
+          </label>
           <input
-            className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
-            type={togglePassword}
+            className={`border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden   ${
+              errors.email && "border-pink-800"
+            }
+          }`}
+            type="text"
             // name="contact"
-            id="password"
-            placeholder="mot de passe"
-            {...register("password")}
+            id="email"
+            placeholder="example@email.com"
+            {...register("email")}
           />
-          <button
-            type="button"
-            onClick={toggleInput}
-            className="cursor-pointer"
+          {errors.email && (
+            <p className="text-red-400 text-center  after:content-['⚠️']">
+              {errors.email.message}
+            </p>
+          )}
+          <label
+            className="text-xl  text-gray-700 font-bold font-exo"
+            htmlFor="password"
           >
-            <img
-              className="w-7 h-7 "
-              src={togglePassword === "password" ? oeilFermé : oeilOuvert}
-              alt=""
+            Mot de passe
+          </label>
+          <div className="flex flex-row gap-3">
+            <input
+              className="border-1 border-solid rounded-[0.6em] border-gray-400 p-2 min-w-3xs text-center focus:outline-hidden "
+              type={togglePassword}
+              // name="contact"
+              id="password"
+              placeholder="mot de passe"
+              {...register("password")}
             />
-          </button>
-        </div>
-        {errors.password && (
-          <p className="text-red-400 text-center  after:content-['⚠️']">
-            {errors.password.message}
+            <button
+              type="button"
+              onClick={toggleInput}
+              className="cursor-pointer"
+            >
+              <img
+                className="w-7 h-7 "
+                src={togglePassword === "password" ? oeilFermé : oeilOuvert}
+                alt=""
+              />
+            </button>
+          </div>
+          {errors.password && (
+            <p className="text-red-400 text-center  after:content-['⚠️']">
+              {errors.password.message}
+            </p>
+          )}
+          <Btn
+            title={isPending ? "connexion.." : "Se connecter"}
+            position=" self-center mt-10 "
+            weight=" px-5"
+            fontStyle=" font-bold text-xl  text-gray-700"
+            attributes="submit"
+            disable={isPending && true}
+          />{" "}
+          <p className=" text-sm">
+            Vous n'avez pas de compte?{" "}
+            <Link className="text-blue-600 underline" to={"/register"}>
+              Créer un compte
+            </Link>
           </p>
-        )}
-        <Btn
-          title={isPending ? "connexion.." : "Se connecter"}
-          position=" self-center mt-10 "
-          weight=" px-5"
-          fontStyle=" font-bold text-xl  text-gray-700"
-          attributes="submit"
-          disable={isPending && true}
-        />{" "}
-        <p className=" text-sm">
-          Vous n'avez pas de compte?{" "}
-          <Link className="text-blue-600 underline" to={"/register"}>
-            Créer un compte
-          </Link>
-        </p>
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   );
 }

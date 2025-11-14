@@ -23,6 +23,7 @@ import useWindowSize from "../components/useWindowsSize";
 import publishICO from "../assets/publish-Ico.png";
 import unArchive from "../assets/unarchive.png";
 import wifiOff from "../assets/wifi-off.png";
+import Tippy from "@tippyjs/react";
 
 export const List = () => {
   const [showModal, setShowModal] = useState(false);
@@ -206,7 +207,13 @@ export const List = () => {
                                 className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                                 onClick={() => handleUpdate(list.id)}
                               >
-                                <Pen color="black" size={15} className="" />
+                                <Tippy
+                                  placement="bottom"
+                                  content="modifier"
+                                  theme="tooltip"
+                                >
+                                  <Pen color="black" size={15} className="" />
+                                </Tippy>
                               </button>
                             )}
                             {user?.role === "ceo" && (
@@ -214,26 +221,44 @@ export const List = () => {
                                 className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                                 onClick={() => handleDelete(list.id)}
                               >
-                                <Trash color="black" size={15} />
+                                <Tippy
+                                  placement="bottom"
+                                  content="supprimer"
+                                  theme="tooltip"
+                                >
+                                  <Trash color="black" size={15} />
+                                </Tippy>
                               </button>
                             )}
-                            <button
-                              className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                              onClick={() =>
-                                handleArchived(list.id, !list.archived)
-                              }
+                            <Tippy
+                              content="archiver/desarchiver"
+                              placement="bottom"
+                              theme="tooltip"
                             >
-                              {!list.archived ? "Archiver" : "Désarchiver"}{" "}
-                            </button>
-                            {user?.role === "ceo" && (
                               <button
-                                className="cursor-pointer hover:scale-105 transition-transform duration-300 border-2 p-1 rounded-lg bg-gray-500 text-white "
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                                 onClick={() =>
-                                  handlePublish(list.id, !list.publish)
+                                  handleArchived(list.id, !list.archived)
                                 }
                               >
-                                {!list.publish ? "publier" : "dissimuler"}{" "}
+                                {!list.archived ? "Archiver" : "Désarchiver"}{" "}
                               </button>
+                            </Tippy>
+                            {user?.role === "ceo" && (
+                              <Tippy
+                                content="publier/dissimuler"
+                                placement="bottom"
+                                theme="tooltip"
+                              >
+                                <button
+                                  className="cursor-pointer hover:scale-105 transition-transform duration-300 border-2 p-1 rounded-lg bg-gray-500 text-white "
+                                  onClick={() =>
+                                    handlePublish(list.id, !list.publish)
+                                  }
+                                >
+                                  {!list.publish ? "publier" : "dissimuler"}{" "}
+                                </button>
+                              </Tippy>
                             )}
                           </div>
                         ) : (
@@ -254,7 +279,13 @@ export const List = () => {
                                   className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                                   onClick={() => handleUpdate(list.id)}
                                 >
-                                  <Pen color="black" className="" />
+                                  <Tippy
+                                    placement="bottom"
+                                    content="modifier"
+                                    theme="tooltip"
+                                  >
+                                    <Pen color="black" size={15} className="" />
+                                  </Tippy>
                                 </button>
                               )}
                               {user?.role === "ceo" && (
@@ -262,43 +293,61 @@ export const List = () => {
                                   className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                                   onClick={() => handleDelete(list.id)}
                                 >
-                                  <Trash color="black" />
+                                  <Tippy
+                                    placement="bottom"
+                                    content="supprimer"
+                                    theme="tooltip"
+                                  >
+                                    <Trash color="black" size={15} />
+                                  </Tippy>
                                 </button>
                               )}
-                              <button
-                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                                onClick={() =>
-                                  handleArchived(list.id, !list.archived)
-                                }
+                              <Tippy
+                                content="archiver/désarchiver"
+                                placement="bottom"
+                                theme="tooltip"
                               >
-                                {!list.archived ? (
-                                  <Archive color="black" />
-                                ) : (
-                                  <img
-                                    src={unArchive}
-                                    className="w-60 h-auto"
-                                  />
-                                )}{" "}
-                              </button>
-                              {user?.role === "ceo" && (
                                 <button
-                                  className="cursor-pointer hover:scale-205 transition-transform duration-300 border-2 p-1 rounded-lg bg-gray-500 text-white "
+                                  className="cursor-pointer hover:scale-105 transition-transform duration-300 "
                                   onClick={() =>
-                                    handlePublish(list.id, !list.publish)
+                                    handleArchived(list.id, !list.archived)
                                   }
                                 >
-                                  {!list.publish ? (
-                                    <img
-                                      src={publishICO}
-                                      className="w-30 h-auto"
-                                    />
+                                  {!list.archived ? (
+                                    <Archive color="black" />
                                   ) : (
                                     <img
-                                      src={wifiOff}
-                                      className="w-30 h-auto"
+                                      src={unArchive}
+                                      className="w-60 h-auto"
                                     />
-                                  )}
+                                  )}{" "}
                                 </button>
+                              </Tippy>
+                              {user?.role === "ceo" && (
+                                <Tippy
+                                  content="publier/dissimuler"
+                                  placement="bottom"
+                                  theme="tooltip"
+                                >
+                                  <button
+                                    className="cursor-pointer hover:scale-105 transition-transform duration-300 border-2 p-1 rounded-lg bg-gray-500 text-white "
+                                    onClick={() =>
+                                      handlePublish(list.id, !list.publish)
+                                    }
+                                  >
+                                    {!list.publish ? (
+                                      <img
+                                        src={publishICO}
+                                        className="w-30 h-auto"
+                                      />
+                                    ) : (
+                                      <img
+                                        src={wifiOff}
+                                        className="w-30 h-auto"
+                                      />
+                                    )}
+                                  </button>
+                                </Tippy>
                               )}
                             </div>
                           </div>
