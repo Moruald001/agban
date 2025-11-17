@@ -7,9 +7,11 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // reste false car on utilise TLS START
   auth: {
-    user: process.env.SMPT_USER,
+    user: process.env.SMTP_USER,
     pass: process.env.SMTP_KEY_BREVO,
   },
+  disableUrlAccess: false,
+  disableFileAccess: false,
 });
 
 export async function sendLoginEmail(to, loginLink) {
@@ -22,5 +24,11 @@ export async function sendLoginEmail(to, loginLink) {
       <p>Clique ici pour te pour valider ton compte  :</p>
       <a href="${loginLink}" style="color:gray;border:1px solid black;font-weight:bold;">Se connecter</a>
     `,
+    headers: {
+      "X-Mailin-Track": "0",
+      "X-Mailin-Track-click": "0",
+      "X-Mailin-Open": "0",
+    },
+    disableUrlTracking: true,
   });
 }

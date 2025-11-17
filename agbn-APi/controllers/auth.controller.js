@@ -1,9 +1,12 @@
-const bcrypt = require("bcryptjs");
-const { User } = require("../models");
-const jwtokenGenerator = require("../utils/jwtokenGenerator");
-const jwt = require("jsonwebtoken");
-const { where } = require("sequelize");
-const { sendLoginEmail } = require("../utils/mailSender");
+import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
+import { User } from "../models/index.js";
+import jwtokenGenerator from "../utils/jwtokenGenerator.js";
+import jwt from "jsonwebtoken";
+import { where } from "sequelize";
+import { sendLoginEmail } from "../utils/mailSender.js";
+
+dotenv.config();
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -33,7 +36,7 @@ const register = async (req, res) => {
       ceo,
     });
     const token = jwtokenGenerator(user.id);
-    sendLoginEmail(email, `${backendUrl}\auth\verify?token=${token}`);
+    sendLoginEmail(email, `${backendUrl}/auth/verify?token=${token}`);
 
     res.status(201).json({
       message: `Utilisateur créé, ${user.name},veuillez validez votre email`,
@@ -137,11 +140,13 @@ const verificationEmail = async (req, res) => {
   const { token } = req.query;
 
   try {
-    const decoded = jwt.verify(token, process.env.EMAIL_TOKEN_SECRET);
+    console.log("entré");
 
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
     const user = await User.update(
       { isVerified: true },
-      { where: { id: decoded.id } }
+      { where: { id: decoded.userId } }
     );
 
     res.redirect(`${process.env.FRONT_URL}/verify`);
@@ -150,4 +155,4 @@ const verificationEmail = async (req, res) => {
   }
 };
 
-module.exports = { register, login, logout, ceos, verificationEmail };
+export { register, login, logout, ceos, verificationEmail };
