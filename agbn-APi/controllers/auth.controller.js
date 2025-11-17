@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { User } from "../models/index.js";
 import jwtokenGenerator from "../utils/jwtokenGenerator.js";
 import jwt from "jsonwebtoken";
-import { where } from "sequelize";
+import { json, where } from "sequelize";
 import { sendLoginEmail } from "../utils/mailSender.js";
 
 dotenv.config();
@@ -99,6 +99,7 @@ const login = async (req, res) => {
         role: user.role,
         collaborators,
         ceoName: user.ceo,
+        isVerified: user.isVerified,
       },
     });
   } catch (error) {
@@ -136,6 +137,18 @@ const logout = async (req, res) => {
 };
 
 //email verification
+const verificationEmailByUser = async (req, res) => {
+  const { id } = req.params.id;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.update({ isVerified: true }, { where: { id: id } });
+
+    res.status(201).json({ message: "email verifié" });
+  } catch (err) {
+    res.status(400).send("Lien invalide ou expiré");
+  }
+};
 const verificationEmail = async (req, res) => {
   const { token } = req.query;
 
@@ -155,4 +168,11 @@ const verificationEmail = async (req, res) => {
   }
 };
 
-export { register, login, logout, ceos, verificationEmail };
+export {
+  register,
+  login,
+  logout,
+  ceos,
+  verificationEmail,
+  verificationEmailByUser,
+};

@@ -19,9 +19,9 @@ function App() {
       <Route
         path={"/profil"}
         element={
-          <Guard>
+          <Protected>
             <Profil />
-          </Guard>
+          </Protected>
         }
       />
 

@@ -13,7 +13,7 @@ export const Btn = ({
     <>
       <button
         type={attributes}
-        className={`bg-gray-600 p-3 rounded-md text-white font-center font-exo  duration-600 ease-in-out hover:scale-105  transition-all  r 
+        className={`bg-gray-600 p-3 rounded-md text-white font-center font-exo  duration-600 ease-in-out hover:scale-105  transition-all
           ${animation} 
           ${position} 
           ${weight} 
