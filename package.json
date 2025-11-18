@@ -1,8 +1,0 @@
-{
-	"dependencies": {
-		"@popperjs/core": "^2.11.8",
-		"@tippyjs/react": "^4.2.6",
-		"nodemailer": "^7.0.10",
-		"tippy.js": "^6.3.7"
-	}
-}
