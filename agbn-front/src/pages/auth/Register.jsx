@@ -5,7 +5,7 @@ import { schemaRegister } from "../../lib/Schema";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { doRegistration, fetchingCeos } from "../../../utils/authFetcher";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, replace } from "react-router-dom";
 import oeilFermé from "../../assets/oeilFermé.png";
 import oeilOuvert from "../../assets/oeilOuvert.png";
 import { useEffect, useState } from "react";
@@ -69,7 +69,7 @@ export function Register() {
       await mutateAsync(shrinkData);
       toast.success("Inscription réussi");
       setTimeout(() => {
-        navigate("/login");
+        navigate("/success-register", { replace: true });
       }, 2000);
     } catch (error) {
       console.log(error);

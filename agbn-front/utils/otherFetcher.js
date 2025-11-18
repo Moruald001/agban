@@ -82,8 +82,6 @@ export const delivredClient = async ({ data, id }) => {
 };
 
 export const publishList = async ({ data, id }) => {
-  console.log(data, id);
-
   const res = await fetch(`${apiUrl}/client/publish-list/${id}`, {
     method: "PUT",
     headers: {

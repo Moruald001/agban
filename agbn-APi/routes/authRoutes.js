@@ -1,20 +1,23 @@
-const express = require("express");
-const router = express.Router();
-const validate = require("../middlewares/validate");
-const {
+import express from "express";
+import validate from "../middlewares/validate.js";
+import {
   register,
   login,
   logout,
   ceos,
-} = require("../controllers/auth.controller");
-const { registerUserSchema, loginSchema } = require("../utils/schema");
-const loginRateLimiter = require("../middlewares/loginRateLimiter");
-const auth = require("../middlewares/authMiddleware");
+  verificationEmail,
+  verificationEmailByUser,
+} from "../controllers/auth.controller.js";
+import { registerUserSchema, loginSchema } from "../utils/schema.js";
+import loginRateLimiter from "../middlewares/loginRateLimiter.js";
+import auth from "../middlewares/authMiddleware.js";
+const router = express.Router();
 
 router.post("/register", validate(registerUserSchema), register);
 router.get("/ceos", ceos);
-
+router.get("/verify", verificationEmail);
+router.post("/profil/verify/:id", auth, verificationEmailByUser);
 router.post("/login", loginRateLimiter, validate(loginSchema), login);
-router.post("/logout", logout);
+router.post("/logout", auth, logout);
 
-module.exports = router;
+export default router;

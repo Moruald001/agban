@@ -4,10 +4,11 @@ import { useMutation } from "@tanstack/react-query";
 import { doLogout } from "../../utils/authFetcher";
 import { useQueryClient } from "@tanstack/react-query";
 import useClientStore from "../../store/clientStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function NavBar() {
   const { user, isAuthenticated, logout } = useAuthStore();
+  const navigate = useNavigate();
   const { remove } = useClientStore();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: doLogout,
@@ -28,6 +29,7 @@ export default function NavBar() {
       res && toast.success(res.message);
       logout();
       remove();
+      navigate("/", { replace: true });
     } catch (error) {
       console.log(error);
       toast.error(`${error}`);

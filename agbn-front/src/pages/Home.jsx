@@ -19,6 +19,7 @@ import { Trash } from "lucide-react";
 import { Pen } from "lucide-react";
 import useClientStore from "../../store/clientStore";
 import Tippy from "@tippyjs/react";
+import EmailVerificationModal from "../components/EmailVerificationModal";
 
 export function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -115,30 +116,45 @@ export function Home() {
           repeat={Infinity}
           cursor={false}
         />
+
         {isAuthenticated ? (
-          <div className="flex gap-4">
-            {user?.role === "ceo" && (
-              <Button
-                onClick={() => {
-                  setShowModal(true);
-                  setModaltype("createList");
-                }}
+          user?.isVerified ? (
+            <div className="flex gap-4">
+              {user?.role === "ceo" && (
+                <Button
+                  onClick={() => {
+                    setShowModal(true);
+                    setModaltype("createList");
+                  }}
+                  className={
+                    "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center cursor-pointer hover:scale-110 transition-transform duration-600  "
+                  }
+                >
+                  Créer une liste
+                </Button>
+              )}
+              <Link
                 className={
-                  "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center cursor-pointer hover:scale-110 transition-transform duration-600  "
+                  "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110 transition-transform duration-600  "
                 }
+                to={`/list`}
               >
-                Créer une liste
-              </Button>
-            )}
-            <Link
-              className={
-                "bg-gray-600 p-3 rounded-lg opacity-80 text-white font-center  hover:scale-110 transition-transform duration-600  "
-              }
-              to={`/list`}
-            >
-              Voir toutes les listes
-            </Link>
-          </div>
+                Voir toutes les listes
+              </Link>
+            </div>
+          ) : (
+            <p className="text-yellow-500 font-semibold flex flex-col gap-4">
+              Veuillez valider votre email svp
+              <button
+                onClick={() =>
+                  document.getElementById("my_modal_3").showModal()
+                }
+                className="  p-1 btn btn-ghost rounded-lg  text-black cursor-pointer font-center  hover:scale-105 transition-transform duration-300  "
+              >
+                Verifier email
+              </button>
+            </p>
+          )
         ) : (
           <div className="flex gap-x-4">
             <Link
@@ -170,70 +186,76 @@ export function Home() {
         />
 
         {isAuthenticated && !isLoading ? (
-          <div className=" min-w-[60vw] max-w-[80vw] h-auto mt-10  rounded-box">
-            <p className="pl-2">Dernières listes crées</p>
-            <hr className="border-b-2 mt-2 opacity-30" />
-            <div className="flex flex-col gap-2 justify-evenly mt-5">
-              <ul className="  bg-gray-200/69 rounded-box shadow-md ">
-                {latestList?.length > 0 ? (
-                  latestList.map((list) => (
-                    <li
-                      key={list.id}
-                      className="list-row p-4 my-4 gap-2 transition-colors duration-300 hover:bg-slate-600/15  "
-                    >
-                      <div className="flex  justify-between gap-4">
-                        <p className="capitalize">
-                          <Link key={list.id} to={`/list-details/${list.id}`}>
-                            {list.name}
-                          </Link>
-                        </p>
-                        <div className="flex gap-8">
-                          <button
-                            className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                            onClick={() => {
-                              setModaltype("updateList"), handleUpdate(list.id);
-                            }}
-                          >
-                            <Tippy
-                              placement="bottom"
-                              theme="tooltip"
-                              content="modifier"
+          user?.isVerified ? (
+            <div className=" min-w-[60vw] max-w-[80vw] h-auto mt-10  rounded-box">
+              <p className="pl-2">Dernières listes crées</p>
+              <hr className="border-b-2 mt-2 opacity-30" />
+              <div className="flex flex-col gap-2 justify-evenly mt-5">
+                <ul className="  bg-gray-200/69 rounded-box shadow-md ">
+                  {latestList?.length > 0 ? (
+                    latestList.map((list) => (
+                      <li
+                        key={list.id}
+                        className="list-row p-4 my-4 gap-2 transition-colors duration-300 hover:bg-slate-600/15  "
+                      >
+                        <div className="flex  justify-between gap-4">
+                          <p className="capitalize">
+                            <Link key={list.id} to={`/list-details/${list.id}`}>
+                              {list.name}
+                            </Link>
+                          </p>
+                          <div className="flex gap-8">
+                            <button
+                              className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                              onClick={() => {
+                                setModaltype("updateList"),
+                                  handleUpdate(list.id);
+                              }}
                             >
-                              <Pen color="black" size={20} />
-                            </Tippy>
-                          </button>
-                          <button
-                            className="cursor-pointer hover:scale-105 transition-transform duration-300"
-                            onClick={() => {
-                              handleDelete(list.id);
-                            }}
-                          >
-                            <Tippy
-                              placement="bottom"
-                              content="supprimer"
-                              theme="tooltip"
+                              <Tippy
+                                placement="bottom"
+                                theme="tooltip"
+                                content="modifier"
+                              >
+                                <Pen color="black" size={20} />
+                              </Tippy>
+                            </button>
+                            <button
+                              className="cursor-pointer hover:scale-105 transition-transform duration-300"
+                              onClick={() => {
+                                handleDelete(list.id);
+                              }}
                             >
-                              <Trash color="black" size={20} />
-                            </Tippy>
-                          </button>
+                              <Tippy
+                                placement="bottom"
+                                content="supprimer"
+                                theme="tooltip"
+                              >
+                                <Trash color="black" size={20} />
+                              </Tippy>
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  ))
-                ) : (
-                  <p className="p-4 text-center text-gray-400">
-                    Aucune liste pour le moment
-                  </p>
-                )}
-              </ul>
+                      </li>
+                    ))
+                  ) : (
+                    <p className="p-4 text-center text-gray-400">
+                      Aucune liste pour le moment
+                    </p>
+                  )}
+                </ul>
+              </div>
             </div>
-          </div>
+          ) : (
+            ""
+          )
         ) : (
           <div className="w-screen h-screen flex justify-center items-end ">
             <SyncLoader color="grey" />
           </div>
         )}
       </div>
+      <EmailVerificationModal />
     </>
   );
 }

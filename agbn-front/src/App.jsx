@@ -5,17 +5,28 @@ import { Register } from "./pages/auth/Register";
 import { Login } from "./pages/auth/Login";
 import { NotFound } from "./pages/NotFound";
 import { List } from "./pages/List";
-import { Guard, Protected } from "./pages/auth/Guard";
+import { Guard, Protected, Verified } from "./pages/auth/Guard";
 import ListDetails from "./pages/ListDetails";
 import Profil from "./pages/Profil";
+import Verify from "./pages/auth/Verify";
+import SuccessRegistry from "./pages/auth/SuccessRegistry";
 
 function App() {
   return (
     <Routes>
       <Route path={"/"} element={<Home />} />
 
-      <Route path={"/profil"} element={<Profil />} />
+      <Route
+        path={"/profil"}
+        element={
+          <Protected>
+            <Profil />
+          </Protected>
+        }
+      />
 
+      <Route path="/verify" element={<Verify />} />
+      <Route path="/success-register" element={<SuccessRegistry />} />
       <Route
         path={"/register"}
         element={
@@ -38,8 +49,9 @@ function App() {
         path={"/list"}
         element={
           <Protected>
-            {" "}
-            <List />{" "}
+            <Verified>
+              <List />{" "}
+            </Verified>
           </Protected>
         }
       />
@@ -47,8 +59,10 @@ function App() {
         path={"/list-details/:id"}
         element={
           <Protected>
-            {" "}
-            <ListDetails />{" "}
+            <Verified>
+              {" "}
+              <ListDetails />{" "}
+            </Verified>
           </Protected>
         }
       />

@@ -23,3 +23,14 @@ export const Protected = ({ children }) => {
 
   return children;
 };
+
+export const Verified = ({ children }) => {
+  const { user } = useAuthStore();
+
+  if (user?.isVerified === false) {
+    toast("Veuillez valider votre email svp");
+    return <Navigate to="/" />;
+  }
+
+  return children;
+};

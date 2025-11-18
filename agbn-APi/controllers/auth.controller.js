@@ -1,22 +1,29 @@
-const bcrypt = require("bcryptjs");
-const { User } = require("../models");
-const jwtokenGenerator = require("../utils/jwtokenGenerator");
+import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
+import { User } from "../models/index.js";
+import jwtokenGenerator from "../utils/jwtokenGenerator.js";
+import jwt from "jsonwebtoken";
+import { json, where } from "sequelize";
+import { sendLoginEmail } from "../utils/mailSender.js";
+
+dotenv.config();
 
 const isProduction = process.env.NODE_ENV === "production";
 
 //Creation d'un utilisateur
 const register = async (req, res) => {
   const { name, email, role, password, ceo } = req.body;
+  const protocol = req.protocol;
+  const host = req.get("host");
 
+  const backendUrl = `${protocol}://${host}`;
   try {
     const emailExist = await User.findOne({ where: { email } });
 
     if (emailExist) {
-      return res
-        .status(400)
-        .json({
-          message: "Impossible de créer le compte, cet email existe déja.",
-        });
+      return res.status(400).json({
+        message: "Impossible de créer le compte, cet email existe déja.",
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -27,8 +34,12 @@ const register = async (req, res) => {
       role: role,
       ceo,
     });
+    const token = jwtokenGenerator(user.id);
+    sendLoginEmail(email, `${backendUrl}/auth/verify?token=${token}`);
 
-    res.status(201).json({ message: `Utilisateur créé, ${user.name}` });
+    res.status(201).json({
+      message: `Utilisateur créé, ${user.name},veuillez validez votre email`,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ errors: `Impossible de créer le compte.${error}` });
@@ -87,6 +98,7 @@ const login = async (req, res) => {
         role: user.role,
         collaborators,
         ceoName: user.ceo,
+        isVerified: user.isVerified,
       },
     });
   } catch (error) {
@@ -116,11 +128,54 @@ const ceos = async (req, res) => {
 const logout = async (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: false,
-    sameSite: "Lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
   });
 
   res.status(200).json({ message: "Déconnecté avec succès." });
 };
 
-module.exports = { register, login, logout, ceos };
+//email verification
+const verificationEmailByUser = async (req, res) => {
+  const { id } = req.params.id;
+  const { email } = req.body;
+  const protocol = req.protocol;
+  const host = req.get("host");
+
+  const backendUrl = `${protocol}://${host}`;
+
+  try {
+    const token = jwtokenGenerator(id);
+    sendLoginEmail(email, `${backendUrl}/auth/verify?token=${token}`);
+
+    res.status(201).json({ message: "email envoyé" });
+  } catch (err) {
+    res.status(400).send("erreur lors de la validation de l'email" + err);
+  }
+};
+
+const verificationEmail = async (req, res) => {
+  const { token } = req.query;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.update(
+      { isVerified: true },
+      { where: { id: decoded.userId } }
+    );
+
+    res.redirect(`${process.env.FRONT_URL}/verify`);
+  } catch (err) {
+    res.status(400).send("Lien invalide ou expiré");
+  }
+};
+
+export {
+  register,
+  login,
+  logout,
+  ceos,
+  verificationEmail,
+  verificationEmailByUser,
+};
