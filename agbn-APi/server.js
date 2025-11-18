@@ -68,7 +68,6 @@ async function main() {
 
     await sequelize.sync();
     console.log("Synchronisation modèles OK.");
-
     app.listen(port, () => {
       console.log(`Serveur écoute sur le port : ${port}`);
     });
