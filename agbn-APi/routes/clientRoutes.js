@@ -1,8 +1,12 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const validate = require("../middlewares/validate");
-const upload = require("../middlewares/imagesUpload");
-const {
+
+import validate from "../middlewares/validate.js";
+import upload from "../middlewares/imagesUpload.js";
+import auth from "../middlewares/authMiddleware.js";
+import isCeoMiddleware from "../middlewares/isCeo.js";
+
+import {
   createClient,
   createList,
   getClients,
@@ -18,18 +22,17 @@ const {
   delivredClient,
   getLatestCollaboratorLists,
   getCollaboratorLists,
-} = require("../controllers/Client.controller");
-const {
+} from "../controllers/Client.controller.js";
+
+import {
   createClientSchema,
   createListSchema,
   publishSchema,
   delivredSchema,
   archivedSchema,
-} = require("../utils/schema");
-const auth = require("../middlewares/authMiddleware");
-const isCeoMiddleware = require("../middlewares/isCeo");
+} from "../utils/schema.js";
 
-// creation
+// Création
 router.post(
   "/add-client",
   auth,
@@ -38,6 +41,7 @@ router.post(
   validate(createClientSchema),
   createClient
 );
+
 router.post(
   "/create-list",
   auth,
@@ -45,7 +49,8 @@ router.post(
   validate(createListSchema),
   createList
 );
-// modification
+
+// Modification
 router.put(
   "/update-client/:id",
   auth,
@@ -81,16 +86,15 @@ router.put(
 
 router.put("/archived-list/:id", auth, validate(archivedSchema), archivedList);
 
-// suppression
-
+// Suppression
 router.delete("/delete-client/:id", auth, isCeoMiddleware, deleteClient);
 router.delete("/delete-list/:id", auth, isCeoMiddleware, deleteList);
 
-//recuperation
+// Récupération
 router.get("/clients", auth, getClients);
 router.get("/latest-lists/:id", auth, isCeoMiddleware, getListsLatest);
 router.get("/lists/:id", auth, getLists);
 router.get("/latest-lists-collaborator/:id", auth, getLatestCollaboratorLists);
 router.get("/lists-collaborator/:id", auth, getCollaboratorLists);
 
-module.exports = router;
+export default router;

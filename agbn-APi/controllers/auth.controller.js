@@ -17,7 +17,6 @@ const register = async (req, res) => {
   const host = req.get("host");
 
   const backendUrl = `${protocol}://${host}`;
-
   try {
     const emailExist = await User.findOne({ where: { email } });
 
@@ -139,24 +138,28 @@ const logout = async (req, res) => {
 //email verification
 const verificationEmailByUser = async (req, res) => {
   const { id } = req.params.id;
+  const { email } = req.body;
+  const protocol = req.protocol;
+  const host = req.get("host");
+
+  const backendUrl = `${protocol}://${host}`;
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.update({ isVerified: true }, { where: { id: id } });
+    const token = jwtokenGenerator(id);
+    sendLoginEmail(email, `${backendUrl}/auth/verify?token=${token}`);
 
-    res.status(201).json({ message: "email verifié" });
+    res.status(201).json({ message: "email envoyé" });
   } catch (err) {
-    res.status(400).send("Lien invalide ou expiré");
+    res.status(400).send("erreur lors de la validation de l'email" + err);
   }
 };
+
 const verificationEmail = async (req, res) => {
   const { token } = req.query;
 
   try {
-    console.log("entré");
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
+
     const user = await User.update(
       { isVerified: true },
       { where: { id: decoded.userId } }

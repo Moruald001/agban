@@ -55,3 +55,20 @@ export const fetchingCeos = async () => {
   }
   return await res.json();
 };
+
+export const verificationEmailByUser = async ({ userId, email }) => {
+  const res = await fetch(`${apiUrl}/auth/profil/verify/${userId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(
+      errData.message || "Erreur lors de la validation de l'eamil"
+    );
+  }
+};

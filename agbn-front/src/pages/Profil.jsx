@@ -4,16 +4,49 @@ import useAuthStore from "../../store/useAuthStore";
 import NavBar from "../components/NavBar";
 import { useForm } from "react-hook-form";
 import { Btn } from "../components/Button";
+import { useMutation } from "@tanstack/react-query";
+import { doLogout, verificationEmailByUser } from "../../utils/authFetcher";
+import useClientStore from "../../store/clientStore";
+
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Profil() {
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
+  const { remove } = useClientStore();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const handleEmailVerying = async () => {};
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: verificationEmailByUser,
+  });
+
+  const handleEmailVerying = async (data) => {
+    const resp = confirm(
+      " vous allez etre deconnecter pour la validation de votre email "
+    );
+    if (!resp) return;
+
+    try {
+      await mutateAsync({ userId: user.id, email: data.email });
+
+      await doLogout();
+      logout();
+      remove();
+      setTimeout(() => {
+        logout();
+        remove();
+        navigate("/success-register", { replace: true });
+      }, 1000);
+    } catch (error) {
+      console.log(error.toString().split(": ")[1]);
+      toast.error(`${error}`);
+    }
+  };
 
   return (
     <>
@@ -91,7 +124,7 @@ export default function Profil() {
               weight=" px-5"
               fontStyle=" font-bold text-xl  text-gray-700"
               attributes="submit"
-              // disable={isPending && true}
+              disable={isPending && true}
             />
           </form>
         </div>
