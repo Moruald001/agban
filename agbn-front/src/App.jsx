@@ -5,7 +5,7 @@ import { Register } from "./pages/auth/Register";
 import { Login } from "./pages/auth/Login";
 import { NotFound } from "./pages/NotFound";
 import { List } from "./pages/List";
-import { Guard, Protected } from "./pages/auth/Guard";
+import { Guard, Protected, Verified } from "./pages/auth/Guard";
 import ListDetails from "./pages/ListDetails";
 import Profil from "./pages/Profil";
 import Verify from "./pages/auth/Verify";
@@ -49,8 +49,9 @@ function App() {
         path={"/list"}
         element={
           <Protected>
-            {" "}
-            <List />{" "}
+            <Verified>
+              <List />{" "}
+            </Verified>
           </Protected>
         }
       />
@@ -58,8 +59,10 @@ function App() {
         path={"/list-details/:id"}
         element={
           <Protected>
-            {" "}
-            <ListDetails />{" "}
+            <Verified>
+              {" "}
+              <ListDetails />{" "}
+            </Verified>
           </Protected>
         }
       />
