@@ -13,7 +13,7 @@ module.exports = {
 
   production: {
     dialect: "postgres",
-    url: process.env.DATABASE_URL, // Railway fournit DATABASE_URL automatiquement si tu l'ajoutes dans Variables
+    url: process.env.DATABASE_URL,
     dialectOptions: {
       ssl: {
         require: true,
