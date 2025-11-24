@@ -24,19 +24,18 @@ const createClient = async (req, res) => {
     });
   }
 
-  if (clientExist !== null) {
-    res.status(404).json({
-      message: "ce client existe déjà, modifier le si vous le souhaitez",
+  if (clientExist) {
+    return res.status(409).json({
+      message: "ce client existe déjà",
     });
-    throw new Error("ce client existe déjà");
   }
 
-  if (clientNumberExist !== null) {
-    res.status(404).json({
-      message: "ce numero exist déjà ",
+  if (clientNumberExist) {
+    return res.status(409).json({
+      message: "ce numéro existe déjà",
     });
-    throw new Error("ce client existe déjà");
   }
+
   // ajout du client
   try {
     const response = await Client.create({

@@ -37,7 +37,7 @@ app.use(
 app.use("/auth", userRoutes);
 app.use("/client", clientRoutes);
 
-// Middleware erreurs (ex: Multer)
+// Middleware erreurs ( Multer)
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     if (err.code === "LIMIT_FILE_SIZE") {
