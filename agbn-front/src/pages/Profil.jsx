@@ -39,7 +39,9 @@ export default function Profil() {
           <Avatar name={user?.name} />
           <span className=" text-2xl">
             {user?.name}
-            {`(${user?.role}${user?.role !== "ceo" ? ` de ${user?.ceo}` : ""})`}
+            {`(${user?.role}${
+              user?.role !== "ceo" ? ` de ${user?.ceoName ?? "🤷‍♀️"}` : ""
+            })`}
           </span>
           {user?.role === "ceo" && (
             <div className="card bg-base-100 w-96 shadow-sm">
