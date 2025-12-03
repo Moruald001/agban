@@ -204,37 +204,39 @@ export function Home() {
                               {list.name}
                             </Link>
                           </p>
-                          <div className="flex gap-8">
-                            <button
-                              className="cursor-pointer hover:scale-105 transition-transform duration-300 "
-                              onClick={() => {
-                                setModaltype("updateList"),
-                                  handleUpdate(list.id);
-                              }}
-                            >
-                              <Tippy
-                                placement="bottom"
-                                theme="tooltip"
-                                content="modifier"
+                          {user?.role === "ceo" && (
+                            <div className="flex gap-8">
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300 "
+                                onClick={() => {
+                                  setModaltype("updateList"),
+                                    handleUpdate(list.id);
+                                }}
                               >
-                                <Pen color="black" size={20} />
-                              </Tippy>
-                            </button>
-                            <button
-                              className="cursor-pointer hover:scale-105 transition-transform duration-300"
-                              onClick={() => {
-                                handleDelete(list.id);
-                              }}
-                            >
-                              <Tippy
-                                placement="bottom"
-                                content="supprimer"
-                                theme="tooltip"
+                                <Tippy
+                                  placement="bottom"
+                                  theme="tooltip"
+                                  content="modifier"
+                                >
+                                  <Pen color="black" size={20} />
+                                </Tippy>
+                              </button>
+                              <button
+                                className="cursor-pointer hover:scale-105 transition-transform duration-300"
+                                onClick={() => {
+                                  handleDelete(list.id);
+                                }}
                               >
-                                <Trash color="black" size={20} />
-                              </Tippy>
-                            </button>
-                          </div>
+                                <Tippy
+                                  placement="bottom"
+                                  content="supprimer"
+                                  theme="tooltip"
+                                >
+                                  <Trash color="black" size={20} />
+                                </Tippy>
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </li>
                     ))
