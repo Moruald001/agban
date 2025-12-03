@@ -81,7 +81,7 @@ export function Register() {
       <Tippy content="Acceuil" theme="tooltip">
         <Link
           to={"/"}
-          className=" relative  top-5 left-5 hover:scale-115 transition-transform duration-300 hover:"
+          className=" relative top-5 left-5 hover:scale-115 transition-transform duration-300 "
         >
           <LucideHome size={30} color="black" />
         </Link>
