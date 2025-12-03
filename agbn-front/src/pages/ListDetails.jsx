@@ -26,6 +26,7 @@ import {
   delivredList,
   getCollaboratorlists,
   getList,
+  publishList,
 } from "../../utils/otherFetcher";
 
 import toast from "react-hot-toast";
@@ -33,6 +34,9 @@ import ImagesDisplayModal from "../components/ImagesDisplayModal";
 import useWindowSize from "../components/useWindowsSize";
 import Card from "../components/Card";
 import { mutate } from "../../utils/mutationHelper";
+import Tippy from "@tippyjs/react";
+import publishICO from "../assets/publish-Ico.png";
+import wifiOff from "../assets/wifi-off.png";
 
 export default function ListDetails() {
   const listId = useParams();
@@ -77,6 +81,7 @@ export default function ListDetails() {
   const toFinishList = mutate(delivredList);
   const toArchived = mutate(archivedList);
   const toDelivredClient = mutate(delivredClient);
+  const toPublish = mutate(publishList);
 
   const finishedList = async (id, delivred) => {
     const response = confirm("vous êtes sur le point de terminer  cette liste");
@@ -97,6 +102,21 @@ export default function ListDetails() {
   const handleArchived = async (id, archived) => {
     try {
       await toArchived({ data: archived, id: id });
+    } catch (error) {
+      console.log(error);
+      toast.error(`Echec de l’opération`);
+    }
+  };
+  const handlePublish = async (id, publish) => {
+    const response = confirm("vous êtes sur le point de publier  cette liste");
+
+    if (!response) {
+      return;
+    }
+    try {
+      await toPublish({ data: publish, id: id });
+      toast.success("operation effectué ");
+      await refetch();
     } catch (error) {
       console.log(error);
       toast.error(`Echec de l’opération`);
@@ -160,19 +180,38 @@ export default function ListDetails() {
           {listSelected?.name}
           {listSelected?.delivred === false ? "" : `(Terminée)`}{" "}
         </h1>
-        {listSelected && (
-          <div className="flex justify-center mt-4">
-            <PDFDownloadLink
-              document={<ClientListPDF list={listSelected} />}
-              fileName={`liste-${listSelected.name}.pdf`}
-              className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-300"
+
+        <div className="flex justify-center gap-2 flex-row-reverse">
+          {user?.role === "ceo" && (
+            <Tippy
+              content="publier/dissimuler"
+              placement="bottom"
+              theme="tooltip"
             >
-              {({ loading }) =>
-                loading ? "Génération du PDF..." : "Télécharger en PDF"
-              }
-            </PDFDownloadLink>
-          </div>
-        )}
+              <button
+                className="cursor-pointer hover:scale-105 transition-transform duration-300 border-2 px-2 rounded-lg border-gray-600 bg-transparent text-gray-600 "
+                onClick={() =>
+                  handlePublish(listSelected?.id, !listSelected?.publish)
+                }
+              >
+                {!listSelected?.publish ? "Publier" : "dissimuler"}
+              </button>
+            </Tippy>
+          )}
+          {listSelected && (
+            <div className="flex justify-center mt-4">
+              <PDFDownloadLink
+                document={<ClientListPDF list={listSelected} />}
+                fileName={`liste-${listSelected.name}.pdf`}
+                className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-300"
+              >
+                {({ loading }) =>
+                  loading ? "Génération du PDF..." : "Télécharger en PDF"
+                }
+              </PDFDownloadLink>
+            </div>
+          )}
+        </div>
 
         {width >= 610 ? (
           <div className="overflow-x-auto w-screen h-screen flex justify-center items-start mt-[8vh]">
