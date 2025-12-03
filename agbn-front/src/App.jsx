@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Register } from "./pages/auth/Register";
 import { Login } from "./pages/auth/Login";
@@ -10,8 +10,16 @@ import ListDetails from "./pages/ListDetails";
 import Profil from "./pages/Profil";
 import Verify from "./pages/auth/Verify";
 import SuccessRegistry from "./pages/auth/SuccessRegistry";
+import { useEffect } from "react";
+import { setNavigate } from "../utils/navigate";
 
 function App() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setNavigate(navigate);
+  }, [navigate]);
+
   return (
     <Routes>
       <Route path={"/"} element={<Home />} />

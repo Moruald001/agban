@@ -1,8 +1,10 @@
+import { apiFetch } from "./superFetcher";
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const createList = async ({ data }) => {
   const name = { ...data };
-  const res = await fetch(`${apiUrl}/client/create-list`, {
+  const res = await apiFetch(`${apiUrl}/client/create-list`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -21,7 +23,7 @@ export const createList = async ({ data }) => {
 };
 
 export const updateList = async ({ data, id }) => {
-  const res = await fetch(`${apiUrl}/client/update-list/${id}`, {
+  const res = await apiFetch(`${apiUrl}/client/update-list/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -42,7 +44,7 @@ export const updateList = async ({ data, id }) => {
 export const archivedList = async ({ data, id }) => {
   console.log(data, id);
 
-  const res = await fetch(`${apiUrl}/client/archived-list/${id}`, {
+  const res = await apiFetch(`${apiUrl}/client/archived-list/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -63,7 +65,7 @@ export const archivedList = async ({ data, id }) => {
 export const delivredClient = async ({ data, id }) => {
   console.log(data, id);
 
-  const res = await fetch(`${apiUrl}/client/delivred-client/${id}`, {
+  const res = await apiFetch(`${apiUrl}/client/delivred-client/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -82,7 +84,7 @@ export const delivredClient = async ({ data, id }) => {
 };
 
 export const publishList = async ({ data, id }) => {
-  const res = await fetch(`${apiUrl}/client/publish-list/${id}`, {
+  const res = await apiFetch(`${apiUrl}/client/publish-list/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -101,7 +103,7 @@ export const publishList = async ({ data, id }) => {
 };
 
 export const getListLatest = async (id) => {
-  const res = await fetch(`${apiUrl}/client/latest-lists/${id}`, {
+  const res = await apiFetch(`${apiUrl}/client/latest-lists/${id}`, {
     credentials: "include",
   });
 
@@ -111,7 +113,7 @@ export const getListLatest = async (id) => {
 };
 
 export const getLatestCollaboratorlists = async (ceoId) => {
-  const res = await fetch(
+  const res = await apiFetch(
     `${apiUrl}/client/latest-lists-collaborator/${ceoId}`,
     {
       credentials: "include",
@@ -124,7 +126,7 @@ export const getLatestCollaboratorlists = async (ceoId) => {
 };
 
 export const getCollaboratorlists = async (ceoId) => {
-  const res = await fetch(`${apiUrl}/client/lists-collaborator/${ceoId}`, {
+  const res = await apiFetch(`${apiUrl}/client/lists-collaborator/${ceoId}`, {
     credentials: "include",
   });
 
@@ -134,7 +136,7 @@ export const getCollaboratorlists = async (ceoId) => {
 };
 
 export const getList = async (id) => {
-  const res = await fetch(`${apiUrl}/client/lists/${id}`, {
+  const res = await apiFetch(`${apiUrl}/client/lists/${id}`, {
     credentials: "include",
   });
 
@@ -144,7 +146,7 @@ export const getList = async (id) => {
 };
 
 export const deleteList = async (id) => {
-  const res = await fetch(`${apiUrl}/client/delete-list/${id}`, {
+  const res = await apiFetch(`${apiUrl}/client/delete-list/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -158,7 +160,7 @@ export const deleteList = async (id) => {
 };
 
 export const createClient = async (formData) => {
-  const res = await fetch(`${apiUrl}/client/add-client`, {
+  const res = await apiFetch(`${apiUrl}/client/add-client`, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -171,7 +173,7 @@ export const createClient = async (formData) => {
 };
 
 export const getClients = async () => {
-  const res = await fetch(`${apiUrl}/client/lists`, {
+  const res = await apiFetch(`${apiUrl}/client/lists`, {
     credentials: "include",
   });
 
@@ -181,7 +183,7 @@ export const getClients = async () => {
 };
 
 export const updateClient = async (formData, clientId) => {
-  const res = await fetch(`${apiUrl}/client/update-client/${clientId}`, {
+  const res = await apiFetch(`${apiUrl}/client/update-client/${clientId}`, {
     method: "PUT",
 
     credentials: "include",
@@ -195,7 +197,7 @@ export const updateClient = async (formData, clientId) => {
 };
 
 export const deleteClient = async (clientId) => {
-  const res = await fetch(`${apiUrl}/client/delete-client/${clientId}`, {
+  const res = await apiFetch(`${apiUrl}/client/delete-client/${clientId}`, {
     method: "DELETE",
 
     credentials: "include",
@@ -209,7 +211,7 @@ export const deleteClient = async (clientId) => {
 export const delivredList = async ({ data, id }) => {
   console.log(data, id);
 
-  const res = await fetch(`${apiUrl}/client/delivred-list/${id}`, {
+  const res = await apiFetch(`${apiUrl}/client/delivred-list/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

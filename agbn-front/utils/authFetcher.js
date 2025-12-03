@@ -1,3 +1,5 @@
+import { apiFetch } from "./superFetcher";
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const doLogin = async (data) => {
@@ -32,7 +34,7 @@ export const doRegistration = async (data) => {
 };
 
 export const doLogout = async () => {
-  const res = await fetch(`${apiUrl}/auth/logout`, {
+  const res = await apiFetch(`${apiUrl}/auth/logout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
