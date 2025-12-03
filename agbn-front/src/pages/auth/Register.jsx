@@ -77,11 +77,11 @@ export function Register() {
     }
   };
   return (
-    <div className="relative">
+    <div className=" mx-auto">
       <Tippy content="Acceuil" theme="tooltip">
         <Link
           to={"/"}
-          className="absolute top-15 left-10 hover:scale-115 transition-transform duration-300 hover:"
+          className=" relative  top-5 left-5 hover:scale-115 transition-transform duration-300 hover:"
         >
           <LucideHome size={30} color="black" />
         </Link>
