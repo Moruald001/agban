@@ -13,7 +13,7 @@ export const doLogin = async (data) => {
   });
   if (!res.ok) {
     const errData = await res.json();
-    throw new Error(errData.error || "Erreur lors de la connexion");
+    throw new Error(errData.message || "Erreur lors de la connexion");
   }
   return await res.json();
 };
