@@ -3,34 +3,50 @@ import { apiFetch } from "./superFetcher";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const doLogin = async (data) => {
-  const res = await fetch(`${apiUrl}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-    credentials: "include",
-  });
-  if (!res.ok) {
-    const errData = await res.json();
-    throw new Error(errData.message || "Erreur lors de la connexion");
+  try {
+    const res = await fetch(`${apiUrl}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
+    if (!res.ok) {
+      const errData = await res.json();
+      throw new Error(errData.message || "Erreur lors de la connexion");
+    }
+    return await res.json();
+  } catch (error) {
+    if (error instanceof TypeError && error.message.includes("fetch")) {
+      throw new Error("Serveur injoignable");
+    } else {
+      throw new Error(error.message);
+    }
   }
-  return await res.json();
 };
 
 export const doRegistration = async (data) => {
-  const res = await fetch(`${apiUrl}/auth/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  if (!res.ok) {
-    const errData = await res.json();
-    throw new Error(errData.message || "Erreur lors de l'inscription");
+  try {
+    const res = await fetch(`${apiUrl}/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const errData = await res.json();
+      throw new Error(errData.message || "Erreur lors de l'inscription");
+    }
+    return await res.json();
+  } catch (error) {
+    if (error instanceof TypeError && error.message.includes("fetch")) {
+      throw new Error("Erreur serveur injoignable");
+    } else {
+      throw new Error(error.message);
+    }
   }
-  return await res.json();
 };
 
 export const doLogout = async () => {
